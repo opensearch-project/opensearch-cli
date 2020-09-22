@@ -1,4 +1,4 @@
-## My Project
+## ODFE Command Line Interface
 
 TODO: Fill this README out!
 
