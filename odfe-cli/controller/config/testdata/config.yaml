@@ -1,0 +1,9 @@
+profiles:
+  - endpoint: https://localhost:9200
+    user: admin
+    password: admin
+    name: local
+  - endpoint: https://127.0.0.1:9200
+    user: dadmin
+    password: dadmin
+    name: default
