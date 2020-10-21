@@ -1,5 +1,13 @@
 name: ODFE CLI Test
-on: [pull_request, push]
+on:
+  push:
+    branches:
+      - main
+      - opendistro-*
+  pull_request:
+    branches:
+      - main
+      - opendistro-*
 
 jobs:
   test:
