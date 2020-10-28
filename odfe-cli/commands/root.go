@@ -28,16 +28,16 @@ const (
 	defaultConfigFileName = "config"
 	flagConfig            = "config"
 	folderPermission      = 0755 // only owner can write, while everyone can read and execute
-	failureExitCode       = -1   // non zero code is considered failure
 	odfeConfigEnvVarName  = "ODFE_CLI_CONFIG"
-	rootCommandName       = "odfe-cli"
+	RootCommandName       = "odfe-cli"
 	version               = "0.1"
 )
 
 var rootCommand = &cobra.Command{
-	Use:     rootCommandName,
-	Short:   "odfe-cli is an unified command line interface to manage odfe clusters",
-	Version: version,
+	Use:                RootCommandName,
+	Short:              "odfe-cli is an unified command line interface for managing ODFE clusters.",
+	Version:            version,
+	DisableSuggestions: false,
 }
 
 func GetRoot() *cobra.Command {
@@ -53,7 +53,7 @@ func Execute() error {
 func GetDefaultConfigFilePath() string {
 	return filepath.Join(
 		getDefaultConfigFolderRootPath(),
-		fmt.Sprintf(".%s", rootCommandName),
+		fmt.Sprintf(".%s", RootCommandName),
 		fmt.Sprintf("%s.%s", defaultConfigFileName, configFileType),
 	)
 }
@@ -71,7 +71,9 @@ func getDefaultConfigFolderRootPath() string {
 func init() {
 	cobra.OnInitialize()
 	configFilePath := GetDefaultConfigFilePath()
-	rootCommand.PersistentFlags().StringP(flagConfig, "c", "", fmt.Sprintf("config file default is %s", configFilePath))
+	rootCommand.PersistentFlags().StringP(flagConfig, "c", "", fmt.Sprintf("Configuration file for odfe-cli, default is %s", configFilePath))
+	rootCommand.Flags().BoolP("version", "v", false, "Version for odfe-cli")
+	rootCommand.Flags().BoolP("help", "h", false, "Help for odfe-cli")
 }
 
 // GetConfigFilePath gets config file path for execution
@@ -122,8 +124,7 @@ func isExists(path string) bool {
 // DisplayError prints command name and error on console and exists as well.
 func DisplayError(err error, cmdName string) {
 	if err != nil {
-		fmt.Println(cmdName, "command failed")
+		fmt.Println(cmdName, "command failed.")
 		fmt.Println("Reason:", err)
-		os.Exit(failureExitCode)
 	}
 }

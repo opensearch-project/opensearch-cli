@@ -95,7 +95,7 @@ func (c controller) CreateProfile(p entity.Profile) error {
 	return c.configCtrl.Write(data)
 }
 
-//DeleteProfile loads all profile, deletes selected profiles, and saves rest in config file
+//DeleteProfiles loads all profile, deletes selected profiles, and saves rest in config file
 func (c controller) DeleteProfiles(names []string) error {
 	profilesMap, err := c.GetProfilesMap()
 	if err != nil {

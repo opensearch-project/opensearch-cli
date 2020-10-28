@@ -39,8 +39,8 @@ const (
 	alignLeft                   = 0
 )
 
-//getController gets controller based on config file
-func getController() (profile.Controller, error) {
+//GetProfileController gets controller based on config file
+func GetProfileController() (profile.Controller, error) {
 	cfgFile, err := GetRoot().Flags().GetString(flagConfig)
 	if err != nil {
 		return nil, err
@@ -51,11 +51,11 @@ func getController() (profile.Controller, error) {
 //profileCommand is main command for profile operations like list, create and delete
 var profileCommand = &cobra.Command{
 	Use:   ProfileCommandName + " sub-command",
-	Short: "Manage collection of settings and credentials that you can apply to an odfe-cli command",
+	Short: "Manage a collection of settings and credentials that you can apply to an odfe-cli command",
 	Long: fmt.Sprintf("Description:\n  " +
-		`A named profile is a collection of settings and credentials that you can apply to an odfe-cli command.
-  When you specify a profile for a command (eg: odfe-cli <command> --profile <profile_name> ), its settings and credentials are used to run that command.
-  To configure a default profile for commands, either specify the default profile name in an environment variable (ODFE_PROFILE) or create a profile named 'default'.`),
+		"A named profile is a collection of settings and credentials that you can apply to an odfe-cli command. " +
+		"When you specify a profile for a command (eg: `odfe-cli <command> --profile <profile_name>` ), its settings and credentials are used to run that command. " +
+		"To configure a default profile for commands, either specify the default profile name in an environment variable (ODFE_PROFILE) or create a profile named `default`."),
 }
 
 //createProfileCmd creates profile interactively by prompting for name (distinct), user, endpoint, password.
@@ -65,7 +65,7 @@ var createProfileCmd = &cobra.Command{
 	Long: fmt.Sprintf("Description:\n  " +
 		`Creates a new profile with the following fields: name, endpoint, user and password.`),
 	Run: func(cmd *cobra.Command, args []string) {
-		profileController, err := getController()
+		profileController, err := GetProfileController()
 		if err != nil {
 			DisplayError(err, CreateNewProfileCommandName)
 			return
@@ -112,7 +112,7 @@ var listProfileCmd = &cobra.Command{
 
 //deleteProfiles deletes profiles based on names
 func deleteProfiles(profiles []string) error {
-	profileController, err := getController()
+	profileController, err := GetProfileController()
 	if err != nil {
 		return err
 	}
@@ -124,7 +124,11 @@ func init() {
 	profileCommand.AddCommand(createProfileCmd)
 	profileCommand.AddCommand(deleteProfilesCmd)
 	profileCommand.AddCommand(listProfileCmd)
-	listProfileCmd.Flags().BoolP(FlagProfileVerbose, "l", false, "shows information like name, endpoint, user")
+	listProfileCmd.Flags().BoolP(FlagProfileVerbose, "l", false, "Shows information like name, endpoint, user")
+	listProfileCmd.Flags().BoolP("help", "h", false, "Help for "+ListProfilesCommandName)
+	createProfileCmd.Flags().BoolP("help", "h", false, "Help for "+CreateNewProfileCommandName)
+	deleteProfilesCmd.Flags().BoolP("help", "h", false, "Help for "+DeleteProfilesCommandName)
+	profileCommand.Flags().BoolP("help", "h", false, "Help for "+ProfileCommandName)
 	GetRoot().AddCommand(profileCommand)
 }
 
@@ -219,7 +223,7 @@ func listProfiles(cmd *cobra.Command) error {
 	if err != nil {
 		return err
 	}
-	profileController, err := getController()
+	profileController, err := GetProfileController()
 	if err != nil {
 		return err
 	}
@@ -241,6 +245,9 @@ func displayCompleteProfiles(p profile.Controller) (err error) {
 	if profiles, err = p.GetProfiles(); err != nil {
 		return
 	}
+	if len(profiles) < 1 {
+		return fmt.Errorf("no profiles found")
+	}
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, padding, ' ', alignLeft)
 	defer func() {
 		err = w.Flush()
@@ -259,6 +266,9 @@ func displayProfileNames(p profile.Controller) (err error) {
 	var names []string
 	if names, err = p.GetProfileNames(); err != nil {
 		return
+	}
+	if len(names) < 1 {
+		return fmt.Errorf("no profiles found")
 	}
 	for _, name := range names {
 		fmt.Println(name)

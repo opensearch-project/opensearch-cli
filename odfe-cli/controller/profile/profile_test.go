@@ -118,6 +118,13 @@ func TestControllerGetProfileForExecution(t *testing.T) {
 	t.Run("select default profile", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
+		oldValue, ok := os.LookupEnv(odfeProfileEnvVarName)
+		if ok {
+			assert.NoError(t, os.Unsetenv(odfeProfileEnvVarName))
+			defer func() {
+				assert.NoError(t, os.Setenv(odfeDefaultProfileName, oldValue))
+			}()
+		}
 		mockConfigCtrl := config.NewMockController(mockCtrl)
 		mockConfigCtrl.EXPECT().Read().Return(getDefaultConfig(), nil)
 		ctrl := New(mockConfigCtrl)
@@ -132,10 +139,17 @@ func TestControllerGetProfileForExecution(t *testing.T) {
 		mockConfigCtrl := config.NewMockController(mockCtrl)
 		mockConfigCtrl.EXPECT().Read().Return(getSampleConfig(), nil)
 		ctrl := New(mockConfigCtrl)
+		oldValue, ok := os.LookupEnv(odfeProfileEnvVarName)
+		if ok {
+			assert.NoError(t, os.Unsetenv(odfeProfileEnvVarName))
+			defer func() {
+				assert.NoError(t, os.Setenv(odfeDefaultProfileName, oldValue))
+			}()
+		}
 		err := os.Setenv(odfeProfileEnvVarName, "local")
 		assert.NoError(t, err)
 		defer func() {
-			err = os.Setenv(odfeProfileEnvVarName, "")
+			err = os.Unsetenv(odfeProfileEnvVarName)
 			assert.NoError(t, err)
 		}()
 		p, ok, err := ctrl.GetProfileForExecution("")
