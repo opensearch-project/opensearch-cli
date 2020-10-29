@@ -32,10 +32,8 @@ const (
 var createCmd = &cobra.Command{
 	Use:   createDetectorsCommandName + " json-file-path ...",
 	Short: "Create detectors based on JSON files",
-	Long: fmt.Sprintf("Description:\n  " +
-		"Create detectors based on a local JSON file" +
-		"To begin, use `odfe-cli ad create --generate-template` to generate sample configuration. Save this template locally and update it for your use case." +
-		"Then use `odfe-cli ad create file-path` to create detector."),
+	Long: "Create detectors based on a local JSON file\n" +
+		"To begin, use `odfe-cli ad create --generate-template` to generate a sample configuration. Save this template locally and update it for your use case. Then use `odfe-cli ad create file-path` to create detector.",
 	Run: func(cmd *cobra.Command, args []string) {
 		generate, _ := cmd.Flags().GetBool(generate)
 		if generate {
@@ -60,7 +58,7 @@ func generateTemplate() {
 
 func init() {
 	GetADCommand().AddCommand(createCmd)
-	createCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file.")
+	createCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	createCmd.Flags().BoolP(generate, "g", false, "Output sample detector configuration")
 	createCmd.Flags().BoolP("help", "h", false, "Help for "+createDetectorsCommandName)
 

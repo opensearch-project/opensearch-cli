@@ -33,9 +33,8 @@ const (
 var deleteDetectorsCmd = &cobra.Command{
 	Use:   deleteDetectorsCommandName + " detector_name ..." + " [flags] ",
 	Short: "Delete detectors based on a list of IDs, names, or name regex patterns",
-	Long: fmt.Sprintf("Description:\n  " +
-		`Delete detectors based on list of user input. Use "" to make sure the name does not match with pwd lists'.
-  The default input is detector name, use --id flag if input is detector ID instead of name`),
+	Long: "Delete detectors based on list of IDs, names, or name regex patterns.\n" +
+		"Wrap regex patterns in quotation marks to prevent the terminal from matching patterns against the files in the current directory.\nThe default input is detector name. Use the `--id` flag if input is detector ID instead of name",
 	Run: func(cmd *cobra.Command, args []string) {
 		//If no args, display usage
 		if len(args) < 1 {
@@ -55,9 +54,9 @@ var deleteDetectorsCmd = &cobra.Command{
 
 func init() {
 	GetADCommand().AddCommand(deleteDetectorsCmd)
-	deleteDetectorsCmd.Flags().BoolP(detectorForceDeletionFlagName, "f", false, "Deletes even if detector is running")
+	deleteDetectorsCmd.Flags().BoolP(detectorForceDeletionFlagName, "f", false, "Delete the detector even if it is running")
 	deleteDetectorsCmd.Flags().BoolP(deleteDetectorIDFlagName, "", false, "Input is detector ID")
-	deleteDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file.")
+	deleteDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	deleteDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+deleteDetectorsCommandName)
 }
 

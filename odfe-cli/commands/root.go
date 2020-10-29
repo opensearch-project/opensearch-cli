@@ -34,10 +34,9 @@ const (
 )
 
 var rootCommand = &cobra.Command{
-	Use:                RootCommandName,
-	Short:              "odfe-cli is an unified command line interface for managing ODFE clusters.",
-	Version:            version,
-	DisableSuggestions: false,
+	Use:     RootCommandName,
+	Short:   "odfe-cli is a unified command line interface for managing ODFE clusters",
+	Version: version,
 }
 
 func GetRoot() *cobra.Command {
@@ -124,7 +123,7 @@ func isExists(path string) bool {
 // DisplayError prints command name and error on console and exists as well.
 func DisplayError(err error, cmdName string) {
 	if err != nil {
-		fmt.Println(cmdName, "command failed.")
+		fmt.Println(cmdName, "Command failed.")
 		fmt.Println("Reason:", err)
 	}
 }

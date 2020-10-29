@@ -37,12 +37,11 @@ const (
 var adCommand = &cobra.Command{
 	Use:   adCommandName,
 	Short: "Manage the Anomaly Detection plugin",
-	Long: fmt.Sprintf("Description:\n  " +
-		`Use the Anomaly Detection commands to create, configure, and manage detectors.`),
+	Long:  "Use the Anomaly Detection commands to create, configure, and manage detectors.",
 }
 
 func init() {
-	adCommand.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file.")
+	adCommand.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	adCommand.Flags().BoolP("help", "h", false, "Help for Anomaly Detection")
 	GetRoot().AddCommand(adCommand)
 }
@@ -72,7 +71,7 @@ func GetADHandler() (*handler.Handler, error) {
 		return nil, err
 	}
 	if !ok {
-		return nil, fmt.Errorf("no profile found for execution. Try %s %s --help for more information", RootCommandName, ProfileCommandName)
+		return nil, fmt.Errorf("No profile found for execution. Try %s %s --help for more information.", RootCommandName, ProfileCommandName)
 	}
 	g := adgateway.New(c, &profile)
 	esg := esgateway.New(c, &profile)
