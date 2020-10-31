@@ -53,14 +53,16 @@ jobs:
         env:
           GOPROXY: "https://proxy.golang.org"
         run: |
-          go test ./...
-
-      - name: Run coverage
-        env:
-          GOPROXY: "https://proxy.golang.org"
-        run: |
           go test ./...  -coverprofile=coverage.out
           go tool cover -func=coverage.out
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: odfe-cli/coverage.out
+          flags: odfe-cli
+          name: codecov-umbrella
 
   build:
     defaults:

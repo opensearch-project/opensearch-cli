@@ -1,0 +1,22 @@
+coverage:
+  status:
+    project:
+      default:
+        threshold: auto
+        target: auto
+      odfe-cli:
+        paths:
+          - "odfe-cli/"
+        flags:
+          - odfe-cli
+    patch: off
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: no
+  branches: null
+flags:
+  odfe-cli:
+    carryforward: true
