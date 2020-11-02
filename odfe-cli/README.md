@@ -80,7 +80,7 @@ You can specify profiles in two ways.
 
 1. The first way is to add the --profile <name> option:    
     ```
-    $ odfe ad stop-detector invalid-logins --profile prod
+    $ odfe-cli ad stop-detector invalid-logins --profile prod
     ```
     This example stops the invalid-logins detector using the credentials and settings in the prod profile.
     

@@ -1,4 +1,4 @@
-name: ODFE CLI Test
+name: Build and Test odfe-cli
 on:
   push:
     branches:
