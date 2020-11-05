@@ -1,0 +1,25 @@
+{
+  "currency" : "EUR",
+  "customer_first_name" : "Eddie",
+  "customer_full_name" : "Eddie Underwood",
+  "customer_gender" : "MALE",
+  "customer_id" : 38,
+  "customer_last_name" : "Underwood",
+  "customer_phone" : "",
+  "day_of_week" : "Monday",
+  "day_of_week_i" : 0,
+  "email" : "eddie@underwood-family.zzz",
+  "order_date" : "2020-10-26T09:28:48+00:00",
+  "order_id" : 584677,
+  "total_quantity" : 2,
+  "geoip" : {
+    "country_iso_code" : "EG",
+    "location" : {
+      "lon" : 31.3,
+      "lat" : 30.1
+    },
+    "region_name" : "Cairo Governorate",
+    "continent_name" : "Africa",
+    "city_name" : "Cairo"
+  }
+}
