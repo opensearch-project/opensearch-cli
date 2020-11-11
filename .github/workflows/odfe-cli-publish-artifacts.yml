@@ -1,0 +1,55 @@
+name: Publish odfe-cli
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go ubuntu-latest
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: --snapshot --skip-publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload macOS(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-macOS-amd64
+          path: dist/odfe-cli_darwin_amd64/odfe-cli
+
+      - name: Upload Linux(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-linux-amd64
+          path: dist/odfe-cli_linux_amd64/odfe-cli
+
+      - name: Upload Linux(arm64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-linux-arm64
+          path: dist/odfe-cli_linux_arm64/odfe-cli
+
+      - name: Upload Windows(i386) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-windows-386
+          path: dist/odfe-cli_windows_386/odfe-cli.exe
+
+      - name: Upload Windows(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-windows-amd64
+          path: dist/odfe-cli_windows_amd64/odfe-cli.exe
