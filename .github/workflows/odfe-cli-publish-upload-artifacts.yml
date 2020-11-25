@@ -1,0 +1,98 @@
+name: Publish and Upload odfe-cli
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Version
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/*/}
+          echo "RELEASE_VERSION=${TAG_NAME:1}" >> $GITHUB_ENV
+
+      - name: Set up Go ubuntu-latest
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: --snapshot --skip-publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload macOS(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64
+          path: dist/odfe-cli_darwin_amd64/odfe-cli
+
+      - name: Upload Linux(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64
+          path: dist/odfe-cli_linux_amd64/odfe-cli
+
+      - name: Upload Linux(arm64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64
+          path: dist/odfe-cli_linux_arm64/odfe-cli
+
+      - name: Upload Windows(i386) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86
+          path: dist/odfe-cli_windows_386/odfe-cli.exe
+
+      - name: Upload Windows(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64
+          path: dist/odfe-cli_windows_amd64/odfe-cli.exe
+
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Zip and copy macOS(amd64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/odfe-cli_darwin_amd64/
+          zip odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip odfe-cli
+          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip ${{ secrets.S3_MACOS_URI }}
+
+      - name: Zip and copy linux(amd64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/odfe-cli_linux_amd64
+          zip  odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip odfe-cli
+          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip ${{ secrets.S3_LINUX_URI }}
+
+      - name: Zip and copy linux(arm64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/odfe-cli_linux_arm64/
+          zip  odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip odfe-cli
+          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip ${{ secrets.S3_LINUX_URI }}
+
+      - name: Zip and copy windows(x386) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/odfe-cli_windows_386
+          zip  odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip odfe-cli
+          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip ${{ secrets.S3_WINDOWS_URI }}
+
+      - name: Zip and copy windows(amd64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/odfe-cli_windows_amd64/
+          zip odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip odfe-cli
+          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip ${{ secrets.S3_WINDOWS_URI }}

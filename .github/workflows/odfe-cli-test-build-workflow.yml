@@ -40,9 +40,9 @@ jobs:
           exit 1
 
       - name: Lint check
-        uses: golangci/golangci-lint-action@v1
+        uses: golangci/golangci-lint-action@v2
         with:
-          version: v1.28
+          version: v1.29
 
       - name: Run Unit Tests
         env:
