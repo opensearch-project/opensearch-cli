@@ -17,6 +17,7 @@ package commands
 
 import (
 	"fmt"
+	"odfe-cli/entity"
 	"os"
 	"path/filepath"
 
@@ -27,6 +28,7 @@ const (
 	configFileType        = "yaml"
 	defaultConfigFileName = "config"
 	flagConfig            = "config"
+	flagProfileName       = "profile"
 	folderPermission      = 0755 // only owner can write, while everyone can read and execute
 	odfeConfigEnvVarName  = "ODFE_CLI_CONFIG"
 	RootCommandName       = "odfe-cli"
@@ -71,6 +73,7 @@ func init() {
 	cobra.OnInitialize()
 	configFilePath := GetDefaultConfigFilePath()
 	rootCommand.PersistentFlags().StringP(flagConfig, "c", "", fmt.Sprintf("Configuration file for odfe-cli, default is %s", configFilePath))
+	rootCommand.PersistentFlags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	rootCommand.Flags().BoolP("version", "v", false, "Version for odfe-cli")
 	rootCommand.Flags().BoolP("help", "h", false, "Help for odfe-cli")
 }
@@ -126,4 +129,24 @@ func DisplayError(err error, cmdName string) {
 		fmt.Println(cmdName, "Command failed.")
 		fmt.Println("Reason:", err)
 	}
+}
+
+// GetProfile gets profile details for current execution
+func GetProfile() (*entity.Profile, error) {
+	p, err := GetProfileController()
+	if err != nil {
+		return nil, err
+	}
+	profileFlagValue, err := rootCommand.PersistentFlags().GetString(flagProfileName)
+	if err != nil {
+		return nil, err
+	}
+	profile, ok, err := p.GetProfileForExecution(profileFlagValue)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, fmt.Errorf("No profile found for execution. Try %s %s --help for more information.", RootCommandName, ProfileCommandName)
+	}
+	return &profile, nil
 }

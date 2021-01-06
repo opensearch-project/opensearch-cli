@@ -16,6 +16,7 @@
 package commands
 
 import (
+	"odfe-cli/entity"
 	"os"
 	"testing"
 
@@ -45,8 +46,51 @@ func TestGetRoot(t *testing.T) {
 		root.SetArgs([]string{"--config", "test/config.yml"})
 		cmd, err := root.ExecuteC()
 		assert.NoError(t, err)
-		expected, err := cmd.Flags().GetString(flagConfig)
+		actual, err := cmd.Flags().GetString(flagConfig)
 		assert.NoError(t, err)
-		assert.EqualValues(t, expected, "test/config.yml")
+		assert.EqualValues(t, "test/config.yml", actual)
+	})
+}
+
+func TestGetProfile(t *testing.T) {
+	t.Run("get default profile", func(t *testing.T) {
+		root := GetRoot()
+		assert.NotNil(t, root)
+		root.SetArgs([]string{"--config", "testdata/config.yaml"})
+		_, err := root.ExecuteC()
+		assert.NoError(t, err)
+		actual, err := GetProfile()
+		assert.NoError(t, err)
+		expectedProfile := entity.Profile{Name: "default", Endpoint: "http://localhost:9200", UserName: "default", Password: "admin"}
+		assert.EqualValues(t, expectedProfile, *actual)
+	})
+	t.Run("test get profile", func(t *testing.T) {
+		root := GetRoot()
+		assert.NotNil(t, root)
+		root.SetArgs([]string{"--config", "testdata/config.yaml", "--profile", "test"})
+		_, err := root.ExecuteC()
+		assert.NoError(t, err)
+		actual, err := GetProfile()
+		assert.NoError(t, err)
+		expectedProfile := entity.Profile{Name: "test", Endpoint: "https://localhost:9200", UserName: "admin", Password: "admin"}
+		assert.EqualValues(t, expectedProfile, *actual)
+	})
+	t.Run("Profile mismatch", func(t *testing.T) {
+		root := GetRoot()
+		assert.NotNil(t, root)
+		root.SetArgs([]string{"--config", "testdata/config.yaml", "--profile", "test1"})
+		_, err := root.ExecuteC()
+		assert.NoError(t, err)
+		_, err = GetProfile()
+		assert.EqualError(t, err, "No profile found for execution. Try odfe-cli profile --help for more information.")
+	})
+	t.Run("no config file found", func(t *testing.T) {
+		root := GetRoot()
+		assert.NotNil(t, root)
+		root.SetArgs([]string{"--config", "testdata/config1.yaml", "--profile", "test1"})
+		_, err := root.ExecuteC()
+		assert.NoError(t, err)
+		_, err = GetProfile()
+		assert.EqualError(t, err, "open testdata/config1.yaml: no such file or directory")
 	})
 }

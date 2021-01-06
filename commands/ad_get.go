@@ -129,6 +129,5 @@ func Println(cmd *cobra.Command, d *entity.DetectorOutput) error {
 func init() {
 	GetADCommand().AddCommand(getDetectorsCmd)
 	getDetectorsCmd.Flags().BoolP(getDetectorIDFlagName, "", false, "Input is detector ID")
-	getDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	getDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+getDetectorsCommandName)
 }

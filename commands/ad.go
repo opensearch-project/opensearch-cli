@@ -16,7 +16,6 @@
 package commands
 
 import (
-	"fmt"
 	"odfe-cli/client"
 	adctrl "odfe-cli/controller/ad"
 	esctrl "odfe-cli/controller/es"
@@ -29,8 +28,7 @@ import (
 )
 
 const (
-	adCommandName   = "ad"
-	flagProfileName = "profile"
+	adCommandName = "ad"
 )
 
 //adCommand is base command for Anomaly Detection plugin.
@@ -41,7 +39,6 @@ var adCommand = &cobra.Command{
 }
 
 func init() {
-	adCommand.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	adCommand.Flags().BoolP("help", "h", false, "Help for Anomaly Detection")
 	GetRoot().AddCommand(adCommand)
 }
@@ -58,23 +55,12 @@ func GetADHandler() (*handler.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	p, err := GetProfileController()
+	profile, err := GetProfile()
 	if err != nil {
 		return nil, err
 	}
-	profileFlagValue, err := GetADCommand().Flags().GetString(flagProfileName)
-	if err != nil {
-		return nil, err
-	}
-	profile, ok, err := p.GetProfileForExecution(profileFlagValue)
-	if err != nil {
-		return nil, err
-	}
-	if !ok {
-		return nil, fmt.Errorf("No profile found for execution. Try %s %s --help for more information.", RootCommandName, ProfileCommandName)
-	}
-	g := adgateway.New(c, &profile)
-	esg := esgateway.New(c, &profile)
+	g := adgateway.New(c, profile)
+	esg := esgateway.New(c, profile)
 	esc := esctrl.New(esg)
 	ctr := adctrl.New(os.Stdin, esc, g)
 	return handler.New(ctr), nil

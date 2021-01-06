@@ -56,7 +56,6 @@ func init() {
 	GetADCommand().AddCommand(updateDetectorsCmd)
 	updateDetectorsCmd.Flags().BoolP(forceFlagName, "f", false, "Stop detector and update forcefully")
 	updateDetectorsCmd.Flags().BoolP(startFlagName, "s", false, "Start detector if update is successful")
-	updateDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	updateDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+updateDetectorsCommandName)
 }
 

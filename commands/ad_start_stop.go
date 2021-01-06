@@ -77,11 +77,9 @@ var stopDetectorsCmd = &cobra.Command{
 
 func init() {
 	startDetectorsCmd.Flags().BoolP(idFlagName, "", false, "Input is detector ID")
-	startDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	startDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+startDetectorsCommandName)
 	GetADCommand().AddCommand(startDetectorsCmd)
 	stopDetectorsCmd.Flags().BoolP(idFlagName, "", false, "Input is detector ID")
-	stopDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	stopDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+stopDetectorsCommandName)
 	GetADCommand().AddCommand(stopDetectorsCmd)
 }

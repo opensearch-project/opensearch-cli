@@ -1,0 +1,9 @@
+profiles:
+  - name: test
+    endpoint: https://localhost:9200
+    user: admin
+    password: admin
+  - name: default
+    endpoint: http://localhost:9200
+    user: default
+    password: admin

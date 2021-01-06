@@ -58,7 +58,6 @@ func generateTemplate() {
 
 func init() {
 	GetADCommand().AddCommand(createCmd)
-	createCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	createCmd.Flags().BoolP(generate, "g", false, "Output sample detector configuration")
 	createCmd.Flags().BoolP("help", "h", false, "Help for "+createDetectorsCommandName)
 

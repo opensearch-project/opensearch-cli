@@ -56,7 +56,6 @@ func init() {
 	GetADCommand().AddCommand(deleteDetectorsCmd)
 	deleteDetectorsCmd.Flags().BoolP(detectorForceDeletionFlagName, "f", false, "Delete the detector even if it is running")
 	deleteDetectorsCmd.Flags().BoolP(deleteDetectorIDFlagName, "", false, "Input is detector ID")
-	deleteDetectorsCmd.Flags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
 	deleteDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+deleteDetectorsCommandName)
 }
 
