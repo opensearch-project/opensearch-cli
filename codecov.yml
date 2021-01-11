@@ -2,7 +2,7 @@ coverage:
   status:
     project:
       default:
-        threshold: auto
+        threshold: 5%
         target: auto
       odfe-cli:
         paths:

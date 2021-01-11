@@ -17,14 +17,15 @@ package commands
 
 import (
 	"fmt"
+
+	"golang.org/x/term"
+
 	"odfe-cli/controller/config"
 	"odfe-cli/controller/profile"
 	"odfe-cli/entity"
 	"os"
 	"strings"
 	"text/tabwriter"
-
-	"golang.org/x/crypto/ssh/terminal"
 
 	"github.com/spf13/cobra"
 )
@@ -202,7 +203,7 @@ func checkInputIsNotEmpty(input string) bool {
 // getUserInputAsMaskedText get value from user as masked text, since credentials like password
 // should not be displayed on console for security reasons
 func getUserInputAsMaskedText(isValid func(string) bool) string {
-	maskedValue, err := terminal.ReadPassword(0)
+	maskedValue, err := term.ReadPassword(0)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
