@@ -32,31 +32,31 @@ jobs:
       - name: Upload macOS(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64
+          name: opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64
           path: dist/odfe-cli_darwin_amd64/odfe-cli
 
       - name: Upload Linux(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64
+          name: opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64
           path: dist/odfe-cli_linux_amd64/odfe-cli
 
       - name: Upload Linux(arm64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64
+          name: opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64
           path: dist/odfe-cli_linux_arm64/odfe-cli
 
       - name: Upload Windows(i386) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86
+          name: opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86
           path: dist/odfe-cli_windows_386/odfe-cli.exe
 
       - name: Upload Windows(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64
+          name: opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64
           path: dist/odfe-cli_windows_amd64/odfe-cli.exe
 
 
@@ -70,29 +70,29 @@ jobs:
       - name: Zip and copy macOS(amd64) artifacts to S3 bucket with the AWS CLI
         run: |
           cd dist/odfe-cli_darwin_amd64/
-          zip odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip odfe-cli
-          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip ${{ secrets.S3_MACOS_URI }}
+          zip opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip odfe-cli
+          aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip ${{ secrets.S3_MACOS_URI }}
 
       - name: Zip and copy linux(amd64) artifacts to S3 bucket with the AWS CLI
         run: |
           cd dist/odfe-cli_linux_amd64
-          zip  odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip odfe-cli
-          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip ${{ secrets.S3_LINUX_URI }}
+          zip  opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip odfe-cli
+          aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip ${{ secrets.S3_LINUX_URI }}
 
       - name: Zip and copy linux(arm64) artifacts to S3 bucket with the AWS CLI
         run: |
           cd dist/odfe-cli_linux_arm64/
-          zip  odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip odfe-cli
-          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip ${{ secrets.S3_LINUX_URI }}
+          zip  opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip odfe-cli
+          aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip ${{ secrets.S3_LINUX_URI }}
 
       - name: Zip and copy windows(x386) artifacts to S3 bucket with the AWS CLI
         run: |
           cd dist/odfe-cli_windows_386
-          zip  odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip odfe-cli
-          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip ${{ secrets.S3_WINDOWS_URI }}
+          zip  opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip odfe-cli.exe
+          aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip ${{ secrets.S3_WINDOWS_URI }}
 
       - name: Zip and copy windows(amd64) artifacts to S3 bucket with the AWS CLI
         run: |
           cd dist/odfe-cli_windows_amd64/
-          zip odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip odfe-cli
-          aws s3 cp odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip ${{ secrets.S3_WINDOWS_URI }}
+          zip opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip odfe-cli.exe
+          aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip ${{ secrets.S3_WINDOWS_URI }}
