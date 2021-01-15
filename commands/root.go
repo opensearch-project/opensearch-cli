@@ -32,7 +32,7 @@ const (
 	folderPermission      = 0755 // only owner can write, while everyone can read and execute
 	odfeConfigEnvVarName  = "ODFE_CLI_CONFIG"
 	RootCommandName       = "odfe-cli"
-	version               = "0.1"
+	version               = "1.0.0"
 )
 
 var rootCommand = &cobra.Command{
