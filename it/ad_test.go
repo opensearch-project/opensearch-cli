@@ -37,7 +37,10 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-const EcommerceIndexName = "integration-test-ecommerce"
+const (
+	EcommerceIndexName     = "ecommerce"
+	EcommerceIndexFileName = "ecommerce"
+)
 
 //ADTestSuite suite specific to AD plugin
 type ADTestSuite struct {
@@ -78,7 +81,7 @@ func (a *ADTestSuite) SetupSuite() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	a.CreateIndex(EcommerceIndexName)
+	a.CreateIndex(EcommerceIndexFileName, "")
 	g := esg.New(a.Client, a.Profile)
 	a.ESController = es.New(g)
 	a.ADGateway = adgateway.New(a.Client, a.Profile)

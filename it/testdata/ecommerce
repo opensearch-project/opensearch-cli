@@ -1,0 +1,2 @@
+{ "index" : { "_index" : "ecommerce", "_id" : "1" } }
+{"currency" : "EUR","customer_id" : 38,"day_of_week" : "Monday","day_of_week_i" : 0,"total_quantity" : 2}

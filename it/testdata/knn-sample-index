@@ -1,0 +1,11 @@
+{ "index" : { "_index" : "knn-sample-index", "_id" : "1" } }
+{"my_dense_vector": [1, 1],"color" : "RED"}
+{ "index" : { "_index" : "knn-sample-index", "_id" : "2" } }
+{"my_dense_vector": [2, 2],"color" : "RED"}
+{ "index" : { "_index" : "knn-sample-index", "_id" : "3" } }
+{"my_dense_vector": [3, 3],"color" : "RED"}
+{ "index" : { "_index" : "knn-sample-index", "_id" : "4" } }
+{"my_dense_vector": [10, 10],"color" : "BLUE"}
+{ "index" : { "_index" : "knn-sample-index", "_id" : "5" } }
+{"my_dense_vector": [30, 30],"color" : "BLUE"}
+

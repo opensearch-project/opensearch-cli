@@ -47,9 +47,9 @@ func HelperLoadBytes(name string) []byte {
 	return contents
 }
 
-// DeleteEcommerceIndex deletes test index created for integration tests
+// DeleteIndex deletes index by name
 func (a *ODFECLISuite) DeleteIndex(indexName string) {
-	_, err := a.callRequest(http.MethodPut, HelperLoadBytes("ecommerce.json"), fmt.Sprintf("%s/%s/_doc", a.Profile.Endpoint, indexName))
+	_, err := a.callRequest(http.MethodDelete, []byte(""), fmt.Sprintf("%s/%s", a.Profile.Endpoint, indexName))
 
 	if err != nil {
 		fmt.Println(err)
@@ -71,8 +71,18 @@ func (a *ODFECLISuite) ValidateProfile() error {
 }
 
 //CreateIndex creates test data for plugin processing
-func (a *ODFECLISuite) CreateIndex(indexName string) {
-	res, err := a.callRequest(http.MethodPut, HelperLoadBytes("ecommerce.json"), fmt.Sprintf("%s/%s/_doc/1?refresh", a.Profile.Endpoint, indexName))
+func (a *ODFECLISuite) CreateIndex(indexFileName string, mappingFileName string) {
+	if mappingFileName != "" {
+		mapping, err := a.callRequest(
+			http.MethodPut, HelperLoadBytes(mappingFileName), fmt.Sprintf("%s/%s", a.Profile.Endpoint, indexFileName))
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		fmt.Println(string(mapping))
+	}
+	res, err := a.callRequest(
+		http.MethodPost, HelperLoadBytes(indexFileName), fmt.Sprintf("%s/_bulk?refresh", a.Profile.Endpoint))
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -91,7 +101,7 @@ func (a *ODFECLISuite) callRequest(method string, reqBytes []byte, url string) (
 	}
 	req := r.WithContext(context.Background())
 	req.SetBasicAuth(a.Profile.UserName, a.Profile.Password)
-	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Content-Type", "application/x-ndjson")
 	response, err := a.Client.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
