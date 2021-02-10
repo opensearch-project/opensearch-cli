@@ -95,17 +95,6 @@ func TestGatewayGetStatistics(t *testing.T) {
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
 	})
-	t.Run("gateway failed due to bad user config", func(t *testing.T) {
-
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/stats", 400, []byte("failed"))
-		testGateway := New(testClient, &entity.Profile{
-			Endpoint: "http://localhost:9200",
-			UserName: "",
-			Password: "admin",
-		})
-		_, err := testGateway.GetStatistics(ctx, "", "")
-		assert.EqualError(t, err, "user name and password cannot be empty")
-	})
 	t.Run("gateway failed due to gateway user config", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/stats", 400, []byte("failed"))
@@ -154,17 +143,6 @@ func TestGatewayWarmupIndices(t *testing.T) {
 		actual, err := testGateway.WarmupIndices(ctx, "index1,index2")
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
-	})
-	t.Run("failed due to bad user config", func(t *testing.T) {
-
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/warmup/index1", 400, []byte("failed"))
-		testGateway := New(testClient, &entity.Profile{
-			Endpoint: "http://localhost:9200",
-			UserName: "",
-			Password: "admin",
-		})
-		_, err := testGateway.WarmupIndices(ctx, "index1")
-		assert.EqualError(t, err, "user name and password cannot be empty")
 	})
 	t.Run("failed due to invalid index", func(t *testing.T) {
 

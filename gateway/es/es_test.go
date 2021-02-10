@@ -83,15 +83,4 @@ func TestGateway_SearchDistinctValues(t *testing.T) {
 		_, err := testGateway.SearchDistinctValues(ctx, "test_index", "day_of_week")
 		assert.EqualError(t, err, "No connection found")
 	})
-	t.Run("search failed due to bad user config", func(t *testing.T) {
-
-		testClient := getTestClient(t, "No connection found", 400)
-		testGateway := New(testClient, &entity.Profile{
-			Endpoint: "http://localhost:9200",
-			UserName: "",
-			Password: "admin",
-		})
-		_, err := testGateway.SearchDistinctValues(ctx, "test_index", "day_of_week")
-		assert.EqualError(t, err, "user name and password cannot be empty")
-	})
 }

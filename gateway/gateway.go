@@ -79,10 +79,9 @@ func (g *HTTPGateway) BuildRequest(ctx context.Context, method string, payload i
 		return nil, err
 	}
 	req := r.WithContext(ctx)
-	if len(g.Profile.UserName) == 0 || len(g.Profile.Password) == 0 {
-		return nil, fmt.Errorf("user name and password cannot be empty")
+	if len(g.Profile.UserName) != 0 {
+		req.SetBasicAuth(g.Profile.UserName, g.Profile.Password)
 	}
-	req.SetBasicAuth(g.Profile.UserName, g.Profile.Password)
 	if len(headers) == 0 {
 		return req, nil
 	}

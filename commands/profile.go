@@ -158,8 +158,8 @@ func CreateProfile(profileController profile.Controller, getNewProfile func(map[
 // getNewProfile gets new profile information from user using command line
 func getNewProfile(profileMap map[string]entity.Profile) entity.Profile {
 	var name string
-	fmt.Printf("Enter profile's name: ")
 	for {
+		fmt.Printf("Enter profile's name: ")
 		name = getUserInputAsText(checkInputIsNotEmpty)
 		if _, ok := profileMap[name]; !ok {
 			break
@@ -168,15 +168,33 @@ func getNewProfile(profileMap map[string]entity.Profile) entity.Profile {
 	}
 	fmt.Printf("Elasticsearch Endpoint: ")
 	endpoint := getUserInputAsText(checkInputIsNotEmpty)
-	fmt.Printf("User Name: ")
-	user := getUserInputAsText(checkInputIsNotEmpty)
-	fmt.Printf("Password: ")
-	password := getUserInputAsMaskedText(checkInputIsNotEmpty)
+	fmt.Printf("Is security plugin enabled? Y/N ")
+	isSecured := getUserInputAsBoolean(checkInputIsNotEmpty)
+	var user, password string
+	if isSecured {
+		fmt.Printf("User Name: ")
+		user = getUserInputAsText(checkInputIsNotEmpty)
+		fmt.Printf("Password: ")
+		password = getUserInputAsMaskedText(checkInputIsNotEmpty)
+	}
 	return entity.Profile{
 		Name:     name,
 		Endpoint: endpoint,
 		UserName: user,
 		Password: password,
+	}
+}
+
+func getUserInputAsBoolean(isValid func(input string) bool) bool {
+	response := getUserInputAsText(isValid)
+	switch strings.ToLower(response) {
+	case "y", "yes":
+		return true
+	case "n", "no":
+		return false
+	default:
+		fmt.Printf("please type (y)es or (n)o: ")
+		return getUserInputAsBoolean(isValid)
 	}
 }
 
@@ -194,7 +212,7 @@ func getUserInputAsText(isValid func(string) bool) string {
 // checkInputIsNotEmpty checks whether input is empty or not
 func checkInputIsNotEmpty(input string) bool {
 	if len(input) < 1 {
-		fmt.Print("value cannot be empty. Please enter non-empty value")
+		fmt.Print("Value cannot be empty, please enter non-empty value: ")
 		return false
 	}
 	return true

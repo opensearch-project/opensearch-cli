@@ -331,16 +331,6 @@ func TestGateway_UpdateDetector(t *testing.T) {
 		err := testGateway.UpdateDetector(ctx, "id", nil)
 		assert.EqualError(t, err, "connection failed")
 	})
-	t.Run("invalid user", func(t *testing.T) {
-		testClient := getTestClient(t, `connection failed`, 400, http.MethodPut, "")
-		testGateway := New(testClient, &entity.Profile{
-			Endpoint: "http://localhost:9200",
-			UserName: "",
-			Password: "",
-		})
-		err := testGateway.UpdateDetector(ctx, "id", nil)
-		assert.EqualError(t, err, "user name and password cannot be empty")
-	})
 	t.Run("update success", func(t *testing.T) {
 		testClient := getTestClient(t, "ok", 200, http.MethodPut, "")
 		testGateway := New(testClient, &entity.Profile{

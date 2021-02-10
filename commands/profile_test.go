@@ -39,6 +39,15 @@ func fakeInputProfile(map[string]entity.Profile) entity.Profile {
 	}
 }
 
+func fakeInSecuredInputProfile(map[string]entity.Profile) entity.Profile {
+	return entity.Profile{
+		Name:     "default",
+		Endpoint: "https://localhost:9200",
+		UserName: "",
+		Password: "",
+	}
+}
+
 func TestCreateProfile(t *testing.T) {
 	t.Run("create profile successfully", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
@@ -47,6 +56,15 @@ func TestCreateProfile(t *testing.T) {
 		mockProfileCtrl.EXPECT().GetProfilesMap().Return(nil, nil)
 		mockProfileCtrl.EXPECT().CreateProfile(fakeInputProfile(nil)).Return(nil)
 		err := CreateProfile(mockProfileCtrl, fakeInputProfile)
+		assert.NoError(t, err)
+	})
+	t.Run("create in-secured profile successfully", func(t *testing.T) {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockProfileCtrl := mocks.NewMockController(mockCtrl)
+		mockProfileCtrl.EXPECT().GetProfilesMap().Return(nil, nil)
+		mockProfileCtrl.EXPECT().CreateProfile(fakeInSecuredInputProfile(nil)).Return(nil)
+		err := CreateProfile(mockProfileCtrl, fakeInSecuredInputProfile)
 		assert.NoError(t, err)
 	})
 	t.Run("create profile failed", func(t *testing.T) {
