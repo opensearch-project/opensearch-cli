@@ -39,7 +39,7 @@ as commands eg: cat nodes, index create, cluster health, etc...
 
 ## 3. Design and Architecture
 
-![](images/design.png)
+![](../images/design.png)
 
 ### 3.1 Commands
 
