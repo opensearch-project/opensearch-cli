@@ -6,6 +6,7 @@ package mocks
 
 import (
 	context "context"
+	es "odfe-cli/entity/es"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -32,6 +33,21 @@ func NewMockController(ctrl *gomock.Controller) *MockController {
 // EXPECT returns an object that allows the caller to indicate expected use
 func (m *MockController) EXPECT() *MockControllerMockRecorder {
 	return m.recorder
+}
+
+// Curl mocks base method
+func (m *MockController) Curl(arg0 context.Context, arg1 es.CurlCommandRequest) ([]byte, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Curl", arg0, arg1)
+	ret0, _ := ret[0].([]byte)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Curl indicates an expected call of Curl
+func (mr *MockControllerMockRecorder) Curl(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Curl", reflect.TypeOf((*MockController)(nil).Curl), arg0, arg1)
 }
 
 // GetDistinctValues mocks base method

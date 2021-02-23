@@ -56,3 +56,24 @@ type Aggregations struct {
 type Response struct {
 	Aggregations Aggregations `json:"aggregations"`
 }
+
+//CurlRequest contains parameter to execute REST Action
+type CurlRequest struct {
+	Action      string
+	Path        string
+	QueryParams string
+	Headers     map[string]string
+	Data        []byte
+}
+
+//CurlCommandRequest contains parameter from command
+type CurlCommandRequest struct {
+	Action           string
+	Path             string
+	QueryParams      string
+	Headers          string
+	Data             string
+	Pretty           bool
+	OutputFormat     string
+	OutputFilterPath string
+}

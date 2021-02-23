@@ -125,7 +125,7 @@ func (g gateway) GetStatistics(ctx context.Context, nodes string, names string) 
 	if err != nil {
 		return nil, err
 	}
-	request, err := g.BuildRequest(ctx, http.MethodGet, "", statsURL.String(), gw.GetHeaders())
+	request, err := g.BuildRequest(ctx, http.MethodGet, "", statsURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +164,7 @@ func (g gateway) WarmupIndices(ctx context.Context, indices string) ([]byte, err
 	if err != nil {
 		return nil, err
 	}
-	request, err := g.BuildRequest(ctx, http.MethodGet, "", warmupURL.String(), gw.GetHeaders())
+	request, err := g.BuildRequest(ctx, http.MethodGet, "", warmupURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}

@@ -40,7 +40,9 @@ func getTestClient(t *testing.T, url string, code int, response []byte) *client.
 			// Send response to be tested
 			Body: ioutil.NopCloser(bytes.NewBuffer(response)),
 			// Must be set to non-nil value or it panics
-			Header: make(http.Header),
+			Header:  make(http.Header),
+			Status:  "SOME OUTPUT",
+			Request: req,
 		}
 	})
 }

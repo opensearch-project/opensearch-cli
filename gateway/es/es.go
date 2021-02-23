@@ -33,6 +33,7 @@ const search = "_search"
 //Gateway interface to call ES
 type Gateway interface {
 	SearchDistinctValues(ctx context.Context, index string, field string) ([]byte, error)
+	Curl(ctx context.Context, request es.CurlRequest) ([]byte, error)
 }
 
 type gateway struct {
@@ -73,7 +74,7 @@ func (g *gateway) SearchDistinctValues(ctx context.Context, index string, field 
 	if err != nil {
 		return nil, err
 	}
-	searchRequest, err := g.BuildRequest(ctx, http.MethodGet, buildPayload(field), searchURL.String(), gw.GetHeaders())
+	searchRequest, err := g.BuildRequest(ctx, http.MethodGet, buildPayload(field), searchURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}
@@ -82,4 +83,37 @@ func (g *gateway) SearchDistinctValues(ctx context.Context, index string, field 
 		return nil, err
 	}
 	return response, nil
+}
+
+//Curl executes REST request based on request parameters
+func (g *gateway) Curl(ctx context.Context, request es.CurlRequest) ([]byte, error) {
+
+	requestURL, err := g.buildURL(request)
+	if err != nil {
+		return nil, err
+	}
+	//append request headers with gateway default headers
+	headers := gw.GetDefaultHeaders()
+	for k, v := range request.Headers {
+		headers[k] = v
+	}
+	curlRequest, err := g.BuildCurlRequest(ctx, request.Action, request.Data, requestURL.String(), headers)
+	if err != nil {
+		return nil, err
+	}
+	response, err := g.Execute(curlRequest)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (g *gateway) buildURL(request es.CurlRequest) (*url.URL, error) {
+	endpoint, err := gw.GetValidEndpoint(g.Profile)
+	if err != nil {
+		return nil, err
+	}
+	endpoint.Path = request.Path
+	endpoint.RawQuery = request.QueryParams
+	return endpoint, nil
 }

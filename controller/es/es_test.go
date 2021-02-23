@@ -19,6 +19,8 @@ import (
 	"context"
 	"errors"
 	"io/ioutil"
+	"net/http"
+	"odfe-cli/entity/es"
 	"odfe-cli/gateway/es/mocks"
 	"path/filepath"
 	"testing"
@@ -99,5 +101,55 @@ func TestController_GetDistinctValues(t *testing.T) {
 		assert.NoError(t, err)
 		assert.EqualValues(t, expectedResult, result)
 
+	})
+}
+
+func TestController_Curl(t *testing.T) {
+	commandRequest := es.CurlCommandRequest{
+		Action:      "post",
+		Path:        "",
+		QueryParams: "",
+		Headers:     "",
+		Data:        "",
+		Pretty:      false,
+	}
+
+	request := es.CurlRequest{
+		Action:      http.MethodPost,
+		Path:        "",
+		QueryParams: "",
+		Headers:     nil,
+		Data:        nil,
+	}
+	t.Run("gateway success", func(t *testing.T) {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockGateway := mocks.NewMockGateway(mockCtrl)
+		ctx := context.Background()
+		mockGateway.EXPECT().Curl(ctx, request).Return([]byte("response"), nil)
+		ctrl := New(mockGateway)
+		data, err := ctrl.Curl(ctx, commandRequest)
+		assert.NoError(t, err, "received error")
+		assert.EqualValues(t, []byte("response"), data)
+	})
+	t.Run("gateway response failed", func(t *testing.T) {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockGateway := mocks.NewMockGateway(mockCtrl)
+		ctx := context.Background()
+		mockGateway.EXPECT().Curl(ctx, request).Return(nil, errors.New("gateway failed"))
+		ctrl := New(mockGateway)
+		_, err := ctrl.Curl(ctx, commandRequest)
+		assert.Error(t, err)
+	})
+	t.Run("mapper failed", func(t *testing.T) {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockGateway := mocks.NewMockGateway(mockCtrl)
+		ctx := context.Background()
+		//mockGateway.EXPECT().Curl(ctx, request).Return(nil, errors.New("gateway failed"))
+		ctrl := New(mockGateway)
+		_, err := ctrl.Curl(ctx, es.CurlCommandRequest{})
+		assert.EqualErrorf(t, err, "action cannot be empty", "wrong error message")
 	})
 }

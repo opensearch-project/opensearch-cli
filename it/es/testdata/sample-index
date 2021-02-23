@@ -1,0 +1,4 @@
+{ "index": { "_id": 1 }}
+{ "title": "Elasticsearch: The Definitive Guide", "num_reviews": 20, "publisher": "oreilly" }
+{ "index": { "_id": 2 }}
+{ "title": "Taming Text: How to Find, Organize, and Manipulate It", "num_reviews": 12, "publisher": "manning" }

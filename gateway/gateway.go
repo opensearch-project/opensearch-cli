@@ -19,11 +19,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"odfe-cli/client"
 	"odfe-cli/entity"
+	"odfe-cli/entity/es"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
@@ -34,10 +37,10 @@ type HTTPGateway struct {
 	Profile *entity.Profile
 }
 
-//GetHeaders returns common headers
-func GetHeaders() map[string]string {
+//GetDefaultHeaders returns common headers
+func GetDefaultHeaders() map[string]string {
 	return map[string]string{
-		"Content-Type": "application/json",
+		"content-type": "application/json",
 	}
 }
 
@@ -49,32 +52,79 @@ func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
 	}
 }
 
-//Call calls request using http
-func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, error) {
+//isValidResponse checks whether the response is valid or not by checking the status code
+func (g *HTTPGateway) isValidResponse(response *http.Response) error {
+	if response == nil {
+		return errors.New("response is nil")
+	}
+	// client error if 400 <= status code < 500
+	if response.StatusCode >= http.StatusBadRequest && response.StatusCode < http.StatusInternalServerError {
 
-	res, err := g.Client.HTTPClient.Do(req)
+		return es.NewRequestError(
+			response.StatusCode,
+			response.Body,
+			fmt.Errorf("%d Client Error: %s for url: %s", response.StatusCode, response.Status, response.Request.URL))
+	}
+	// server error if status code >= 500
+	if response.StatusCode >= http.StatusInternalServerError {
+
+		return es.NewRequestError(
+			response.StatusCode,
+			response.Body,
+			fmt.Errorf("%d Server Error: %s for url: %s", response.StatusCode, response.Status, response.Request.URL))
+	}
+	return nil
+}
+
+//Execute calls request using http and check if status code is ok or not
+func (g *HTTPGateway) Execute(req *retryablehttp.Request) ([]byte, error) {
+
+	response, err := g.Client.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer func() {
-		err := res.Body.Close()
+		err := response.Body.Close()
 		if err != nil {
 			return
 		}
 	}()
-	resBytes, _ := ioutil.ReadAll(res.Body)
-	if res.StatusCode != statusCode {
-		return nil, fmt.Errorf("%s", string(resBytes))
+	if err = g.isValidResponse(response); err != nil {
+		return nil, err
 	}
-	return resBytes, nil
+	return ioutil.ReadAll(response.Body)
+}
+
+//Call calls request using http and return error if status code is not expected
+func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, error) {
+	resBytes, err := g.Execute(req)
+	if err == nil {
+		return resBytes, nil
+	}
+	r, ok := err.(*es.RequestError)
+	if !ok {
+		return nil, err
+	}
+	if r.StatusCode() != statusCode {
+		return nil, fmt.Errorf(r.GetResponse())
+	}
+	return nil, err
 
 }
 
 //BuildRequest builds request based on method and appends payload for given url with headers
+// TODO: Deprecate this method by replace this with BuildCurlRequest
 func (g *HTTPGateway) BuildRequest(ctx context.Context, method string, payload interface{}, url string, headers map[string]string) (*retryablehttp.Request, error) {
-	reqBytes, _ := json.Marshal(payload)
-	reqReader := bytes.NewReader(reqBytes)
-	r, err := retryablehttp.NewRequest(method, url, reqReader)
+	reqBytes, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+	return g.BuildCurlRequest(ctx, method, reqBytes, url, headers)
+}
+
+//BuildCurlRequest builds request based on method and add payload (in byte)
+func (g *HTTPGateway) BuildCurlRequest(ctx context.Context, method string, payload []byte, url string, headers map[string]string) (*retryablehttp.Request, error) {
+	r, err := retryablehttp.NewRequest(method, url, bytes.NewBuffer(payload))
 	if err != nil {
 		return nil, err
 	}

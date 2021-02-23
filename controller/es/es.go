@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"odfe-cli/entity/es"
 	esg "odfe-cli/gateway/es"
+	mapper "odfe-cli/mapper/es"
 
 	"fmt"
 )
@@ -28,6 +29,7 @@ import (
 //Controller is an interface for Elasticsearch
 type Controller interface {
 	GetDistinctValues(ctx context.Context, index string, field string) ([]interface{}, error)
+	Curl(ctx context.Context, param es.CurlCommandRequest) ([]byte, error)
 }
 
 type controller struct {
@@ -40,6 +42,8 @@ func New(gateway esg.Gateway) Controller {
 		gateway,
 	}
 }
+
+//GetDistinctValues get only unique values for given index, given field name
 func (c controller) GetDistinctValues(ctx context.Context, index string, field string) ([]interface{}, error) {
 	if len(index) == 0 || len(field) == 0 {
 		return nil, fmt.Errorf("index and field cannot be empty")
@@ -59,4 +63,13 @@ func (c controller) GetDistinctValues(ctx context.Context, index string, field s
 		values = append(values, bucket.Key)
 	}
 	return values, nil
+}
+
+//Curl accept user request and convert to format which Elasticsearch can understand
+func (c controller) Curl(ctx context.Context, param es.CurlCommandRequest) ([]byte, error) {
+	curlRequest, err := mapper.CommandToCurlRequestParameter(param)
+	if err != nil {
+		return nil, err
+	}
+	return c.gateway.Curl(ctx, curlRequest)
 }

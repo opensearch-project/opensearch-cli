@@ -122,7 +122,7 @@ func (g *gateway) CreateDetector(ctx context.Context, payload interface{}) ([]by
 	if err != nil {
 		return nil, err
 	}
-	detectorRequest, err := g.BuildRequest(ctx, http.MethodPost, payload, createURL.String(), gw.GetHeaders())
+	detectorRequest, err := g.BuildRequest(ctx, http.MethodPost, payload, createURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (g *gateway) StartDetector(ctx context.Context, ID string) error {
 	if err != nil {
 		return err
 	}
-	detectorRequest, err := g.BuildRequest(ctx, http.MethodPost, "", startURL.String(), gw.GetHeaders())
+	detectorRequest, err := g.BuildRequest(ctx, http.MethodPost, "", startURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return err
 	}
@@ -176,7 +176,7 @@ func (g *gateway) StopDetector(ctx context.Context, ID string) (*string, error) 
 	if err != nil {
 		return nil, err
 	}
-	detectorRequest, err := g.BuildRequest(ctx, http.MethodPost, "", stopURL.String(), gw.GetHeaders())
+	detectorRequest, err := g.BuildRequest(ctx, http.MethodPost, "", stopURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}
@@ -211,7 +211,7 @@ func (g *gateway) SearchDetector(ctx context.Context, payload interface{}) ([]by
 	if err != nil {
 		return nil, err
 	}
-	searchRequest, err := g.BuildRequest(ctx, http.MethodPost, payload, searchURL.String(), gw.GetHeaders())
+	searchRequest, err := g.BuildRequest(ctx, http.MethodPost, payload, searchURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +238,7 @@ func (g *gateway) DeleteDetector(ctx context.Context, ID string) error {
 	if err != nil {
 		return err
 	}
-	detectorRequest, err := g.BuildRequest(ctx, http.MethodDelete, "", deleteURL.String(), gw.GetHeaders())
+	detectorRequest, err := g.BuildRequest(ctx, http.MethodDelete, "", deleteURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return err
 	}
@@ -265,7 +265,7 @@ func (g *gateway) GetDetector(ctx context.Context, ID string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	detectorRequest, err := g.BuildRequest(ctx, http.MethodGet, "", getURL.String(), gw.GetHeaders())
+	detectorRequest, err := g.BuildRequest(ctx, http.MethodGet, "", getURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return nil, err
 	}
@@ -340,7 +340,7 @@ func (g *gateway) UpdateDetector(ctx context.Context, ID string, payload interfa
 	if err != nil {
 		return err
 	}
-	detectorRequest, err := g.BuildRequest(ctx, http.MethodPut, payload, updateURL.String(), gw.GetHeaders())
+	detectorRequest, err := g.BuildRequest(ctx, http.MethodPut, payload, updateURL.String(), gw.GetDefaultHeaders())
 	if err != nil {
 		return err
 	}

@@ -51,7 +51,9 @@ func getTestClient(t *testing.T, response string, code int, method string, actio
 			// Send response to be tested
 			Body: ioutil.NopCloser(bytes.NewBufferString(response)),
 			// Must be set to non-nil value or it panics
-			Header: make(http.Header),
+			Header:  make(http.Header),
+			Status:  "SOME OUTPUT",
+			Request: req,
 		}
 	})
 	return testClient
@@ -234,7 +236,9 @@ func getSearchClient(t *testing.T, responseData []byte, code int) *client.Client
 			// Send response to be tested
 			Body: ioutil.NopCloser(bytes.NewBufferString(string(responseData))),
 			// Must be set to non-nil value or it panics
-			Header: make(http.Header),
+			Header:  make(http.Header),
+			Status:  "SOME OUTPUT",
+			Request: req,
 		}
 	})
 	return testClient
@@ -289,7 +293,9 @@ func getCreateClient(t *testing.T, responseData []byte, code int) *client.Client
 			// Send response to be tested
 			Body: ioutil.NopCloser(bytes.NewBufferString(string(responseData))),
 			// Must be set to non-nil value or it panics
-			Header: make(http.Header),
+			Header:  make(http.Header),
+			Status:  "SOME OUTPUT",
+			Request: req,
 		}
 	})
 }

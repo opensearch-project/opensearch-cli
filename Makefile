@@ -1,5 +1,5 @@
 # we will put our integration testing in this path
-INTEGRATION_TEST_PATH=./it
+INTEGRATION_TEST_PATH=./it/...
 
 # set of env variables that you need for testing
 ENV_LOCAL_TEST=\

@@ -8,4 +8,3 @@
 {"my_dense_vector": [10, 10],"color" : "BLUE"}
 { "index" : { "_index" : "knn-sample-index", "_id" : "5" } }
 {"my_dense_vector": [30, 30],"color" : "BLUE"}
-

@@ -1,0 +1,10 @@
+{ "index" : { "_index" : "bulk-user-request", "_id" : "1" } }
+{"price": 100, "color" : "RED"}
+{ "index" : { "_index" : "bulk-user-request", "_id" : "2" } }
+{"price": 101,"color" : "RED"}
+{ "index" : { "_index" : "bulk-user-request", "_id" : "3" } }
+{"price": 102,"color" : "RED"}
+{ "index" : { "_index" : "bulk-user-request", "_id" : "4" } }
+{"price": 103,"color" : "BLUE"}
+{ "index" : { "_index" : "bulk-user-request", "_id" : "5" } }
+{"price": 104,"color" : "BLUE"}
