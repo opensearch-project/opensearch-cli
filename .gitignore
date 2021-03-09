@@ -21,3 +21,6 @@ bin
 .dockerfile-*
 
 /coverage.out
+
+odfe-cli
+odfe-cli.exe
