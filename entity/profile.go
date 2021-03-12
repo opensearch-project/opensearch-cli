@@ -15,9 +15,14 @@
 
 package entity
 
+type AWSIAM struct {
+	ProfileName string `yaml:"profile"`
+	ServiceName string `yaml:"service"`
+}
 type Profile struct {
-	Name     string `yaml:"name"`
-	Endpoint string `yaml:"endpoint"`
-	UserName string `yaml:"user"`
-	Password string `yaml:"password"`
+	Name     string  `yaml:"name"`
+	Endpoint string  `yaml:"endpoint"`
+	UserName string  `yaml:"user,omitempty"`
+	Password string  `yaml:"password,omitempty"`
+	AWS      *AWSIAM `yaml:"aws_iam,omitempty"`
 }

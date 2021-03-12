@@ -49,6 +49,11 @@ func StringToStringPtr(r string) *string {
 	return &r
 }
 
+// BoolToBoolPtr maps a bool to a *bool.
+func BoolToBoolPtr(r bool) *bool {
+	return &r
+}
+
 // StringPtrToString maps a *string to a string,
 // defaulting to "" if the pointer is nil.
 func StringPtrToString(r *string) string {

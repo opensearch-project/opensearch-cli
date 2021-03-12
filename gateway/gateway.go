@@ -16,7 +16,6 @@
 package gateway
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -27,6 +26,7 @@ import (
 	"odfe-cli/client"
 	"odfe-cli/entity"
 	"odfe-cli/entity/es"
+	"odfe-cli/gateway/aws/signer"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
@@ -78,7 +78,12 @@ func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 
 //Execute calls request using http and check if status code is ok or not
 func (g *HTTPGateway) Execute(req *retryablehttp.Request) ([]byte, error) {
-
+	if g.Profile.AWS != nil {
+		//sign request
+		if err := signer.SignRequest(req, *g.Profile.AWS, signer.GetV4Signer); err != nil {
+			return nil, err
+		}
+	}
 	response, err := g.Client.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -124,7 +129,7 @@ func (g *HTTPGateway) BuildRequest(ctx context.Context, method string, payload i
 
 //BuildCurlRequest builds request based on method and add payload (in byte)
 func (g *HTTPGateway) BuildCurlRequest(ctx context.Context, method string, payload []byte, url string, headers map[string]string) (*retryablehttp.Request, error) {
-	r, err := retryablehttp.NewRequest(method, url, bytes.NewBuffer(payload))
+	r, err := retryablehttp.NewRequest(method, url, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -143,13 +148,7 @@ func (g *HTTPGateway) BuildCurlRequest(ctx context.Context, method string, paylo
 
 //GetValidEndpoint get url based on user config
 func GetValidEndpoint(profile *entity.Profile) (*url.URL, error) {
-	if len(profile.Endpoint) == 0 {
-		return &url.URL{
-			Scheme: "https",
-			Host:   "localhost:9200",
-		}, nil
-	}
-	u, err := url.Parse(profile.Endpoint)
+	u, err := url.ParseRequestURI(profile.Endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("invalid endpoint: %v due to %v", profile.Endpoint, err)
 	}

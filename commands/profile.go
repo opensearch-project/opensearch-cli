@@ -16,6 +16,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 
 	"golang.org/x/term"
@@ -38,6 +39,10 @@ const (
 	ProfileCommandName          = "profile"
 	padding                     = 3
 	alignLeft                   = 0
+	FlagProfileCreateName       = "name"
+	FlagProfileCreateEndpoint   = "endpoint"
+	FlagProfileCreateAuthType   = "auth-type"
+	FlagProfileHelp             = "help"
 )
 
 //GetProfileController gets controller based on config file
@@ -64,19 +69,49 @@ var profileCommand = &cobra.Command{
 var createProfileCmd = &cobra.Command{
 	Use:   CreateNewProfileCommandName,
 	Short: "Create profile",
-	Long:  "Create profile with following fields: name, endpoint, user and password",
+	Long:  "Create named profile to save settings and credentials that you can apply to an odfe-cli command.",
 	Run: func(cmd *cobra.Command, args []string) {
 		profileController, err := GetProfileController()
 		if err != nil {
 			DisplayError(err, CreateNewProfileCommandName)
 			return
 		}
-		err = CreateProfile(profileController, getNewProfile)
+		name, err := getProfileName(cmd, profileController)
 		if err != nil {
 			DisplayError(err, CreateNewProfileCommandName)
 			return
 		}
+		endpoint, _ := cmd.Flags().GetString(FlagProfileCreateEndpoint)
+		newProfile := entity.Profile{
+			Name:     name,
+			Endpoint: endpoint,
+		}
+		switch authType, _ := cmd.Flags().GetString(FlagProfileCreateAuthType); authType {
+		case "disabled":
+			break
+		case "basic":
+			getBasicAuthDetails(&newProfile)
+		case "aws-iam":
+			getAWSIAMAuthDetails(&newProfile)
+		default:
+			DisplayError(errors.New("invalid value for auth-type. Use --help -h command to see permitted values"), CreateNewProfileCommandName)
+			return
+		}
+		err = CreateProfile(profileController, newProfile)
+		if err != nil {
+			DisplayError(err, CreateNewProfileCommandName)
+			return
+		}
+		fmt.Println("Profile created successfully.")
 	},
+}
+
+func getProfileName(cmd *cobra.Command, controller profile.Controller) (string, error) {
+	name, _ := cmd.Flags().GetString(FlagProfileCreateName)
+	if err := validateProfileName(name, controller); err != nil {
+		return "", err
+	}
+	return name, nil
 }
 
 //deleteProfilesCmd deletes profiles by names
@@ -93,6 +128,7 @@ var deleteProfilesCmd = &cobra.Command{
 			DisplayError(err, DeleteProfilesCommandName)
 			return
 		}
+		fmt.Println("Profile deleted successfully.")
 	},
 }
 
@@ -123,11 +159,28 @@ func init() {
 	profileCommand.AddCommand(createProfileCmd)
 	profileCommand.AddCommand(deleteProfilesCmd)
 	profileCommand.AddCommand(listProfileCmd)
+
+	//profile flags
+	profileCommand.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+ProfileCommandName)
+
+	//profile list flags
 	listProfileCmd.Flags().BoolP(FlagProfileVerbose, "l", false, "Shows information like name, endpoint, user")
-	listProfileCmd.Flags().BoolP("help", "h", false, "Help for "+ListProfilesCommandName)
-	createProfileCmd.Flags().BoolP("help", "h", false, "Help for "+CreateNewProfileCommandName)
-	deleteProfilesCmd.Flags().BoolP("help", "h", false, "Help for "+DeleteProfilesCommandName)
-	profileCommand.Flags().BoolP("help", "h", false, "Help for "+ProfileCommandName)
+	listProfileCmd.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+ListProfilesCommandName)
+
+	//profile create flags
+	createProfileCmd.Flags().StringP(FlagProfileCreateName, "n", "", "Create profile with this name")
+	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateName)
+	createProfileCmd.Flags().StringP(FlagProfileCreateEndpoint, "e", "", "Create profile with this endpoint or host")
+	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateEndpoint)
+	createProfileCmd.Flags().StringP(FlagProfileCreateAuthType, "a", "", "Authentication type. Options are disabled, basic and aws-iam."+
+		"\nIf security is disabled, provide --auth-type='disabled'.\nIf security uses HTTP basic authentication, provide --auth-type='basic'.\n"+
+		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nodfe-cli asks for additional information based on your choice of authentication type.")
+	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateAuthType)
+	createProfileCmd.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+CreateNewProfileCommandName)
+
+	//profile delete flags
+	deleteProfilesCmd.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+DeleteProfilesCommandName)
+
 	GetRoot().AddCommand(profileCommand)
 }
 
@@ -143,59 +196,40 @@ func getProfileController(cfgFlagValue string) (profile.Controller, error) {
 }
 
 // CreateProfile creates a new named profile
-func CreateProfile(profileController profile.Controller, getNewProfile func(map[string]entity.Profile) entity.Profile) error {
-	profiles, err := profileController.GetProfilesMap()
-	if err != nil {
-		return fmt.Errorf("failed to get profile names due to: %w", err)
-	}
-	newProfile := getNewProfile(profiles)
-	if err = profileController.CreateProfile(newProfile); err != nil {
+func CreateProfile(profileController profile.Controller, newProfile entity.Profile) error {
+	if err := profileController.CreateProfile(newProfile); err != nil {
 		return fmt.Errorf("failed to create profile %v due to: %w", newProfile, err)
 	}
 	return nil
 }
 
-// getNewProfile gets new profile information from user using command line
-func getNewProfile(profileMap map[string]entity.Profile) entity.Profile {
-	var name string
-	for {
-		fmt.Printf("Enter profile's name: ")
-		name = getUserInputAsText(checkInputIsNotEmpty)
-		if _, ok := profileMap[name]; !ok {
-			break
-		}
-		fmt.Println("profile", name, "already exists.")
+func validateProfileName(name string, controller profile.Controller) error {
+	profileMap, err := controller.GetProfilesMap()
+	if err != nil {
+		return err
 	}
-	fmt.Printf("Elasticsearch Endpoint: ")
-	endpoint := getUserInputAsText(checkInputIsNotEmpty)
-	fmt.Printf("Is security plugin enabled? Y/N ")
-	isSecured := getUserInputAsBoolean(checkInputIsNotEmpty)
-	var user, password string
-	if isSecured {
-		fmt.Printf("User Name: ")
-		user = getUserInputAsText(checkInputIsNotEmpty)
-		fmt.Printf("Password: ")
-		password = getUserInputAsMaskedText(checkInputIsNotEmpty)
+	if _, ok := profileMap[name]; !ok {
+		return nil
 	}
-	return entity.Profile{
-		Name:     name,
-		Endpoint: endpoint,
-		UserName: user,
-		Password: password,
-	}
+	return fmt.Errorf("profile %s already exists", name)
 }
 
-func getUserInputAsBoolean(isValid func(input string) bool) bool {
-	response := getUserInputAsText(isValid)
-	switch strings.ToLower(response) {
-	case "y", "yes":
-		return true
-	case "n", "no":
-		return false
-	default:
-		fmt.Printf("please type (y)es or (n)o: ")
-		return getUserInputAsBoolean(isValid)
-	}
+// getBasicAuthDetails gets new basic HTTP Auth profile information from user using command line
+func getBasicAuthDetails(newProfile *entity.Profile) {
+	fmt.Printf("Username: ")
+	newProfile.UserName = getUserInputAsText(checkInputIsNotEmpty)
+	fmt.Printf("Password: ")
+	newProfile.Password = getUserInputAsMaskedText(checkInputIsNotEmpty)
+}
+
+// getAWSIAMAuthDetails gets new AWS IAM Auth profile information from user using command line
+func getAWSIAMAuthDetails(newProfile *entity.Profile) {
+	fmt.Printf("AWS profile name (leave blank if you want to provide credentials using environment variables): ")
+	awsIAM := &entity.AWSIAM{}
+	awsIAM.ProfileName = getUserInputAsText(nil)
+	fmt.Printf("AWS service name where your cluster is deployed (for Amazon Elasticsearch Service, use 'es'. For EC2, use 'ec2'): ")
+	awsIAM.ServiceName = getUserInputAsText(checkInputIsNotEmpty)
+	newProfile.AWS = awsIAM
 }
 
 // getUserInputAsText get value from user as text
@@ -203,7 +237,7 @@ func getUserInputAsText(isValid func(string) bool) string {
 	var response string
 	//Ignore return value since validation is applied below
 	_, _ = fmt.Scanln(&response)
-	if !isValid(response) {
+	if isValid != nil && !isValid(response) {
 		return getUserInputAsText(isValid)
 	}
 	return strings.TrimSpace(response)

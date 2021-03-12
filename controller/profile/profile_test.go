@@ -80,6 +80,70 @@ func TestControllerGetProfilesMap(t *testing.T) {
 	})
 }
 
+func TestControllerGetProfiles(t *testing.T) {
+
+	profiles := entity.Config{
+		Profiles: []entity.Profile{
+			{
+				Name:     "local",
+				Endpoint: "https://localhost:9200",
+				UserName: "", Password: "",
+			},
+			{
+				Name:     "default",
+				Endpoint: "https://127.0.0.1:9200",
+				UserName: "user", Password: "user123",
+			},
+			{
+				Name:     "default1",
+				Endpoint: "https://127.0.0.1:9200",
+				UserName: "user", Password: "user123",
+				AWS: &entity.AWSIAM{ProfileName: "iam"},
+			},
+			{
+				Name:     "default2",
+				Endpoint: "https://127.0.0.1:9200",
+				UserName: "user", Password: "user123",
+				AWS: &entity.AWSIAM{ProfileName: ""},
+			},
+		}}
+	t.Run("get profiles", func(t *testing.T) {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockConfigCtrl := config.NewMockController(mockCtrl)
+		mockConfigCtrl.EXPECT().Read().Return(profiles, nil)
+		ctrl := New(mockConfigCtrl)
+		actual, err := ctrl.GetProfiles()
+		assert.NoError(t, err)
+		expectedProfiles := []entity.Profile{
+			{
+				Name:     "local",
+				Endpoint: "https://localhost:9200",
+				UserName: "", Password: "",
+			},
+			{
+				Name:     "default",
+				Endpoint: "https://127.0.0.1:9200",
+				UserName: "user", Password: "user123",
+			},
+			{
+				Name:     "default1",
+				Endpoint: "https://127.0.0.1:9200",
+				UserName: "user", Password: "user123",
+				AWS: &entity.AWSIAM{ProfileName: "iam"},
+			},
+			{
+				Name:     "default2",
+				Endpoint: "https://127.0.0.1:9200",
+				UserName: "user", Password: "user123",
+				AWS: &entity.AWSIAM{ProfileName: ""},
+			},
+		}
+
+		assert.EqualValues(t, expectedProfiles, actual)
+	})
+}
+
 func TestControllerGetProfileNames(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)

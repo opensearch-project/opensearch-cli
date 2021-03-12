@@ -30,21 +30,29 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func fakeInputProfile(map[string]entity.Profile) entity.Profile {
+func fakeInputProfile() entity.Profile {
 	return entity.Profile{
 		Name:     "default",
-		Endpoint: "https://localhost:9200",
+		Endpoint: "localhost:9200",
 		UserName: "admin",
 		Password: "admin",
 	}
 }
 
-func fakeInSecuredInputProfile(map[string]entity.Profile) entity.Profile {
+func fakeInSecuredInputProfile() entity.Profile {
 	return entity.Profile{
 		Name:     "default",
-		Endpoint: "https://localhost:9200",
-		UserName: "",
-		Password: "",
+		Endpoint: "localhost:9200",
+	}
+}
+
+func fakeAWSIAMInputProfile() entity.Profile {
+	return entity.Profile{
+		Name:     "default",
+		Endpoint: "localhost:9200",
+		AWS: &entity.AWSIAM{
+			ProfileName: "iam-test",
+		},
 	}
 }
 
@@ -53,28 +61,73 @@ func TestCreateProfile(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
 		mockProfileCtrl := mocks.NewMockController(mockCtrl)
-		mockProfileCtrl.EXPECT().GetProfilesMap().Return(nil, nil)
-		mockProfileCtrl.EXPECT().CreateProfile(fakeInputProfile(nil)).Return(nil)
-		err := CreateProfile(mockProfileCtrl, fakeInputProfile)
+		mockProfileCtrl.EXPECT().CreateProfile(fakeInputProfile()).Return(nil)
+		err := CreateProfile(mockProfileCtrl, fakeInputProfile())
 		assert.NoError(t, err)
 	})
-	t.Run("create in-secured profile successfully", func(t *testing.T) {
+	t.Run("create security disabled profile successfully", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
 		mockProfileCtrl := mocks.NewMockController(mockCtrl)
-		mockProfileCtrl.EXPECT().GetProfilesMap().Return(nil, nil)
-		mockProfileCtrl.EXPECT().CreateProfile(fakeInSecuredInputProfile(nil)).Return(nil)
-		err := CreateProfile(mockProfileCtrl, fakeInSecuredInputProfile)
+		mockProfileCtrl.EXPECT().CreateProfile(fakeInSecuredInputProfile()).Return(nil)
+		err := CreateProfile(mockProfileCtrl, fakeInSecuredInputProfile())
+		assert.NoError(t, err)
+	})
+	t.Run("create profile using aws iam successfully", func(t *testing.T) {
+		mockCtrl := gomock.NewController(t)
+		defer mockCtrl.Finish()
+		mockProfileCtrl := mocks.NewMockController(mockCtrl)
+		mockProfileCtrl.EXPECT().CreateProfile(fakeAWSIAMInputProfile()).Return(nil)
+		err := CreateProfile(mockProfileCtrl, fakeAWSIAMInputProfile())
 		assert.NoError(t, err)
 	})
 	t.Run("create profile failed", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
 		mockProfileCtrl := mocks.NewMockController(mockCtrl)
-		mockProfileCtrl.EXPECT().GetProfilesMap().Return(nil, nil)
-		mockProfileCtrl.EXPECT().CreateProfile(fakeInputProfile(nil)).Return(errors.New("error"))
-		err := CreateProfile(mockProfileCtrl, fakeInputProfile)
-		assert.EqualError(t, err, fmt.Sprintf("failed to create profile %v due to: error", fakeInputProfile(nil)))
+		mockProfileCtrl.EXPECT().CreateProfile(fakeInputProfile()).Return(errors.New("error"))
+		err := CreateProfile(mockProfileCtrl, fakeInputProfile())
+		assert.EqualError(t, err, fmt.Sprintf("failed to create profile %v due to: error", fakeInputProfile()))
+	})
+	t.Run("check mandatory create parameters are provided", func(t *testing.T) {
+		root := GetRoot()
+		assert.NotNil(t, root)
+		root.SetArgs([]string{
+			ProfileCommandName, CreateNewProfileCommandName,
+		})
+		_, err := root.ExecuteC()
+		assert.EqualErrorf(t, err, "required flag(s) \"auth-type\", \"endpoint\", \"name\" not set", "unexpected error")
+	})
+	t.Run("create security disabled profile", func(t *testing.T) {
+		f, err := ioutil.TempFile("", "profile")
+		assert.NoError(t, err)
+		defer func() {
+			err := os.Remove(f.Name())
+			assert.NoError(t, err)
+		}()
+		root := GetRoot()
+		assert.NotNil(t, root)
+		testProfileName := "pname"
+		testProfileEndpoint := "some-endpoint"
+		root.SetArgs([]string{
+			ProfileCommandName, CreateNewProfileCommandName,
+			"--" + flagConfig, f.Name(),
+			"--" + FlagProfileCreateAuthType, "disabled",
+			"--" + FlagProfileCreateEndpoint, testProfileEndpoint,
+			"--" + FlagProfileCreateName, testProfileName,
+		})
+		_, err = root.ExecuteC()
+		assert.NoError(t, err)
+		contents, _ := ioutil.ReadFile(f.Name())
+		var actual entity.Config
+		assert.NoError(t, yaml.Unmarshal(contents, &actual))
+		assert.EqualValues(t, []entity.Profile{
+			{
+				Name:     testProfileName,
+				Endpoint: testProfileEndpoint,
+			},
+		}, actual.Profiles)
+
 	})
 }
 
@@ -86,7 +139,7 @@ func TestDeleteProfileCommand(t *testing.T) {
 			err := os.Remove(f.Name())
 			assert.NoError(t, err)
 		}()
-		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile(nil)}}
+		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile()}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
 		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
@@ -116,7 +169,7 @@ func TestListsProfileCommand(t *testing.T) {
 			err := os.Remove(f.Name())
 			assert.NoError(t, err)
 		}()
-		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile(nil)}}
+		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile()}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
 		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
@@ -137,7 +190,7 @@ func TestListsProfileCommand(t *testing.T) {
 			err := os.Remove(f.Name())
 			assert.NoError(t, err)
 		}()
-		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile(nil)}}
+		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile()}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
 		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
