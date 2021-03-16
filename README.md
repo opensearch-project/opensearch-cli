@@ -29,10 +29,11 @@ or from the [releases](https://github.com/opendistro-for-elasticsearch/odfe-cli/
 
 ### Odfe cli and Opendistro plugins compatibility
 
-| odfe-cli version  | odfe plugins  | odfe versions |
-| ----------------  | ------------- | --------------- |
-| 1.0               | [Anomaly Detection](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/)  | [1.12.0](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.12.0.md), [1.13.0](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.0.md), [1.13.1](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.1.md) |
-
+| odfe plugins  | odfe versions |
+| ------------- | --------------- |
+| [Anomaly Detection](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/)  | [1.12.0](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.12.0.md), [1.13.0](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.0.md), [1.13.1](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.1.md) |
+| [k-NN](https://opendistro.github.io/for-elasticsearch-docs/docs/knn/)  | [1.12.0](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.12.0.md), [1.13.0](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.0.md), [1.13.1](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.1.md) |
+            
 
 ## Development
 
@@ -92,7 +93,27 @@ We recommend you to create all integration tests inside [this](./it) folder with
 ## Usage
 
 ```
-odfe-cli --help
+$ odfe-cli --help
+
+odfe-cli is a unified command line interface for managing ODFE clusters
+
+Usage:
+  odfe-cli [command]
+
+Available Commands:
+  ad          Manage the Anomaly Detection plugin
+  completion  Generate completion script for your shell
+  curl        Manage Elasticsearch core features
+  help        Help about any command
+  knn         Manage the k-NN plugin
+  profile     Manage a collection of settings and credentials that you can apply to an odfe-cli command
+
+Flags:
+  -c, --config string    Configuration file for odfe-cli, default is /Users/balasvij/.odfe-cli/config.yaml
+  -h, --help             Help for odfe-cli
+  -p, --profile string   Use a specific profile from your configuration file
+  -v, --version          Version for odfe-cli
+
 ```
 
 ### Create default profile
@@ -100,12 +121,32 @@ A profile is a collection of credentials that will be applied to the odfe-cli co
 the settings and credentials of that profile will be used to execute the command.
 Users can create one profile with the name "default", and is used when no profile is explicitly referenced. 
 
+#### Examples:
+
+1. Create default profile where the cluster's security uses HTTP basic authentication.
 ```
-$ odfe-cli profile create
-Enter profile's name: default
-Elasticsearch Endpoint: https://localhost:9200  
-User Name: admin
-Password: 
+$ odfe-cli profile create --auth-type "basic" \
+                          --name "default" \
+                          --endpoint "https://localhost:9200" 
+Username: admin
+Password: *******
+Profile created successfully.
+```
+2. Create default profile where the cluster's security uses AWS IAM ARNs as users.
+```
+$ odfe-cli profile create --auth-type "aws-iam" \
+                          --name "default" \
+                          --endpoint "https://localhost:9200" 
+AWS profile name (leave blank if you want to provide credentials using environment variables): readonly      
+AWS service name where your cluster is deployed (for Amazon Elasticsearch Service, use 'es'. For EC2, use 'ec2'): es
+Profile created successfully.
+```
+3. Create default profile where the cluster's security plugin is disabled.
+```
+$ odfe-cli profile create --auth-type "disabled" \
+                          --name "default" \
+                          --endpoint "https://cloud-service-endpoint:9200" 
+Profile created successfully.
 ```
 
 ### List existing profile
