@@ -146,7 +146,7 @@ func GetProfile() (*entity.Profile, error) {
 		return nil, err
 	}
 	if !ok {
-		return nil, fmt.Errorf("No profile found for execution. Try %s %s --help for more information.", RootCommandName, ProfileCommandName)
+		return nil, fmt.Errorf("no profile found for execution. Try %s %s --help for more information", RootCommandName, ProfileCommandName)
 	}
 	return &profile, nil
 }

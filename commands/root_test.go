@@ -82,7 +82,7 @@ func TestGetProfile(t *testing.T) {
 		_, err := root.ExecuteC()
 		assert.NoError(t, err)
 		_, err = GetProfile()
-		assert.EqualError(t, err, "No profile found for execution. Try odfe-cli profile --help for more information.")
+		assert.EqualErrorf(t, err, "profile 'test1' does not exist", "unexpected error")
 	})
 	t.Run("no config file found", func(t *testing.T) {
 		root := GetRoot()
@@ -91,6 +91,6 @@ func TestGetProfile(t *testing.T) {
 		_, err := root.ExecuteC()
 		assert.NoError(t, err)
 		_, err = GetProfile()
-		assert.EqualError(t, err, "open testdata/config1.yaml: no such file or directory")
+		assert.EqualError(t, err, "open testdata/config1.yaml: no such file or directory", "unexpected error")
 	})
 }

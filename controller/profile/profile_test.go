@@ -237,7 +237,7 @@ func TestControllerGetProfileForExecution(t *testing.T) {
 		mockConfigCtrl.EXPECT().Read().Return(getSampleConfig(), nil)
 		ctrl := New(mockConfigCtrl)
 		_, ok, err := ctrl.GetProfileForExecution("invalid")
-		assert.NoError(t, err)
+		assert.EqualError(t, err, "profile 'invalid' does not exist")
 		assert.False(t, ok)
 	})
 }

@@ -147,12 +147,16 @@ func (c controller) GetProfileForExecution(name string) (value entity.Profile, o
 		return
 	}
 	if name != "" {
-		value, ok = profiles[name]
-		return
+		if value, ok = profiles[name]; ok {
+			return
+		}
+		return value, ok, fmt.Errorf("profile '%s' does not exist", name)
 	}
 	if envProfileName, exists := os.LookupEnv(odfeProfileEnvVarName); exists {
-		value, ok = profiles[envProfileName]
-		return
+		if value, ok = profiles[envProfileName]; ok {
+			return
+		}
+		return value, ok, fmt.Errorf("profile '%s' does not exist", envProfileName)
 	}
 	value, ok = profiles[odfeDefaultProfileName]
 	return
