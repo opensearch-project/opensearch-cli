@@ -46,7 +46,8 @@ func sign(req *retryablehttp.Request, region *string, serviceName string, signer
 //SignRequest signs the request using SigV4
 func SignRequest(req *retryablehttp.Request, awsProfile entity.AWSIAM, getSigner func(*credentials.Credentials) *v4.Signer) error {
 	awsSession, err := session.NewSessionWithOptions(session.Options{
-		Profile: awsProfile.ProfileName,
+		Profile:           awsProfile.ProfileName,
+		SharedConfigState: session.SharedConfigEnable,
 	})
 
 	if err != nil {
