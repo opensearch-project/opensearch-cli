@@ -133,6 +133,8 @@ Password: *******
 Profile created successfully.
 ```
 2. Create default profile where the cluster's security uses AWS IAM ARNs as users.
+AWS credentials can be provided either by specifying aws profile name or using [environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html).
+You can find details about creating aws profiles [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
 ```
 $ odfe-cli profile create --auth-type "aws-iam" \
                           --name "default" \
