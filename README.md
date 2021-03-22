@@ -1,6 +1,7 @@
 ![Build and Test odfe-cli](https://github.com/opendistro-for-elasticsearch/odfe-cli/workflows/Build%20and%20Test%20odfe-cli/badge.svg?branch=main)
 [![codecov](https://codecov.io/gh/opendistro-for-elasticsearch/odfe-cli/branch/main/graph/badge.svg?flag=odfe-cli)](https://codecov.io/gh/opendistro-for-elasticsearch/odfe-cli)
 [![Documentation](https://img.shields.io/badge/doc-reference-blue)](https://opendistro.github.io/for-elasticsearch-docs/docs/cli/)
+[![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://discuss.opendistrocommunity.dev/c/cli/55)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
 # ODFE Command Line Interface
 
