@@ -16,7 +16,7 @@ jobs:
       - name: Set up Go ubuntu-latest
         uses: actions/setup-go@v2
         with:
-          go-version: 1.14
+          go-version: 1.16.2
 
       - name: Check out source code
         uses: actions/checkout@v2
@@ -72,6 +72,12 @@ jobs:
           cd dist/odfe-cli_darwin_amd64/
           zip opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip odfe-cli
           aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip ${{ secrets.S3_MACOS_URI }}
+
+      - name: Zip and copy macOS(arm64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/odfe-cli_darwin_arm64/
+          zip opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-arm64.zip odfe-cli
+          aws s3 cp opendistro-odfe-cli-${{ env.RELEASE_VERSION }}-macos-arm64.zip ${{ secrets.S3_MACOS_URI }}
 
       - name: Zip and copy linux(amd64) artifacts to S3 bucket with the AWS CLI
         run: |

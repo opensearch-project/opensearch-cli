@@ -44,7 +44,7 @@ odfe-cli shares [minimum requirements](https://github.com/golang/go/wiki/Minimum
 and [docker](https://docs.docker.com/get-docker/) to run integration tests.
 
 ### Build from source
-1. Install [Go](https://golang.org/doc/install) > = 1.14
+1. Install [Go](https://golang.org/doc/install) > = 1.16
 2. Clone the repository:
     ```
     cd $GOPATH/src

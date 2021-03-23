@@ -17,7 +17,7 @@ docker.stop:
 
 # clean up docker
 docker.clean:
-	docker system prune --volumes;
+	docker system prune --volumes --force;
 
 # this command will trigger integration test
 # INTEGRATION_TEST_SUITE_PATH is used for run specific test in Golang

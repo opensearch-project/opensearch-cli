@@ -1,6 +1,6 @@
 module odfe-cli
 
-go 1.14
+go 1.16
 
 require (
 	github.com/aws/aws-sdk-go v1.37.25
