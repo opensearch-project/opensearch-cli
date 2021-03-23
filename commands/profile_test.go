@@ -115,16 +115,19 @@ func TestCreateProfile(t *testing.T) {
 			"--" + FlagProfileCreateAuthType, "disabled",
 			"--" + FlagProfileCreateEndpoint, testProfileEndpoint,
 			"--" + FlagProfileCreateName, testProfileName,
+			"--" + FlagProfileMaxRetry, "2",
 		})
 		_, err = root.ExecuteC()
 		assert.NoError(t, err)
 		contents, _ := ioutil.ReadFile(f.Name())
 		var actual entity.Config
 		assert.NoError(t, yaml.Unmarshal(contents, &actual))
+		retryVal := 2
 		assert.EqualValues(t, []entity.Profile{
 			{
 				Name:     testProfileName,
 				Endpoint: testProfileEndpoint,
+				MaxRetry: &retryVal,
 			},
 		}, actual.Profiles)
 

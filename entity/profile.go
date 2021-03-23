@@ -25,4 +25,5 @@ type Profile struct {
 	UserName string  `yaml:"user,omitempty"`
 	Password string  `yaml:"password,omitempty"`
 	AWS      *AWSIAM `yaml:"aws_iam,omitempty"`
+	MaxRetry *int    `yaml:"max_retry"`
 }

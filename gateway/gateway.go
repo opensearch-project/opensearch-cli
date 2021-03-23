@@ -27,6 +27,8 @@ import (
 	"odfe-cli/entity"
 	"odfe-cli/entity/es"
 	"odfe-cli/gateway/aws/signer"
+	"os"
+	"strconv"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
@@ -46,6 +48,16 @@ func GetDefaultHeaders() map[string]string {
 
 //NewHTTPGateway creates new HTTPGateway instance
 func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
+	// set max retry if provided by command
+	if p.MaxRetry != nil {
+		c.HTTPClient.RetryMax = *p.MaxRetry
+	}
+	if val, ok := os.LookupEnv("ODFE_MAX_RETRY"); ok {
+		//ignore error from non positive number
+		if attempt, err := strconv.Atoi(val); err == nil {
+			c.HTTPClient.RetryMax = attempt
+		}
+	}
 	return &HTTPGateway{
 		Client:  c,
 		Profile: p,
