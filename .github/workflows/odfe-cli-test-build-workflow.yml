@@ -69,6 +69,11 @@ jobs:
           flags: odfe-cli
           name: codecov-umbrella
 
+      - name: Stop and Clean Docker Components
+        run: |
+          make docker.stop
+          make docker.clean
+
   build:
     strategy:
       matrix:

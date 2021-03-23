@@ -60,9 +60,9 @@ func (a *ESGetTestSuite) SetupSuite() {
 	}
 	a.Profile = &entity.Profile{
 		Name:     "test",
-		Endpoint: "https://localhost:9200",
-		UserName: "admin",
-		Password: "admin",
+		Endpoint: os.Getenv("ODFE_ENDPOINT"),
+		UserName: os.Getenv("ODFE_USER"),
+		Password: os.Getenv("ODFE_PASSWORD"),
 	}
 	if err = a.ValidateProfile(); err != nil {
 		fmt.Println(err)
