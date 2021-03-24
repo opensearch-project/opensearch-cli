@@ -20,6 +20,7 @@ import (
 	"odfe-cli/entity"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -86,5 +87,45 @@ func TestGatewayRetryVal(t *testing.T) {
 		testClient := mocks.NewTestClient(nil)
 		NewHTTPGateway(testClient, &profile)
 		assert.EqualValues(t, 10, testClient.HTTPClient.RetryMax)
+	})
+}
+
+func TestGatewayConnectionTimeout(t *testing.T) {
+	t.Run("default timeout", func(t *testing.T) {
+		profile := entity.Profile{
+			Name:     "test1",
+			Endpoint: "https://localhost:9200",
+		}
+		testClient := mocks.NewTestClient(nil)
+		NewHTTPGateway(testClient, &profile)
+		assert.EqualValues(t, 10*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
+	})
+	t.Run("configure profile timeout", func(t *testing.T) {
+		timeout := int64(60)
+		profile := entity.Profile{
+			Name:     "test1",
+			Endpoint: "https://localhost:9200",
+			Timeout:  &timeout,
+		}
+		testClient := mocks.NewTestClient(nil)
+		NewHTTPGateway(testClient, &profile)
+		assert.EqualValues(t, time.Duration(timeout)*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
+	})
+
+	t.Run("override from os variable", func(t *testing.T) {
+		val := os.Getenv("ODFE_TIMEOUT")
+		defer func() {
+			assert.NoError(t, os.Setenv("ODFE_TIMEOUT", val))
+		}()
+		os.Setenv("ODFE_TIMEOUT", "5")
+		timeout := int64(60)
+		profile := entity.Profile{
+			Name:     "test1",
+			Endpoint: "https://localhost:9200",
+			Timeout:  &timeout,
+		}
+		testClient := mocks.NewTestClient(nil)
+		NewHTTPGateway(testClient, &profile)
+		assert.EqualValues(t, 5*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
 	})
 }

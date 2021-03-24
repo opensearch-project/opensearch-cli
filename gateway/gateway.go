@@ -29,6 +29,7 @@ import (
 	"odfe-cli/gateway/aws/signer"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
@@ -52,16 +53,33 @@ func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
 	if p.MaxRetry != nil {
 		c.HTTPClient.RetryMax = *p.MaxRetry
 	}
-	if val, ok := os.LookupEnv("ODFE_MAX_RETRY"); ok {
-		//ignore error from non positive number
-		if attempt, err := strconv.Atoi(val); err == nil {
-			c.HTTPClient.RetryMax = attempt
-		}
+	//override with environment variable if exists
+	if val, ok := overrideValue(p, "ODFE_MAX_RETRY"); ok {
+		c.HTTPClient.RetryMax = *val
+	}
+
+	// set connection timeout if provided by command
+	if p.Timeout != nil {
+		c.HTTPClient.HTTPClient.Timeout = time.Duration(*p.Timeout) * time.Second
+	}
+	//override with environment variable if exists
+	if duration, ok := overrideValue(p, "ODFE_TIMEOUT"); ok {
+		c.HTTPClient.HTTPClient.Timeout = time.Duration(*duration) * time.Second
 	}
 	return &HTTPGateway{
 		Client:  c,
 		Profile: p,
 	}
+}
+
+func overrideValue(p *entity.Profile, envVariable string) (*int, bool) {
+	if val, ok := os.LookupEnv(envVariable); ok {
+		//ignore error from non positive number
+		if attempt, err := strconv.Atoi(val); err == nil {
+			return &attempt, true
+		}
+	}
+	return nil, false
 }
 
 //isValidResponse checks whether the response is valid or not by checking the status code

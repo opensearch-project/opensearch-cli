@@ -18,9 +18,12 @@ package client
 import (
 	"crypto/tls"
 	"net/http"
+	"time"
 
 	"github.com/hashicorp/go-retryablehttp"
 )
+
+const defaultTimeout = 10
 
 //Client is an Abstraction for actual client
 type Client struct {
@@ -32,6 +35,7 @@ func NewDefaultClient(tripper http.RoundTripper) (*Client, error) {
 
 	client := retryablehttp.NewClient()
 	client.HTTPClient.Transport = tripper
+	client.HTTPClient.Timeout = defaultTimeout * time.Second
 	client.Logger = nil
 	return &Client{
 		HTTPClient: client,

@@ -116,6 +116,7 @@ func TestCreateProfile(t *testing.T) {
 			"--" + FlagProfileCreateEndpoint, testProfileEndpoint,
 			"--" + FlagProfileCreateName, testProfileName,
 			"--" + FlagProfileMaxRetry, "2",
+			"--" + FlagProfileTimeout, "10",
 		})
 		_, err = root.ExecuteC()
 		assert.NoError(t, err)
@@ -123,11 +124,13 @@ func TestCreateProfile(t *testing.T) {
 		var actual entity.Config
 		assert.NoError(t, yaml.Unmarshal(contents, &actual))
 		retryVal := 2
+		timeout := int64(10)
 		assert.EqualValues(t, []entity.Profile{
 			{
 				Name:     testProfileName,
 				Endpoint: testProfileEndpoint,
 				MaxRetry: &retryVal,
+				Timeout:  &timeout,
 			},
 		}, actual.Profiles)
 

@@ -43,6 +43,7 @@ const (
 	FlagProfileCreateEndpoint   = "endpoint"
 	FlagProfileCreateAuthType   = "auth-type"
 	FlagProfileMaxRetry         = "max-retry"
+	FlagProfileTimeout          = "timeout"
 	FlagProfileHelp             = "help"
 )
 
@@ -84,10 +85,12 @@ var createProfileCmd = &cobra.Command{
 		}
 		endpoint, _ := cmd.Flags().GetString(FlagProfileCreateEndpoint)
 		maxAttempt, _ := cmd.Flags().GetInt(FlagProfileMaxRetry)
+		timeout, _ := cmd.Flags().GetInt64(FlagProfileTimeout)
 		newProfile := entity.Profile{
 			Name:     name,
 			Endpoint: endpoint,
 			MaxRetry: &maxAttempt,
+			Timeout:  &timeout,
 		}
 		switch authType, _ := cmd.Flags().GetString(FlagProfileCreateAuthType); authType {
 		case "disabled":
@@ -179,8 +182,10 @@ func init() {
 		"\nIf security is disabled, provide --auth-type='disabled'.\nIf security uses HTTP basic authentication, provide --auth-type='basic'.\n"+
 		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nodfe-cli asks for additional information based on your choice of authentication type.")
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateAuthType)
-	createProfileCmd.Flags().IntP(FlagProfileMaxRetry, "m", 3, "Specifies a value of maximum retry attempts the odfe-cli retry handler can perform.\n"+
+	createProfileCmd.Flags().IntP(FlagProfileMaxRetry, "m", 3, "Maximum retry attempts allowed if transient problems occur.\n"+
 		"You can override this value by using the ODFE_MAX_RETRY environment variable.")
+	createProfileCmd.Flags().Int64P(FlagProfileTimeout, "t", 10, "Maximum time allowed for connection in seconds.\n"+
+		"You can override this value by using the ODFE_TIMEOUT environment variable.")
 	createProfileCmd.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+CreateNewProfileCommandName)
 
 	//profile delete flags

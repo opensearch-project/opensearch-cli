@@ -201,3 +201,9 @@ If defined, `ODFE_MAX_RETRY` overrides the value for the individual profiles set
 Specifies the name of the ofe-cli profile to use.
 If defined, this environment variable overrides the behavior of using the profile named `[default]` in the configuration file.
 You can override this environment variable by using the `--profile` command line parameter.
+
+`ODFE_TIMEOUT`  
+Specifies maximum time  in  seconds  that you allow the connection to the server to take.
+If defined, `ODFE_TIMEOUT` overrides the value for the individual profiles setting `timeout`.
+This only limits  the  connection  phase, once timeout happens, client will only exit, it doesn't terminate the
+request that already reached the server.
