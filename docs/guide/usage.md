@@ -9,6 +9,7 @@ ODFE Command Line Interface (odfe-cli).
 + [Command structure](./usage.md#command-structure)
 + [Specifying parameter values](./usage.md#specifying-parameter-values)
 + [Auto complete](./usage.md#auto-complete)
++ [Environment variables](./usage.md#environment-variables)
 
 
 ## Getting help
@@ -183,3 +184,20 @@ odfe-cli curl get --[tab key]
 odfe-cli curl [tab key]
 delete  get     post    put     
 ```
+
+## Environment variables
+
+The odfe-cli supports the following environment variables.
+
+`ODFE_CONFIG_FILE`  
+Specifies the location of the file that the odfe-cli saves configuration profiles.
+The default file location is `~/.odfe-cli/config.yaml`.
+
+`ODFE_MAX_RETRY`  
+Specifies a value of maximum retry attempts the odfe-cli performs, excluding initial call.
+If defined, `ODFE_MAX_RETRY` overrides the value for the individual profiles setting `max_retry`.
+
+`ODFE_PROFILE`  
+Specifies the name of the ofe-cli profile to use.
+If defined, this environment variable overrides the behavior of using the profile named `[default]` in the configuration file.
+You can override this environment variable by using the `--profile` command line parameter.
