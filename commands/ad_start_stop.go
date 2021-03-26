@@ -36,11 +36,8 @@ var startDetectorsCmd = &cobra.Command{
 	Long: "Start detectors based on a list of IDs, names, or name regex patterns.\n" +
 		"Wrap regex patterns in quotation marks to prevent the terminal from matching patterns against the files in the current directory.\n" +
 		"The default input is detector name. Use the `--id` flag if input is detector ID instead of name",
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			fmt.Println(cmd.Usage())
-			return
-		}
 		idStatus, _ := cmd.Flags().GetBool(idFlagName)
 		action := ad.StartAnomalyDetectorByNamePattern
 		if idStatus {

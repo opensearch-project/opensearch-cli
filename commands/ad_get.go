@@ -38,12 +38,8 @@ var getDetectorsCmd = &cobra.Command{
 	Short: "Get detectors based on a list of IDs, names, or name regex patterns",
 	Long: "Get detectors based on a list of IDs, names, or name regex patterns.\n" +
 		"Wrap regex patterns in quotation marks to prevent the terminal from matching patterns against the files in the current directory.\nThe default input is detector name. Use the `--id` flag if input is detector ID instead of name",
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		//If no args, display usage
-		if len(args) < 1 {
-			fmt.Println(cmd.Usage())
-			return
-		}
 		err := printDetectors(Println, cmd, args)
 		if err != nil {
 			DisplayError(err, getDetectorsCommandName)

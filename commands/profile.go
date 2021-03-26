@@ -125,11 +125,8 @@ var deleteProfilesCmd = &cobra.Command{
 	Use:   DeleteProfilesCommandName + " profile_name ...",
 	Short: "Delete profiles by names",
 	Long:  "Delete profiles by names from the config file permanently.",
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			fmt.Println(cmd.Usage())
-			return
-		}
 		if err := deleteProfiles(args); err != nil {
 			DisplayError(err, DeleteProfilesCommandName)
 			return
