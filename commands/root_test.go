@@ -18,6 +18,7 @@ package commands
 import (
 	"odfe-cli/entity"
 	"os"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -49,6 +50,18 @@ func TestGetRoot(t *testing.T) {
 		actual, err := cmd.Flags().GetString(flagConfig)
 		assert.NoError(t, err)
 		assert.EqualValues(t, "test/config.yml", actual)
+	})
+}
+
+func TestVersionString(t *testing.T) {
+	t.Run("test version flag", func(t *testing.T) {
+		root := GetRoot()
+		assert.NotNil(t, root)
+		root.SetArgs([]string{"--version"})
+		cmd, err := root.ExecuteC()
+		assert.NoError(t, err)
+		expected := "1.1.0 " + runtime.GOOS + "/" + runtime.GOARCH
+		assert.EqualValues(t, expected, cmd.Version)
 	})
 }
 

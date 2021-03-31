@@ -20,6 +20,7 @@ import (
 	"odfe-cli/entity"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/spf13/cobra"
 )
@@ -35,10 +36,15 @@ const (
 	version               = "1.1.0"
 )
 
+func buildVersionString() string {
+
+	return fmt.Sprintf("%s %s/%s", version, runtime.GOOS, runtime.GOARCH)
+}
+
 var rootCommand = &cobra.Command{
 	Use:     RootCommandName,
 	Short:   "odfe-cli is a unified command line interface for managing ODFE clusters",
-	Version: version,
+	Version: buildVersionString(),
 }
 
 func GetRoot() *cobra.Command {
