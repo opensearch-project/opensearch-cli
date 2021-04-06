@@ -25,6 +25,7 @@ import (
 	"opensearch-cli/client"
 	ctrl "opensearch-cli/controller/knn"
 	"opensearch-cli/entity"
+	"opensearch-cli/environment"
 	gateway "opensearch-cli/gateway/knn"
 	"os"
 	"strings"
@@ -56,9 +57,9 @@ func (a *KNNTestSuite) SetupSuite() {
 	}
 	a.Profile = &entity.Profile{
 		Name:     "test",
-		Endpoint: os.Getenv("ODFE_ENDPOINT"),
-		UserName: os.Getenv("ODFE_USER"),
-		Password: os.Getenv("ODFE_PASSWORD"),
+		Endpoint: os.Getenv(environment.OPENSEARCH_ENDPOINT),
+		UserName: os.Getenv(environment.OPENSEARCH_USER),
+		Password: os.Getenv(environment.OPENSEARCH_PASSWORD),
 	}
 	if err = a.ValidateProfile(); err != nil {
 		fmt.Println(err)

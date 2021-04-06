@@ -19,6 +19,7 @@ import (
 	"errors"
 	config "opensearch-cli/controller/config/mocks"
 	"opensearch-cli/entity"
+	"opensearch-cli/environment"
 	"os"
 	"testing"
 
@@ -30,7 +31,7 @@ func getDefaultConfig() entity.Config {
 	return entity.Config{
 		Profiles: []entity.Profile{
 			{
-				Name:     odfeDefaultProfileName,
+				Name:     DefaultProfileName,
 				Endpoint: "https://localhost:9200",
 				UserName: "user", Password: "user123",
 			}}}
@@ -182,11 +183,11 @@ func TestControllerGetProfileForExecution(t *testing.T) {
 	t.Run("select default profile", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
-		oldValue, ok := os.LookupEnv(odfeProfileEnvVarName)
+		oldValue, ok := os.LookupEnv(environment.OPENSEARCH_PROFILE)
 		if ok {
-			assert.NoError(t, os.Unsetenv(odfeProfileEnvVarName))
+			assert.NoError(t, os.Unsetenv(environment.OPENSEARCH_PROFILE))
 			defer func() {
-				assert.NoError(t, os.Setenv(odfeDefaultProfileName, oldValue))
+				assert.NoError(t, os.Setenv(DefaultProfileName, oldValue))
 			}()
 		}
 		mockConfigCtrl := config.NewMockController(mockCtrl)
@@ -203,17 +204,17 @@ func TestControllerGetProfileForExecution(t *testing.T) {
 		mockConfigCtrl := config.NewMockController(mockCtrl)
 		mockConfigCtrl.EXPECT().Read().Return(getSampleConfig(), nil)
 		ctrl := New(mockConfigCtrl)
-		oldValue, ok := os.LookupEnv(odfeProfileEnvVarName)
+		oldValue, ok := os.LookupEnv(environment.OPENSEARCH_PROFILE)
 		if ok {
-			assert.NoError(t, os.Unsetenv(odfeProfileEnvVarName))
+			assert.NoError(t, os.Unsetenv(environment.OPENSEARCH_PROFILE))
 			defer func() {
-				assert.NoError(t, os.Setenv(odfeDefaultProfileName, oldValue))
+				assert.NoError(t, os.Setenv(DefaultProfileName, oldValue))
 			}()
 		}
-		err := os.Setenv(odfeProfileEnvVarName, "local")
+		err := os.Setenv(environment.OPENSEARCH_PROFILE, "local")
 		assert.NoError(t, err)
 		defer func() {
-			err = os.Unsetenv(odfeProfileEnvVarName)
+			err = os.Unsetenv(environment.OPENSEARCH_PROFILE)
 			assert.NoError(t, err)
 		}()
 		p, ok, err := ctrl.GetProfileForExecution("")

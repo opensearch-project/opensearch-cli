@@ -18,6 +18,7 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"opensearch-cli/environment"
 
 	"golang.org/x/term"
 
@@ -64,7 +65,7 @@ var profileCommand = &cobra.Command{
 		"When you specify a profile for a command (e.g. `opensearch-cli <command> --profile <profile_name>`), opensearch-cli uses " +
 		"the profile's settings and credentials to run the given command.\n" +
 		"To configure a default profile for commands, either specify the default profile name in an environment " +
-		"variable (`OPENSEARCH_PROFILE`) or create a profile named `default`.",
+		"variable (`" + environment.OPENSEARCH_PROFILE + "`) or create a profile named `default`.",
 }
 
 //createProfileCmd creates profile interactively by prompting for name (distinct), user, endpoint, password.
@@ -180,9 +181,9 @@ func init() {
 		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nopensearch-cli asks for additional information based on your choice of authentication type.")
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateAuthType)
 	createProfileCmd.Flags().IntP(FlagProfileMaxRetry, "m", 3, "Maximum retry attempts allowed if transient problems occur.\n"+
-		"You can override this value by using the OPENSEARCH_MAX_RETRY environment variable.")
+		"You can override this value by using the "+environment.OPENSEARCH_MAX_RETRY+" environment variable.")
 	createProfileCmd.Flags().Int64P(FlagProfileTimeout, "t", 10, "Maximum time allowed for connection in seconds.\n"+
-		"You can override this value by using the OPENSEARCH_TIMEOUT environment variable.")
+		"You can override this value by using the "+environment.OPENSEARCH_TIMEOUT+" environment variable.")
 	createProfileCmd.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+CreateNewProfileCommandName)
 
 	//profile delete flags

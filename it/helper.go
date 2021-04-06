@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"opensearch-cli/client"
 	"opensearch-cli/entity"
+	"opensearch-cli/environment"
 	"os"
 	"path/filepath"
 
@@ -59,13 +60,13 @@ func (a *CLISuite) DeleteIndex(indexName string) {
 
 func (a *CLISuite) ValidateProfile() error {
 	if a.Profile.Endpoint == "" {
-		return fmt.Errorf("odfe endpoint cannot be empty. set env ODFE_ENDPOINT")
+		return fmt.Errorf("endpoint cannot be empty. set env %s", environment.OPENSEARCH_ENDPOINT)
 	}
 	if a.Profile.UserName == "" {
-		return fmt.Errorf("odfe user name cannot be empty. set env ODFE_USER")
+		return fmt.Errorf("user cannot be empty. set env %s", environment.OPENSEARCH_USER)
 	}
 	if a.Profile.Password == "" {
-		return fmt.Errorf("odfe endpoint cannot be empty. set env ODFE_PASSWORD")
+		return fmt.Errorf("password cannot be empty. set env %s", environment.OPENSEARCH_PASSWORD)
 	}
 	return nil
 }

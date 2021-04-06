@@ -18,6 +18,7 @@ package gateway
 import (
 	"opensearch-cli/client/mocks"
 	"opensearch-cli/entity"
+	"opensearch-cli/environment"
 	"os"
 	"testing"
 	"time"
@@ -73,11 +74,11 @@ func TestGatewayRetryVal(t *testing.T) {
 	})
 
 	t.Run("override from core variable", func(t *testing.T) {
-		val := os.Getenv("ODFE_MAX_RETRY")
+		val := os.Getenv(environment.OPENSEARCH_MAX_RETRY)
 		defer func() {
-			assert.NoError(t, os.Setenv("ODFE_MAX_RETRY", val))
+			assert.NoError(t, os.Setenv(environment.OPENSEARCH_MAX_RETRY, val))
 		}()
-		os.Setenv("ODFE_MAX_RETRY", "10")
+		os.Setenv(environment.OPENSEARCH_MAX_RETRY, "10")
 		valAttempt := 2
 		profile := entity.Profile{
 			Name:     "test1",
@@ -113,11 +114,11 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 	})
 
 	t.Run("override from core variable", func(t *testing.T) {
-		val := os.Getenv("ODFE_TIMEOUT")
+		val := os.Getenv(environment.OPENSEARCH_TIMEOUT)
 		defer func() {
-			assert.NoError(t, os.Setenv("ODFE_TIMEOUT", val))
+			assert.NoError(t, os.Setenv(environment.OPENSEARCH_TIMEOUT, val))
 		}()
-		os.Setenv("ODFE_TIMEOUT", "5")
+		os.Setenv(environment.OPENSEARCH_TIMEOUT, "5")
 		timeout := int64(60)
 		profile := entity.Profile{
 			Name:     "test1",

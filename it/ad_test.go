@@ -28,6 +28,7 @@ import (
 	"opensearch-cli/controller/core"
 	"opensearch-cli/entity"
 	adentity "opensearch-cli/entity/ad"
+	"opensearch-cli/environment"
 	adgateway "opensearch-cli/gateway/ad"
 	esg "opensearch-cli/gateway/core"
 	"os"
@@ -73,9 +74,9 @@ func (a *ADTestSuite) SetupSuite() {
 	}
 	a.Profile = &entity.Profile{
 		Name:     "test",
-		Endpoint: os.Getenv("ODFE_ENDPOINT"),
-		UserName: os.Getenv("ODFE_USER"),
-		Password: os.Getenv("ODFE_PASSWORD"),
+		Endpoint: os.Getenv(environment.OPENSEARCH_ENDPOINT),
+		UserName: os.Getenv(environment.OPENSEARCH_USER),
+		Password: os.Getenv(environment.OPENSEARCH_PASSWORD),
 	}
 	if err = a.ValidateProfile(); err != nil {
 		fmt.Println(err)

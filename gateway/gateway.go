@@ -26,6 +26,7 @@ import (
 	"opensearch-cli/client"
 	"opensearch-cli/entity"
 	"opensearch-cli/entity/core"
+	"opensearch-cli/environment"
 	"opensearch-cli/gateway/aws/signer"
 	"os"
 	"strconv"
@@ -54,7 +55,7 @@ func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
 		c.HTTPClient.RetryMax = *p.MaxRetry
 	}
 	//override with environment variable if exists
-	if val, ok := overrideValue(p, "ODFE_MAX_RETRY"); ok {
+	if val, ok := overrideValue(p, environment.OPENSEARCH_MAX_RETRY); ok {
 		c.HTTPClient.RetryMax = *val
 	}
 
@@ -63,7 +64,7 @@ func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
 		c.HTTPClient.HTTPClient.Timeout = time.Duration(*p.Timeout) * time.Second
 	}
 	//override with environment variable if exists
-	if duration, ok := overrideValue(p, "ODFE_TIMEOUT"); ok {
+	if duration, ok := overrideValue(p, environment.OPENSEARCH_TIMEOUT); ok {
 		c.HTTPClient.HTTPClient.Timeout = time.Duration(*duration) * time.Second
 	}
 	return &HTTPGateway{
