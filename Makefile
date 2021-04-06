@@ -33,7 +33,7 @@ test.unit:
 format:
 	goimports -w .;
 
-# generate odfe-cli file in current directory
-# update GOOS / GOARCH if you want to build for other os and architecture
+# generate opensearch-cli file in current directory
+# update GOOS / GOARCH if you want to build for other core and architecture
 build:
 	go build .

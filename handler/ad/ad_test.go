@@ -16,9 +16,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"odfe-cli/controller/ad/mocks"
-	"odfe-cli/entity/ad"
-	"odfe-cli/mapper"
+	"opensearch-cli/controller/ad/mocks"
+	"opensearch-cli/entity/ad"
+	"opensearch-cli/mapper"
 	"testing"
 
 	"github.com/golang/mock/gomock"

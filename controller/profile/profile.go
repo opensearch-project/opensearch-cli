@@ -17,8 +17,8 @@ package profile
 
 import (
 	"fmt"
-	"odfe-cli/controller/config"
-	"odfe-cli/entity"
+	"opensearch-cli/controller/config"
+	"opensearch-cli/entity"
 	"os"
 	"strings"
 )

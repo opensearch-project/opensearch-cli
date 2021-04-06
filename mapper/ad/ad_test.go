@@ -17,8 +17,8 @@ package ad
 
 import (
 	"io/ioutil"
-	"odfe-cli/entity/ad"
-	"odfe-cli/mapper"
+	"opensearch-cli/entity/ad"
+	"opensearch-cli/mapper"
 	"path/filepath"
 	"testing"
 

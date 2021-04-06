@@ -1,4 +1,4 @@
-module odfe-cli
+module opensearch-cli
 
 go 1.16
 

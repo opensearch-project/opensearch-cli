@@ -1,8 +1,8 @@
-# How to add your plugin as commands to odfe-cli
+# How to add your plugin as commands to opensearch-cli
 
 ## Concepts
 
-odfe-cli is built on a structure of 
+opensearch-cli is built on a structure of 
 1. Commands, arguments & flags
 2. Controller
 3. Entity
@@ -18,9 +18,9 @@ things and flags are ways to modify the behavior of the commands.
 
 A flag is a way to modify or tune the behavior of a command
 
-In the following example, 'odfe-cli', 'ad', 'start' are commands, and 'profile' is a flag
+In the following example, 'opensearch-cli', 'ad', 'start' are commands, and 'profile' is a flag
 ```
-odfe-cli ad start detector-name --profile prod
+opensearch-cli ad start detector-name --profile prod
 ```
 
 ### 2. Controller
@@ -46,10 +46,10 @@ of user input before it is passed on to controller.
 
 ## Getting started
 
-odfe-cli follows the following organization structure:
+opensearch-cli follows the following organization structure:
 
 ```
-▾ odfe-cli/
+▾ opensearch-cli/
     ▾ commands/
         root.go
         root_test.go
@@ -83,8 +83,8 @@ odfe-cli follows the following organization structure:
       main.go
 ```
 
-## Integrate new plugins with odfe-cli
-To integrate new plugins, you need to create a plugin base command file (odfe-cli/commands/ad.go). You will optionally provide additional commands as you see fit.
+## Integrate new plugins with opensearch-cli
+To integrate new plugins, you need to create a plugin base command file (opensearch-cli/commands/ad.go). You will optionally provide additional commands as you see fit.
 ### Create plugin base command
 
 ```
@@ -112,7 +112,7 @@ In above example, we created a base command 'ad' and added it to root command.
 
 Additional commands can be defined and added in their own file inside commands/ directory.
 
-If you wanted to implement a create detector command from Anomaly Detection, you would create odfe-cli/commands/ad_create.go
+If you wanted to implement a create detector command from Anomaly Detection, you would create opensearch-cli/commands/ad_create.go
 and include the following code snippet.
 
 ```

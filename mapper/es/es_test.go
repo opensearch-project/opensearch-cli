@@ -18,7 +18,7 @@ package es
 import (
 	"io/ioutil"
 	"net/http"
-	"odfe-cli/entity/es"
+	"opensearch-cli/entity/core"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -35,18 +35,18 @@ func helperLoadBytes(t *testing.T, name string) []byte {
 
 func TestCommandToCurlRequestParameter(t *testing.T) {
 	type args struct {
-		request es.CurlCommandRequest
+		request core.CurlCommandRequest
 	}
 	tests := []struct {
 		name       string
 		args       args
-		wantResult es.CurlRequest
+		wantResult core.CurlRequest
 		wantErr    bool
 	}{
 		{
 			"success: with data from file",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "post",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -55,7 +55,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			es.CurlRequest{
+			core.CurlRequest{
 				Action:      http.MethodPost,
 				Path:        "sample-path/two",
 				QueryParams: "a=b&c=d",
@@ -70,7 +70,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"success: with data from stdin",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "post",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -79,7 +79,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      true,
 				},
 			},
-			es.CurlRequest{
+			core.CurlRequest{
 				Action:      http.MethodPost,
 				Path:        "sample-path/two",
 				QueryParams: "a=b&c=d&pretty=true",
@@ -94,7 +94,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"success: with basic data",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:       "post",
 					Path:         "",
 					QueryParams:  "",
@@ -104,7 +104,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					OutputFormat: "yaml",
 				},
 			},
-			es.CurlRequest{
+			core.CurlRequest{
 				Action:      http.MethodPost,
 				Path:        "",
 				QueryParams: "&pretty=true&format=yaml",
@@ -116,7 +116,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"fail: invalid action",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "test",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -125,13 +125,13 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			es.CurlRequest{},
+			core.CurlRequest{},
 			true,
 		},
 		{
 			"fail: empty action",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -140,13 +140,13 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			es.CurlRequest{},
+			core.CurlRequest{},
 			true,
 		},
 		{
 			"fail: invalid header",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "post",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -155,13 +155,13 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			es.CurlRequest{},
+			core.CurlRequest{},
 			true,
 		},
 		{
 			"success:  empty header",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "Get",
 					Path:        "  ",
 					QueryParams: "",
@@ -170,7 +170,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      true,
 				},
 			},
-			es.CurlRequest{
+			core.CurlRequest{
 				Action:      http.MethodGet,
 				QueryParams: "&pretty=true",
 				Headers:     map[string]string{},
@@ -181,7 +181,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"fail: invalid data",
 			args{
-				request: es.CurlCommandRequest{
+				request: core.CurlCommandRequest{
 					Action:      "post",
 					Path:        "",
 					QueryParams: "",
@@ -190,7 +190,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			es.CurlRequest{},
+			core.CurlRequest{},
 			true,
 		},
 	}

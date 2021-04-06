@@ -16,8 +16,8 @@
 package gateway
 
 import (
-	"odfe-cli/client/mocks"
-	"odfe-cli/entity"
+	"opensearch-cli/client/mocks"
+	"opensearch-cli/entity"
 	"os"
 	"testing"
 	"time"
@@ -72,7 +72,7 @@ func TestGatewayRetryVal(t *testing.T) {
 		assert.EqualValues(t, valAttempt, testClient.HTTPClient.RetryMax)
 	})
 
-	t.Run("override from os variable", func(t *testing.T) {
+	t.Run("override from core variable", func(t *testing.T) {
 		val := os.Getenv("ODFE_MAX_RETRY")
 		defer func() {
 			assert.NoError(t, os.Setenv("ODFE_MAX_RETRY", val))
@@ -112,7 +112,7 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 		assert.EqualValues(t, time.Duration(timeout)*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
 	})
 
-	t.Run("override from os variable", func(t *testing.T) {
+	t.Run("override from core variable", func(t *testing.T) {
 		val := os.Getenv("ODFE_TIMEOUT")
 		defer func() {
 			assert.NoError(t, os.Setenv("ODFE_TIMEOUT", val))

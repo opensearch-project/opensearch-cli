@@ -13,21 +13,21 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 import (
 	"context"
-	"odfe-cli/controller/es"
-	entity "odfe-cli/entity/es"
+	"opensearch-cli/controller/core"
+	entity "opensearch-cli/entity/core"
 )
 
 //Handler is facade for controller
 type Handler struct {
-	es.Controller
+	core.Controller
 }
 
 // New returns new Handler instance
-func New(controller es.Controller) *Handler {
+func New(controller core.Controller) *Handler {
 	return &Handler{
 		controller,
 	}

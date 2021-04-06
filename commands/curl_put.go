@@ -23,12 +23,12 @@ const curlPutCommandName = "put"
 
 var curlPutExample = `
 # Create a knn index from mapping setting saved in file "knn-mapping.json"
-odfe-cli curl put --path "my-knn-index"  \
+opensearch-cli curl put --path "my-knn-index"  \
                   --data "@some-location/knn-mapping.json" \
                   --pretty
 
 # Update cluster settings transiently
-odfe-cli curl put --path "_cluster/settings" \
+opensearch-cli curl put --path "_cluster/settings" \
                   --query-params "flat_settings=true"  \
                   --data '
                     {

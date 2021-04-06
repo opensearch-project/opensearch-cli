@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 //Terms contains fields
 type Terms struct {
@@ -42,17 +42,17 @@ type Bucket struct {
 	DocCount int64       `json:"doc_count"`
 }
 
-//Items contains buckets defined by es response
+//Items contains buckets defined by core response
 type Items struct {
 	Buckets []Bucket `json:"buckets"`
 }
 
-//Aggregations contains items defined by es response
+//Aggregations contains items defined by core response
 type Aggregations struct {
 	Items Items `json:"items"`
 }
 
-//Response response defined by es response
+//Response response defined by core response
 type Response struct {
 	Aggregations Aggregations `json:"aggregations"`
 }

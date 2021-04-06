@@ -4,34 +4,34 @@
 
 ## 1. Overview
 
-The ODFE Command Line Interface `(odfe-cli)` is an open source tool that enables 
+The ODFE Command Line Interface `(opensearch-cli)` is an open source tool that enables 
 users to manage their odfe clusters using through CLI or command-line-shell.
 Additionally, command line interface will allow users to configure and manage 
 odfe plugins configurations like anomaly detections, alerting, sql, and 
-access Elasticsearch features from command line with prominence on 
+access OpenSearch features from command line with prominence on 
 automation. 
 
 This cli enables users to start running commands that implement 
 Kibana-equivalent functionality from the command prompt in their favorite 
 terminal programs with a minimal configuration. As a programmer or an admin, 
 users constantly want to perform ad-hoc operations that Kibana may not support. 
-odfe-cli is better suited when the user wants to quickly combine a couple of commands 
+opensearch-cli is better suited when the user wants to quickly combine a couple of commands 
 to perform a task. These commands are powerful and concise. Since shell 
 commands can be combined into script files, one can build sequence of commands to automate 
 operations that they do often. This also provides direct access to the odfe cluster. 
-The user can engage with different plugins using odfe-cli, and develop shell 
+The user can engage with different plugins using opensearch-cli, and develop shell 
 scripts to manage their cluster.
 
 ## 2. Tenets
 
-1. Unified CLI for Open Distro for Elasticsearch.
+1. Unified CLI for OpenSearch.
 2. Available for installation on all platforms (Mac , Windows and Linux).
-3. odfe-cli will be distributed as Docker image just like any other image to enable possibilities for automation CI / CD.
+3. opensearch-cli will be distributed as Docker image just like any other image to enable possibilities for automation CI / CD.
 4. Provide profiles to handle multiple clusters with different user preferences such as Configure security credentials, 
 default input/output file format at once and apply across multiple plugins / cluster.
 5. Flexibility to work with multiple odfe clusters.
 6. Scaling your workflow allows you to automate and replicate and make life .
-7. It also supports Elasticsearch core rest apis from [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html) 
+7. It also supports OpenSearch core rest apis from [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html) 
 as commands eg: cat nodes, index create, cluster health, etc...
 8. Provide extra functions which are hard to implement on Kibana, like batch action, long running tasks, etc.
 
@@ -48,7 +48,7 @@ supports will be represented as command. A command can have sub-commands,
 arguments and flags . Usually command represent an action, arguments are the 
 things and flags are ways to modify the behavior of the commands.
 
-odfe-cli will be the root command and it contains three type of sub-commands
+opensearch-cli will be the root command and it contains three type of sub-commands
 
 * es core commands as index get, index create, cluster health, etc ...
 * plugins as commands like ad, monitor, sql, etc...
@@ -107,7 +107,7 @@ REST API, every gateway uses this client to communicate to cluster.
 
 ODFE Command line interface can be installed in following ways
 
-1. Install `odfe-cli` Using Docker Image
+1. Install `opensearch-cli` Using Docker Image
 2. Install `odfe-cli` on Linux
 3. Install `odfe-cli` on macOS
 4. Install `odfe-cli` on Windows

@@ -22,5 +22,5 @@ bin
 
 /coverage.out
 
-odfe-cli
-odfe-cli.exe
+opensearch-cli
+opensearch-cli.exe

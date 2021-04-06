@@ -18,8 +18,8 @@ package knn
 import (
 	"context"
 	"encoding/json"
-	"odfe-cli/controller/knn"
-	entity "odfe-cli/entity/knn"
+	"opensearch-cli/controller/knn"
+	entity "opensearch-cli/entity/knn"
 )
 
 //Handler is facade for controller

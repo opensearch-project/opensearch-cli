@@ -22,10 +22,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"odfe-cli/client"
-	ctrl "odfe-cli/controller/knn"
-	"odfe-cli/entity"
-	gateway "odfe-cli/gateway/knn"
+	"opensearch-cli/client"
+	ctrl "opensearch-cli/controller/knn"
+	"opensearch-cli/entity"
+	gateway "opensearch-cli/gateway/knn"
 	"os"
 	"strings"
 	"testing"
@@ -41,7 +41,7 @@ const (
 
 //KNNTestSuite suite specific to k-NN plugin
 type KNNTestSuite struct {
-	ODFECLISuite
+	CLISuite
 	Gateway    gateway.Gateway
 	Controller ctrl.Controller
 }

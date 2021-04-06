@@ -17,7 +17,7 @@ package commands
 
 import (
 	"fmt"
-	"odfe-cli/handler/ad"
+	"opensearch-cli/handler/ad"
 
 	"github.com/spf13/cobra"
 )

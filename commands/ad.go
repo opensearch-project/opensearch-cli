@@ -16,12 +16,12 @@
 package commands
 
 import (
-	"odfe-cli/client"
-	adctrl "odfe-cli/controller/ad"
-	esctrl "odfe-cli/controller/es"
-	adgateway "odfe-cli/gateway/ad"
-	esgateway "odfe-cli/gateway/es"
-	handler "odfe-cli/handler/ad"
+	"opensearch-cli/client"
+	adctrl "opensearch-cli/controller/ad"
+	ctrl "opensearch-cli/controller/core"
+	adgateway "opensearch-cli/gateway/ad"
+	gateway "opensearch-cli/gateway/core"
+	handler "opensearch-cli/handler/ad"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -60,8 +60,8 @@ func GetADHandler() (*handler.Handler, error) {
 		return nil, err
 	}
 	g := adgateway.New(c, profile)
-	esg := esgateway.New(c, profile)
-	esc := esctrl.New(esg)
+	esg := gateway.New(c, profile)
+	esc := ctrl.New(esg)
 	ctr := adctrl.New(os.Stdin, esc, g)
 	return handler.New(ctr), nil
 }

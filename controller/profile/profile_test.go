@@ -17,8 +17,8 @@ package profile
 
 import (
 	"errors"
-	config "odfe-cli/controller/config/mocks"
-	"odfe-cli/entity"
+	config "opensearch-cli/controller/config/mocks"
+	"opensearch-cli/entity"
 	"os"
 	"testing"
 

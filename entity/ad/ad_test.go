@@ -17,7 +17,7 @@ package ad
 
 import (
 	"encoding/json"
-	"odfe-cli/mapper"
+	"opensearch-cli/mapper"
 	"strings"
 	"testing"
 

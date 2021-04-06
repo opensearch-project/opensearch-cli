@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"odfe-cli/client"
-	"odfe-cli/entity"
+	"opensearch-cli/client"
+	"opensearch-cli/entity"
 	"os"
 	"path/filepath"
 
@@ -30,7 +30,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type ODFECLISuite struct {
+type CLISuite struct {
 	suite.Suite
 	Client  *client.Client
 	Profile *entity.Profile
@@ -48,7 +48,7 @@ func HelperLoadBytes(name string) []byte {
 }
 
 // DeleteIndex deletes index by name
-func (a *ODFECLISuite) DeleteIndex(indexName string) {
+func (a *CLISuite) DeleteIndex(indexName string) {
 	_, err := a.callRequest(http.MethodDelete, []byte(""), fmt.Sprintf("%s/%s", a.Profile.Endpoint, indexName))
 
 	if err != nil {
@@ -57,7 +57,7 @@ func (a *ODFECLISuite) DeleteIndex(indexName string) {
 	}
 }
 
-func (a *ODFECLISuite) ValidateProfile() error {
+func (a *CLISuite) ValidateProfile() error {
 	if a.Profile.Endpoint == "" {
 		return fmt.Errorf("odfe endpoint cannot be empty. set env ODFE_ENDPOINT")
 	}
@@ -71,7 +71,7 @@ func (a *ODFECLISuite) ValidateProfile() error {
 }
 
 //CreateIndex creates test data for plugin processing
-func (a *ODFECLISuite) CreateIndex(indexFileName string, mappingFileName string) {
+func (a *CLISuite) CreateIndex(indexFileName string, mappingFileName string) {
 	if mappingFileName != "" {
 		mapping, err := a.callRequest(
 			http.MethodPut, HelperLoadBytes(mappingFileName), fmt.Sprintf("%s/%s", a.Profile.Endpoint, indexFileName))
@@ -90,7 +90,7 @@ func (a *ODFECLISuite) CreateIndex(indexFileName string, mappingFileName string)
 	fmt.Println(string(res))
 }
 
-func (a *ODFECLISuite) callRequest(method string, reqBytes []byte, url string) ([]byte, error) {
+func (a *CLISuite) callRequest(method string, reqBytes []byte, url string) ([]byte, error) {
 	var reqReader *bytes.Reader
 	if reqBytes != nil {
 		reqReader = bytes.NewReader(reqBytes)

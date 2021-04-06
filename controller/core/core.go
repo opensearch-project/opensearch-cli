@@ -12,32 +12,32 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package es
+package core
 
 import (
 	"context"
 	"encoding/json"
-	"odfe-cli/entity/es"
-	esg "odfe-cli/gateway/es"
-	mapper "odfe-cli/mapper/es"
+	"opensearch-cli/entity/core"
+	osg "opensearch-cli/gateway/core"
+	mapper "opensearch-cli/mapper/es"
 
 	"fmt"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_es.go -package=mocks . Controller
+//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_core.go -package=mocks . Controller
 
-//Controller is an interface for Elasticsearch
+//Controller is an interface for OpenSearch
 type Controller interface {
 	GetDistinctValues(ctx context.Context, index string, field string) ([]interface{}, error)
-	Curl(ctx context.Context, param es.CurlCommandRequest) ([]byte, error)
+	Curl(ctx context.Context, param core.CurlCommandRequest) ([]byte, error)
 }
 
 type controller struct {
-	gateway esg.Gateway
+	gateway osg.Gateway
 }
 
 //New returns new instance of Controller
-func New(gateway esg.Gateway) Controller {
+func New(gateway osg.Gateway) Controller {
 	return &controller{
 		gateway,
 	}
@@ -52,7 +52,7 @@ func (c controller) GetDistinctValues(ctx context.Context, index string, field s
 	if err != nil {
 		return nil, err
 	}
-	var data es.Response
+	var data core.Response
 	err = json.Unmarshal(response, &data)
 	if err != nil {
 		return nil, err
@@ -65,8 +65,8 @@ func (c controller) GetDistinctValues(ctx context.Context, index string, field s
 	return values, nil
 }
 
-//Curl accept user request and convert to format which Elasticsearch can understand
-func (c controller) Curl(ctx context.Context, param es.CurlCommandRequest) ([]byte, error) {
+//Curl accept user request and convert to format which OpenSearch can understand
+func (c controller) Curl(ctx context.Context, param core.CurlCommandRequest) ([]byte, error) {
 	curlRequest, err := mapper.CommandToCurlRequestParameter(param)
 	if err != nil {
 		return nil, err

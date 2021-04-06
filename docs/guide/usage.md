@@ -30,7 +30,7 @@ Usage:
 Available Commands:
   ad          Manage the Anomaly Detection plugin
   completion  Generate completion script for your shell
-  curl        Manage Elasticsearch core features
+  curl        Manage OpenSearch core features
   help        Help about any command
   knn         Manage the k-NN plugin
   profile     Manage a collection of settings and credentials that you can apply to an odfe-cli command

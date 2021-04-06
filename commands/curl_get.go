@@ -23,13 +23,13 @@ const curlGetCommandName = "get"
 
 var curlGetExample = `
 # get document count for an index
-odfe-cli curl get --path "_cat/count/my-index-01" --query-params "v=true" --pretty
+opensearch-cli curl get --path "_cat/count/my-index-01" --query-params "v=true" --pretty
 
 # get health status of a cluster.
-odfe-cli curl get --path "_cluster/health" --pretty --filter-path "status"
+opensearch-cli curl get --path "_cluster/health" --pretty --filter-path "status"
 
 # get explanation for cluster allocation for a given index and shard number
-odfe-cli curl get --path "_cluster/allocation/explain" \
+opensearch-cli curl get --path "_cluster/allocation/explain" \
                   --data '{
                     "index": "my-index-01",
                     "shard": 0,

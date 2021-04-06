@@ -3,20 +3,20 @@
 ## Objective
 
 This document describes how to support [REST api](https://www.elastic.co/guide/en/elasticsearch/reference/current/rest-apis.html) in a generic way.
-As of now, Elasticsearch support api in different categories like index api, cat api, cluster api, document api, etc to
+As of now, OpenSearch support api in different categories like index api, cat api, cluster api, document api, etc to
 configure and access their features. It will take tremendous amount of time and effort to provide every api as native commands.
 Hence, we will be categorizing those REST api based on GET/PUT/POST/DELETE  and allow users to perform their request 
 in a generic way. This will support any future api without any additional support.
 ## Available commands
 
-1. [get command](./odfe-cli-rest-api-as-commands.md#1-get-command)
-2. [post command](./odfe-cli-rest-api-as-commands.md#2-post-command)
-3. [put command](./odfe-cli-rest-api-as-commands.md#3-put-command)
-4. [delete command](./odfe-cli-rest-api-as-commands.md#4-delete-command)
+1. [get command](rest-api-as-commands.md#1-get-command)
+2. [post command](rest-api-as-commands.md#2-post-command)
+3. [put command](rest-api-as-commands.md#3-put-command)
+4. [delete command](rest-api-as-commands.md#4-delete-command)
 
 ## Common parameters
 
-The following options can be applied to all the odfe-cli commands. These parameters are supported by Elasticsearch as mentioned [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html).
+The following options can be applied to all the opensearch-cli commands. These parameters are supported by OpenSearch as mentioned [here](https://opendistro.github.io/for-elasticsearch-docs/docs/elasticsearch/common-parameters/).
 In the future we will support more parameters or include multiple values that can be added as flag to any commands.
 
 
@@ -34,13 +34,13 @@ In the future we will support more parameters or include multiple values that ca
 
 ### Description
 
-Use GET api to execute requests against Elasticsearch cluster. This command enables you to run any GET based REST api commands across all 
+Use GET api to execute requests against OpenSearch cluster. This command enables you to run any GET based REST api commands across all 
 categories.
 
 ### Synopsis
 
 ```
-odfe-cli curl get options [common parameters]
+opensearch-cli curl get options [common parameters]
 ```
 
 ### Options
@@ -50,13 +50,13 @@ odfe-cli curl get options [common parameters]
 | --path	|Y	|-P	|url-path	|N/A	|
 | --query-params|N	|-q	|url query parameters	|&	|
 | --headers	 |N	|-H	|pass additional information with request. It consists of case-insensitive name followed by a colon (`:`), then by its value.	|semi colon ( ; )	|
-|--data	|N	|-d	|Sends the specified data in the command to Elasticsearch". If value starts with the letter @, the rest should be a file name to read the data from.	|N/A	|
+|--data	|N	|-d	|Sends the specified data in the command to OpenSearch". If value starts with the letter @, the rest should be a file name to read the data from.	|N/A	|
 |--data-binary	|N	|-b	|This is similar to "--data", except that newlines and carriage returns are preserved and conversions are never done. This is required if input file is compressed.	|N/A	|
 |--help	|N	|-h	|Help for get command	|N/A	|
 
 ### Common Parameters
 
-see [here](./odfe-cli-rest-api-as-commands.md#common-parameters)
+see [here](rest-api-as-commands.md#common-parameters)
 
 
 **Note: users can escape separator like ‘\\;’ to use as part of value.**
@@ -66,7 +66,7 @@ see [here](./odfe-cli-rest-api-as-commands.md#common-parameters)
 1. To get document count for an index
 
 ```
-odfe-cli curl get --path "_cat/count/my-index-01" \
+opensearch-cli curl get --path "_cat/count/my-index-01" \
                  --query-params "v=true" \
                  --pretty
 ```
@@ -80,14 +80,14 @@ epoch         timestamp        count
 2.  To  return the health status of a cluster
 
 ```
-odfe-cli curl get --path "_cluster/health" --pretty
+opensearch-cli curl get --path "_cluster/health" --pretty
 ```
 
 Response
 
 ```
 {
-    "cluster_name" : "odfe-cli",
+    "cluster_name" : "opensearch-cli",
     "status" : "green",
     "timed_out" : false,
     "number_of_nodes" : 2,
@@ -109,7 +109,7 @@ Response
 
 
 ```
-odfe-cli curl get --path "_cluster/allocation/explain" \
+opensearch-cli curl get --path "_cluster/allocation/explain" \
                  --data  '{
                     "index": "my-index-01",
                     "shard": 0,
@@ -122,23 +122,23 @@ odfe-cli curl get --path "_cluster/allocation/explain" \
 
 ### Description
 
-Use POST api to execute requests against Elasticsearch cluster. This command enables you to run any POST based REST api
+Use POST api to execute requests against OpenSearch cluster. This command enables you to run any POST based REST api
 commands across all categories.
 
 ### Synopsis
 
 ```
-odfe-cli curl post [options] [common paramters]
+opensearch-cli curl post [options] [common paramters]
               
 ```
 
 ### Options
 
-see [here](./odfe-cli-rest-api-as-commands.md#Options)
+see [here](rest-api-as-commands.md#Options)
 
 ### Common Parameters
 
-see [here](./odfe-cli-rest-api-as-commands.md#common-parameters)
+see [here](rest-api-as-commands.md#common-parameters)
 
 ### Example:
 
@@ -150,7 +150,7 @@ $ cat reroute.json
   "commands": [
     {
         "move": {
-           "index": "odfe-cli",
+           "index": "opensearch-cli",
            "shard": 0,
            "from_node": "odfe-node1",
            "to_node": "odfe-node2"
@@ -166,14 +166,14 @@ $ cat reroute.json
     ]
 }
 
-$ odfe-cli curl post --path "_cluster/reroute" \
+$ opensearch-cli curl post --path "_cluster/reroute" \
                     --data @reroute.json
 ```
 
 2. To insert a document to an index 
 
 ```
-$ odfe-cli curl post --path "my-index-01/_doc" \
+$ opensearch-cli curl post --path "my-index-01/_doc" \
                    --data '
                         {
                             "message": "insert document",
@@ -187,7 +187,7 @@ $ odfe-cli curl post --path "my-index-01/_doc" \
 
 3. Search index with compressed data, also accept response in compressed format provided compression is enabled by setting “http.compression: true”
  ```
- $ odfe-cli curl post --path        "_search" \
+ $ opensearch-cli curl post --path        "_search" \
                      --headers     "Content-Encoding : gzip;Accept-Encoding: gzip, deflate" \
                      --data-binary  @/tmp/req.txt.gz`
     
@@ -197,19 +197,19 @@ $ odfe-cli curl post --path "my-index-01/_doc" \
 
 ### Description
 
-Use PUT api to execute requests against Elasticsearch. This command enables you to run any PUT based REST api
+Use PUT api to execute requests against OpenSearch. This command enables you to run any PUT based REST api
 commands across all categories.
 
 ### Synopsis
 
 ```
-odfe-cli curl put options [common paramters]]
+opensearch-cli curl put options [common paramters]]
               
 ```
 
 ### Options
 
-see [here](./odfe-cli-rest-api-as-commands.md#Options)
+see [here](rest-api-as-commands.md#Options)
 
 ### Common Parameters
 
@@ -220,7 +220,7 @@ see [here]((./odfe-cli-rest-api-as-commands.md#common-parameters))
 1. Create a knn index
 
 ```
-odfe-cli curl put --path "my-knn-index" ---pretty \
+opensearch-cli curl put --path "my-knn-index" ---pretty \
                 --data '
                     {
                         "settings" : {
@@ -245,7 +245,7 @@ odfe-cli curl put --path "my-knn-index" ---pretty \
 2. Update cluster settings transiently
 
 ```
-odfe-cli curl put --path             "_cluster/settings" \
+opensearch-cli curl put --path             "_cluster/settings" \
                 --query-parameters "flat_settings=true" --pretty \
                 --data '
                 {
@@ -259,13 +259,13 @@ odfe-cli curl put --path             "_cluster/settings" \
 
 ### Description
 
-Use DELETE api to execute requests against Elasticsearch. This command enables you to run any DELETE based
+Use DELETE api to execute requests against OpenSearch. This command enables you to run any DELETE based
 REST api commands across all categories.
 
 ### Synopsis
 
 ```
-odfe-cli curl delete [options] [common paramters]
+opensearch-cli curl delete [options] [common paramters]
               
 ```
 
@@ -280,7 +280,7 @@ odfe-cli curl delete [options] [common paramters]
 
 ### Common Parameters
 
-see [here](./odfe-cli-rest-api-as-commands.md#common-parameters)
+see [here](rest-api-as-commands.md#common-parameters)
 
 
 ### Example
@@ -288,7 +288,7 @@ see [here](./odfe-cli-rest-api-as-commands.md#common-parameters)
 1. Delete a document from an index. 
 
 ```
-odfe-cli curl delete --path         "my-index/_doc/1" \
+opensearch-cli curl delete --path         "my-index/_doc/1" \
                    --query-params  "routing=odfe-node1"
 ```
 

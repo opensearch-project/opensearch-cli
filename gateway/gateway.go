@@ -23,10 +23,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"odfe-cli/client"
-	"odfe-cli/entity"
-	"odfe-cli/entity/es"
-	"odfe-cli/gateway/aws/signer"
+	"opensearch-cli/client"
+	"opensearch-cli/entity"
+	"opensearch-cli/entity/core"
+	"opensearch-cli/gateway/aws/signer"
 	"os"
 	"strconv"
 	"time"
@@ -90,7 +90,7 @@ func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 	// client error if 400 <= status code < 500
 	if response.StatusCode >= http.StatusBadRequest && response.StatusCode < http.StatusInternalServerError {
 
-		return es.NewRequestError(
+		return core.NewRequestError(
 			response.StatusCode,
 			response.Body,
 			fmt.Errorf("%d Client Error: %s for url: %s", response.StatusCode, response.Status, response.Request.URL))
@@ -98,7 +98,7 @@ func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 	// server error if status code >= 500
 	if response.StatusCode >= http.StatusInternalServerError {
 
-		return es.NewRequestError(
+		return core.NewRequestError(
 			response.StatusCode,
 			response.Body,
 			fmt.Errorf("%d Server Error: %s for url: %s", response.StatusCode, response.Status, response.Request.URL))
@@ -136,7 +136,7 @@ func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, 
 	if err == nil {
 		return resBytes, nil
 	}
-	r, ok := err.(*es.RequestError)
+	r, ok := err.(*core.RequestError)
 	if !ok {
 		return nil, err
 	}

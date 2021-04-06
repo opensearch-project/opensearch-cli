@@ -1,4 +1,4 @@
-package es
+package core
 
 import (
 	"encoding/json"
@@ -34,7 +34,7 @@ func (r *RequestError) StatusCode() int {
 	return r.statusCode
 }
 
-//GetResponse to get error response from Elasticsearch
+//GetResponse to get error response from OpenSearch
 func (r *RequestError) GetResponse() string {
 	var data map[string]interface{}
 	if err := json.Unmarshal(r.response, &data); err != nil {
@@ -44,7 +44,7 @@ func (r *RequestError) GetResponse() string {
 	return string(formattedResponse)
 }
 
-//getResponseBody to extract response body from elasticsearch server
+//getResponseBody to extract response body from OpenSearch server
 func getResponseBody(b io.Reader) []byte {
 	resBytes, err := ioutil.ReadAll(b)
 	if err != nil {

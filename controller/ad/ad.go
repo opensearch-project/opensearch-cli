@@ -18,11 +18,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"odfe-cli/controller/es"
-	entity "odfe-cli/entity/ad"
-	"odfe-cli/gateway/ad"
-	"odfe-cli/mapper"
-	admapper "odfe-cli/mapper/ad"
+	"opensearch-cli/controller/core"
+	entity "opensearch-cli/entity/ad"
+	"opensearch-cli/gateway/ad"
+	"opensearch-cli/mapper"
+	admapper "opensearch-cli/mapper/ad"
 	"os"
 	"strings"
 
@@ -48,17 +48,17 @@ type Controller interface {
 }
 
 type controller struct {
-	reader  io.Reader
-	gateway ad.Gateway
-	esCtrl  es.Controller
+	reader     io.Reader
+	gateway    ad.Gateway
+	openSearch core.Controller
 }
 
 //New returns new Controller instance
-func New(reader io.Reader, esCtrl es.Controller, gateway ad.Gateway) Controller {
+func New(reader io.Reader, openSearch core.Controller, gateway ad.Gateway) Controller {
 	return &controller{
 		reader,
 		gateway,
-		esCtrl,
+		openSearch,
 	}
 }
 
@@ -124,7 +124,7 @@ func (c controller) askForConfirmation(message *string) bool {
 	case "n", "no":
 		return false
 	default:
-		fmt.Printf("please type (y)es or (n)o and then press enter:")
+		fmt.Printf("please type (y)core or (n)o and then press enter:")
 		return c.askForConfirmation(mapper.StringToStringPtr(""))
 	}
 }
@@ -139,7 +139,7 @@ func (c controller) DeleteDetector(ctx context.Context, id string, interactive b
 		proceed = c.askForConfirmation(
 			mapper.StringToStringPtr(
 				fmt.Sprintf(
-					"odfe-cli will delete detector: %s . Do you want to proceed? Y/N ",
+					"opensearch-cli will delete detector: %s . Do you want to proceed? Y/N ",
 					id,
 				),
 			),
@@ -248,7 +248,7 @@ func (c controller) cleanupCreatedDetectors(ctx context.Context, detectors []ent
 func getFilterValues(ctx context.Context, request entity.CreateDetectorRequest, c controller) ([]interface{}, error) {
 	var filterValues []interface{}
 	for _, index := range request.Index {
-		v, err := c.esCtrl.GetDistinctValues(ctx, index, *request.PartitionField)
+		v, err := c.openSearch.GetDistinctValues(ctx, index, *request.PartitionField)
 		if err != nil {
 			return nil, err
 		}
@@ -316,7 +316,7 @@ func (c controller) CreateMultiEntityAnomalyDetector(ctx context.Context, reques
 		proceed = c.askForConfirmation(
 			mapper.StringToStringPtr(
 				fmt.Sprintf(
-					"odfe-cli will create %d detector(s). Do you want to proceed? please type (y)es or (n)o and then press enter:",
+					"opensearch-cli will create %d detector(s). Do you want to proceed? please type (y)core or (n)o and then press enter:",
 					len(filterValues),
 				),
 			),
@@ -548,7 +548,7 @@ func (c controller) UpdateDetector(ctx context.Context, input entity.UpdateDetec
 	proceed := c.askForConfirmation(
 		mapper.StringToStringPtr(
 			fmt.Sprintf(
-				"odfe-cli will update detector: %s . Do you want to proceed? Y/N ",
+				"opensearch-cli will update detector: %s . Do you want to proceed? Y/N ",
 				input.ID,
 			),
 		),

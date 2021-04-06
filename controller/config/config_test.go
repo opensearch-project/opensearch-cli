@@ -18,7 +18,7 @@ package config
 import (
 	"fmt"
 	"io/ioutil"
-	"odfe-cli/entity"
+	"opensearch-cli/entity"
 	"os"
 	"path/filepath"
 	"testing"

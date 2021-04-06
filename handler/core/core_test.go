@@ -13,13 +13,13 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 import (
 	"context"
 	"errors"
-	"odfe-cli/controller/es/mocks"
-	entity "odfe-cli/entity/es"
+	"opensearch-cli/controller/core/mocks"
+	entity "opensearch-cli/entity/core"
 	"testing"
 
 	"github.com/golang/mock/gomock"
