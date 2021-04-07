@@ -86,7 +86,7 @@ We recommend you to create all integration tests inside [this](./it) folder with
 ```
 $ opensearch-cli --help
 
-opensearch-cli is a unified command line interface for managing ODFE clusters
+opensearch-cli is a unified command line interface for managing OpenSearch clusters
 
 Usage:
   opensearch-cli [command]
@@ -149,7 +149,7 @@ $ opensearch-cli profile list -l
 Name         UserName            Endpoint-url             
 ----         --------            ------------              
 default      admin               https://localhost:9200   
-prod         admin               https://odfe-node1:9200
+prod         admin               https://node1:9200
                  
 ```
 
@@ -167,11 +167,11 @@ You can specify profiles in two ways.
 
     On Linux or macOS :
     ```
-    $ export ODFE_PROFILE=prod
+    $ export OPENSEARCH_PROFILE=prod
     ```
     Windows
     ```
-    C:\> setx ODFE_PROFILE prod
+    C:\> setx OPENSEARCH_PROFILE prod
     ```
    These variables last for the duration of your shell session, but you can add them to .zshenv or .bash_profile
    for a more permanent option.
