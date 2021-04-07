@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 import (
 	"io/ioutil"

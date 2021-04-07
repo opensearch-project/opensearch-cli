@@ -19,7 +19,7 @@ import (
 	"encoding/json"
 	"opensearch-cli/entity/core"
 	osg "opensearch-cli/gateway/core"
-	mapper "opensearch-cli/mapper/es"
+	mapper "opensearch-cli/mapper/core"
 
 	"fmt"
 )
