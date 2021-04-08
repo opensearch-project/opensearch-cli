@@ -235,7 +235,7 @@ func getAWSIAMAuthDetails(newProfile *entity.Profile) {
 	fmt.Printf("AWS profile name (leave blank if you want to provide credentials using environment variables): ")
 	awsIAM := &entity.AWSIAM{}
 	awsIAM.ProfileName = getUserInputAsText(nil)
-	fmt.Printf("AWS service name where your cluster is deployed (for Amazon Elasticsearch Service, use 'core'. For EC2, use 'ec2'): ")
+	fmt.Printf("AWS service name where your cluster is deployed (for Amazon Elasticsearch Service, use 'es'. For EC2, use 'ec2'): ")
 	awsIAM.ServiceName = getUserInputAsText(checkInputIsNotEmpty)
 	newProfile.AWS = awsIAM
 }
