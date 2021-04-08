@@ -404,7 +404,7 @@ func (c controller) getDetectors(ctx context.Context, method string, pattern str
 
 	proceed := c.askForConfirmation(
 		mapper.StringToStringPtr(
-			fmt.Sprintf("odfe will %s above matched detector(s). Do you want to proceed? Y/N ", method),
+			fmt.Sprintf("opensearch-cli will %s above matched detector(s). Do you want to proceed? Y/N ", method),
 		),
 	)
 	if !proceed {

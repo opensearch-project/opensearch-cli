@@ -30,13 +30,13 @@ opensearch-cli curl post --path "_cluster/reroute" \
                     {
                         "move": {
                             "index": "opensearch-cli", "shard": 0,
-                            "from_node": "odfe-node1", "to_node": "odfe-node2"
+                            "from_node": "node1", "to_node": "node2"
                         }
                     },
                     {
                         "allocate_replica": {
                             "index": "test", "shard": 1,
-                            "node": "odfe-node3"
+                            "node": "node3"
                         }
                     }
                 ]}' \

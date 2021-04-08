@@ -43,7 +43,7 @@ func buildVersionString() string {
 
 var rootCommand = &cobra.Command{
 	Use:     RootCommandName,
-	Short:   "opensearch-cli is a unified command line interface for managing ODFE clusters",
+	Short:   "opensearch-cli is a unified command line interface for managing OpenSearch clusters",
 	Version: buildVersionString(),
 }
 

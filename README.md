@@ -23,7 +23,7 @@ opensearch-cli ad delete  ecommerce-count-qualtity      --profile stg
 ## Installation:
 
 You can download the binaries directly from the [downloads](https://opendistro.github.io/for-elasticsearch/downloads.html) page
-or from the [releases](https://github.com/opendistro-for-elasticsearch/odfe-cli/releases) section.
+or from the [releases](https://github.com/opensearch-project/opensearch-cli/releases) section.
 
 
 ## Development
@@ -178,7 +178,7 @@ You can specify profiles in two ways.
     
 ## Security
 
-See [CONTRIBUTING](https://github.com/opendistro-for-elasticsearch/opensearch-cli/blob/main/CONTRIBUTING.md#security-issue-notifications) for more information.
+See [CONTRIBUTING](https://github.com/opensearch-project/opensearch-cli/blob/main/CONTRIBUTING.md#security-issue-notifications) for more information.
 
 ## License
 

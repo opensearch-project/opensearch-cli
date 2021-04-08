@@ -100,5 +100,5 @@ jobs:
       - name: Zip and copy windows(amd64) artifacts to S3 bucket with the AWS CLI
         run: |
           cd dist/opensearch-cli_windows_amd64/
-          zip opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip odfe-cli.exe
+          zip opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip opensearch-cli.exe
           aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip ${{ secrets.S3_WINDOWS_URI }}
