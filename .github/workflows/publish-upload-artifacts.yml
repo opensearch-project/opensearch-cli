@@ -32,31 +32,31 @@ jobs:
       - name: Upload macOS(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: opendistro-opensearch-cli-${{ env.RELEASE_VERSION }}-macos-x64
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-macos-x64
           path: dist/opensearch-cli_darwin_amd64/opensearch-cli
 
       - name: Upload Linux(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: opendistro-opensearch-cli-${{ env.RELEASE_VERSION }}-linux-x64
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-linux-x64
           path: dist/opensearch-cli_linux_amd64/opensearch-cli
 
       - name: Upload Linux(arm64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: opendistro-opensearch-cli-${{ env.RELEASE_VERSION }}-linux-arm64
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-linux-arm64
           path: dist/opensearch-cli_linux_arm64/opensearch-cli
 
       - name: Upload Windows(i386) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: opendistro-opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x86
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x86
           path: dist/opensearch-cli_windows_386/opensearch-cli.exe
 
       - name: Upload Windows(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: opendistro-opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64
           path: dist/opensearch-cli_windows_amd64/opensearch-cli.exe
 
 
