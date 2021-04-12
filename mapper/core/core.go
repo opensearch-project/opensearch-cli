@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"odfe-cli/entity/es"
+	"opensearch-cli/entity/core"
 	"strings"
 )
 
@@ -35,17 +35,17 @@ const (
 	FilterPathQueryParameterTemplate = "filter_path=%s"
 )
 
-//CommandToCurlRequestParameter map user input to Elasticsearch request
-func CommandToCurlRequestParameter(request es.CurlCommandRequest) (result es.CurlRequest, err error) {
+//CommandToCurlRequestParameter map user input to OpenSearch request
+func CommandToCurlRequestParameter(request core.CurlCommandRequest) (result core.CurlRequest, err error) {
 
 	if result.Action, err = toHTTPAction(request.Action); err != nil {
-		return es.CurlRequest{}, err
+		return core.CurlRequest{}, err
 	}
 	if result.Headers, err = toHTTPHeaders(request.Headers); err != nil {
-		return es.CurlRequest{}, err
+		return core.CurlRequest{}, err
 	}
 	if result.Data, err = toCurlPayload(request.Data); err != nil {
-		return es.CurlRequest{}, err
+		return core.CurlRequest{}, err
 	}
 	if !isEmpty(request.Path) {
 		result.Path = request.Path

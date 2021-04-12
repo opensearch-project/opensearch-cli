@@ -17,10 +17,10 @@ package commands
 
 import (
 	"fmt"
-	"odfe-cli/client"
-	ctrl "odfe-cli/controller/knn"
-	gateway "odfe-cli/gateway/knn"
-	handler "odfe-cli/handler/knn"
+	"opensearch-cli/client"
+	ctrl "opensearch-cli/controller/knn"
+	gateway "opensearch-cli/gateway/knn"
+	handler "opensearch-cli/handler/knn"
 
 	"github.com/spf13/cobra"
 )
@@ -73,8 +73,8 @@ var knnWarmupCommand = &cobra.Command{
 	Short: "Warmup shards for given indices",
 	Long: "Warmup command loads all graphs for all of the shards (primaries and replicas) " +
 		"for given indices into native memory.\nThis is an asynchronous operation. If the command times out, " +
-		"the operation will still be going on in the cluster.\nTo monitor this, use the Elasticsearch _tasks API. " +
-		"Use `odfe-cli knn stats` command to verify whether indices are successfully loaded into memory.",
+		"the operation will still be going on in the cluster.\nTo monitor this, use the OpenSearch _tasks API. " +
+		"Use `opensearch-cli knn stats` command to verify whether indices are successfully loaded into memory.",
 	Run: func(cmd *cobra.Command, args []string) {
 		h, err := GetKNNHandler()
 		if err != nil {

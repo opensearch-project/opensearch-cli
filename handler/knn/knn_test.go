@@ -18,8 +18,8 @@ package knn
 import (
 	"context"
 	"errors"
-	"odfe-cli/controller/knn/mocks"
-	entity "odfe-cli/entity/knn"
+	"opensearch-cli/controller/knn/mocks"
+	entity "opensearch-cli/entity/knn"
 	"testing"
 
 	"github.com/golang/mock/gomock"

@@ -23,13 +23,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"odfe-cli/client"
-	adctrl "odfe-cli/controller/ad"
-	"odfe-cli/controller/es"
-	"odfe-cli/entity"
-	adentity "odfe-cli/entity/ad"
-	adgateway "odfe-cli/gateway/ad"
-	esg "odfe-cli/gateway/es"
+	"opensearch-cli/client"
+	adctrl "opensearch-cli/controller/ad"
+	"opensearch-cli/controller/core"
+	"opensearch-cli/entity"
+	adentity "opensearch-cli/entity/ad"
+	"opensearch-cli/environment"
+	adgateway "opensearch-cli/gateway/ad"
+	esg "opensearch-cli/gateway/core"
 	"os"
 	"testing"
 
@@ -44,12 +45,12 @@ const (
 
 //ADTestSuite suite specific to AD plugin
 type ADTestSuite struct {
-	ODFECLISuite
+	CLISuite
 	DetectorRequest adentity.CreateDetectorRequest
 	Detector        adentity.CreateDetector
 	DetectorId      string
 	ADGateway       adgateway.Gateway
-	ESController    es.Controller
+	ESController    core.Controller
 }
 
 func getRawFeatureAggregation() []byte {
@@ -73,9 +74,9 @@ func (a *ADTestSuite) SetupSuite() {
 	}
 	a.Profile = &entity.Profile{
 		Name:     "test",
-		Endpoint: os.Getenv("ODFE_ENDPOINT"),
-		UserName: os.Getenv("ODFE_USER"),
-		Password: os.Getenv("ODFE_PASSWORD"),
+		Endpoint: os.Getenv(environment.OPENSEARCH_ENDPOINT),
+		UserName: os.Getenv(environment.OPENSEARCH_USER),
+		Password: os.Getenv(environment.OPENSEARCH_PASSWORD),
 	}
 	if err = a.ValidateProfile(); err != nil {
 		fmt.Println(err)
@@ -83,7 +84,7 @@ func (a *ADTestSuite) SetupSuite() {
 	}
 	a.CreateIndex(EcommerceIndexFileName, "")
 	g := esg.New(a.Client, a.Profile)
-	a.ESController = es.New(g)
+	a.ESController = core.New(g)
 	a.ADGateway = adgateway.New(a.Client, a.Profile)
 	a.DetectorRequest = getCreateDetectorRequest()
 	a.Detector = adentity.CreateDetector{

@@ -18,12 +18,13 @@ package commands
 import (
 	"errors"
 	"fmt"
+	"opensearch-cli/environment"
 
 	"golang.org/x/term"
 
-	"odfe-cli/controller/config"
-	"odfe-cli/controller/profile"
-	"odfe-cli/entity"
+	"opensearch-cli/controller/config"
+	"opensearch-cli/controller/profile"
+	"opensearch-cli/entity"
 	"os"
 	"strings"
 	"text/tabwriter"
@@ -59,19 +60,19 @@ func GetProfileController() (profile.Controller, error) {
 //profileCommand is main command for profile operations like list, create and delete
 var profileCommand = &cobra.Command{
 	Use:   ProfileCommandName + " sub-command",
-	Short: "Manage a collection of settings and credentials that you can apply to an odfe-cli command",
-	Long: "A named profile is a collection of settings and credentials that you can apply to an odfe-cli command. " +
-		"When you specify a profile for a command (e.g. `odfe-cli <command> --profile <profile_name>`), odfe-cli uses " +
+	Short: "Manage a collection of settings and credentials that you can apply to an opensearch-cli command",
+	Long: "A named profile is a collection of settings and credentials that you can apply to an opensearch-cli command. " +
+		"When you specify a profile for a command (e.g. `opensearch-cli <command> --profile <profile_name>`), opensearch-cli uses " +
 		"the profile's settings and credentials to run the given command.\n" +
 		"To configure a default profile for commands, either specify the default profile name in an environment " +
-		"variable (`ODFE_PROFILE`) or create a profile named `default`.",
+		"variable (`" + environment.OPENSEARCH_PROFILE + "`) or create a profile named `default`.",
 }
 
 //createProfileCmd creates profile interactively by prompting for name (distinct), user, endpoint, password.
 var createProfileCmd = &cobra.Command{
 	Use:   CreateNewProfileCommandName,
 	Short: "Create profile",
-	Long:  "Create named profile to save settings and credentials that you can apply to an odfe-cli command.",
+	Long:  "Create named profile to save settings and credentials that you can apply to an opensearch-cli command.",
 	Run: func(cmd *cobra.Command, args []string) {
 		profileController, err := GetProfileController()
 		if err != nil {
@@ -177,12 +178,12 @@ func init() {
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateEndpoint)
 	createProfileCmd.Flags().StringP(FlagProfileCreateAuthType, "a", "", "Authentication type. Options are disabled, basic and aws-iam."+
 		"\nIf security is disabled, provide --auth-type='disabled'.\nIf security uses HTTP basic authentication, provide --auth-type='basic'.\n"+
-		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nodfe-cli asks for additional information based on your choice of authentication type.")
+		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nopensearch-cli asks for additional information based on your choice of authentication type.")
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateAuthType)
 	createProfileCmd.Flags().IntP(FlagProfileMaxRetry, "m", 3, "Maximum retry attempts allowed if transient problems occur.\n"+
-		"You can override this value by using the ODFE_MAX_RETRY environment variable.")
+		"You can override this value by using the "+environment.OPENSEARCH_MAX_RETRY+" environment variable.")
 	createProfileCmd.Flags().Int64P(FlagProfileTimeout, "t", 10, "Maximum time allowed for connection in seconds.\n"+
-		"You can override this value by using the ODFE_TIMEOUT environment variable.")
+		"You can override this value by using the "+environment.OPENSEARCH_TIMEOUT+" environment variable.")
 	createProfileCmd.Flags().BoolP(FlagProfileHelp, "h", false, "Help for "+CreateNewProfileCommandName)
 
 	//profile delete flags

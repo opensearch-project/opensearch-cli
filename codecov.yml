@@ -4,11 +4,11 @@ coverage:
       default:
         threshold: 5%
         target: auto
-      odfe-cli:
+      opensearch-cli:
         paths:
-          - "odfe-cli/"
+          - "opensearch-cli/"
         flags:
-          - odfe-cli
+          - opensearch-cli
     patch: off
 comment:
   layout: "reach, diff, flags, files"
@@ -18,5 +18,5 @@ comment:
   require_head: no
   branches: null
 flags:
-  odfe-cli:
+  opensearch-cli:
     carryforward: true

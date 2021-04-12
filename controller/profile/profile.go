@@ -17,15 +17,15 @@ package profile
 
 import (
 	"fmt"
-	"odfe-cli/controller/config"
-	"odfe-cli/entity"
+	"opensearch-cli/controller/config"
+	"opensearch-cli/entity"
+	"opensearch-cli/environment"
 	"os"
 	"strings"
 )
 
 const (
-	odfeProfileEnvVarName  = "ODFE_PROFILE"
-	odfeDefaultProfileName = "default"
+	DefaultProfileName = "default"
 )
 
 //go:generate go run -mod=mod github.com/golang/mock/mockgen -destination=mocks/mock_profile.go -package=mocks . Controller
@@ -152,12 +152,12 @@ func (c controller) GetProfileForExecution(name string) (value entity.Profile, o
 		}
 		return value, ok, fmt.Errorf("profile '%s' does not exist", name)
 	}
-	if envProfileName, exists := os.LookupEnv(odfeProfileEnvVarName); exists {
+	if envProfileName, exists := os.LookupEnv(environment.OPENSEARCH_PROFILE); exists {
 		if value, ok = profiles[envProfileName]; ok {
 			return
 		}
 		return value, ok, fmt.Errorf("profile '%s' does not exist", envProfileName)
 	}
-	value, ok = profiles[odfeDefaultProfileName]
+	value, ok = profiles[DefaultProfileName]
 	return
 }

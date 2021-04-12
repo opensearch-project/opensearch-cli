@@ -17,9 +17,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"odfe-cli/controller/ad"
-	entity "odfe-cli/entity/ad"
-	"odfe-cli/mapper"
+	"opensearch-cli/controller/ad"
+	entity "opensearch-cli/entity/ad"
+	"opensearch-cli/mapper"
 	"os"
 )
 

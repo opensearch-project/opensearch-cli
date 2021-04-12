@@ -18,8 +18,8 @@ package ad
 import (
 	"encoding/json"
 	"fmt"
-	"odfe-cli/entity/ad"
-	"odfe-cli/mapper"
+	"opensearch-cli/entity/ad"
+	"opensearch-cli/mapper"
 	"regexp"
 	"strconv"
 	"strings"

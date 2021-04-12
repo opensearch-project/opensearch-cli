@@ -17,11 +17,11 @@ package commands
 
 import (
 	"fmt"
-	"odfe-cli/client"
-	ctrl "odfe-cli/controller/es"
-	entity "odfe-cli/entity/es"
-	gateway "odfe-cli/gateway/es"
-	handler "odfe-cli/handler/es"
+	"opensearch-cli/client"
+	ctrl "opensearch-cli/controller/core"
+	entity "opensearch-cli/entity/core"
+	gateway "opensearch-cli/gateway/core"
+	handler "opensearch-cli/handler/core"
 
 	"github.com/spf13/cobra"
 )
@@ -37,10 +37,10 @@ const (
 	curlOutputFilterPathFlagName = "filter-path"
 )
 
-//curlCommand is base command for Elasticsearch REST APIs.
+//curlCommand is base command for OpenSearch REST APIs.
 var curlCommand = &cobra.Command{
 	Use:   curlCommandName,
-	Short: "Manage Elasticsearch core features",
+	Short: "Manage OpenSearch core features",
 	Long:  "Use the curl command to execute any REST API calls against the cluster.",
 }
 
@@ -48,9 +48,9 @@ func init() {
 	curlCommand.Flags().BoolP("help", "h", false, "Help for curl command")
 	curlCommand.PersistentFlags().Bool(curlPrettyFlagName, false, "Response will be formatted")
 	curlCommand.PersistentFlags().StringP(curlOutputFormatFlagName, "o", "",
-		"Output format if supported by cluster, else, default format by Elasticsearch. Example json, yaml")
+		"Output format if supported by cluster, else, default format by OpenSearch. Example json, yaml")
 	curlCommand.PersistentFlags().StringP(curlOutputFilterPathFlagName, "f", "",
-		"Filter output fields returned by Elasticsearch. Use comma ',' to separate list of filters")
+		"Filter output fields returned by OpenSearch. Use comma ',' to separate list of filters")
 	GetRoot().AddCommand(curlCommand)
 }
 

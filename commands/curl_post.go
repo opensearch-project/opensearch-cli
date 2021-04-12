@@ -23,27 +23,27 @@ const curlPostCommandName = "post"
 
 var postExample = `
 # change the allocation of shards in a cluster.
-odfe-cli curl post --path "_cluster/reroute" \
+opensearch-cli curl post --path "_cluster/reroute" \
                  --data '
                  {
                     "commands": [
                     {
                         "move": {
-                            "index": "odfe-cli", "shard": 0,
-                            "from_node": "odfe-node1", "to_node": "odfe-node2"
+                            "index": "opensearch-cli", "shard": 0,
+                            "from_node": "node1", "to_node": "node2"
                         }
                     },
                     {
                         "allocate_replica": {
                             "index": "test", "shard": 1,
-                            "node": "odfe-node3"
+                            "node": "node3"
                         }
                     }
                 ]}' \
 				--pretty
 
 # insert a document to an index 
-odfe-cli curl post --path "my-index-01/_doc" \
+opensearch-cli curl post --path "my-index-01/_doc" \
                    --data '
                     {
                         "message": "insert document",

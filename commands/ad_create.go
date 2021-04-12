@@ -17,7 +17,7 @@ package commands
 
 import (
 	"fmt"
-	handler "odfe-cli/handler/ad"
+	handler "opensearch-cli/handler/ad"
 
 	"github.com/spf13/cobra"
 )
@@ -33,7 +33,7 @@ var createCmd = &cobra.Command{
 	Use:   createDetectorsCommandName + " json-file-path ...",
 	Short: "Create detectors based on JSON files",
 	Long: "Create detectors based on a local JSON file\n" +
-		"To begin, use `odfe-cli ad create --generate-template` to generate a sample configuration. Save this template locally and update it for your use case. Then use `odfe-cli ad create file-path` to create detector.",
+		"To begin, use `opensearch-cli ad create --generate-template` to generate a sample configuration. Save this template locally and update it for your use case. Then use `opensearch-cli ad create file-path` to create detector.",
 	Run: func(cmd *cobra.Command, args []string) {
 		generate, _ := cmd.Flags().GetBool(generate)
 		if generate {

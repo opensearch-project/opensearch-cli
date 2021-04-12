@@ -19,8 +19,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"odfe-cli/controller/profile/mocks"
-	"odfe-cli/entity"
+	"opensearch-cli/controller/profile/mocks"
+	"opensearch-cli/entity"
 	"os"
 	"testing"
 

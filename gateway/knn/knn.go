@@ -22,10 +22,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"odfe-cli/client"
-	"odfe-cli/entity"
-	"odfe-cli/entity/knn"
-	gw "odfe-cli/gateway"
+	"opensearch-cli/client"
+	"opensearch-cli/entity"
+	"opensearch-cli/entity/knn"
+	gw "opensearch-cli/gateway"
 )
 
 const (

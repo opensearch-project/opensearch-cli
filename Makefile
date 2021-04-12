@@ -3,9 +3,9 @@ INTEGRATION_TEST_PATH=./it/...
 
 # set of env variables that you need for testing
 ENV_LOCAL_TEST=\
-  ODFE_ENDPOINT="https://localhost:9200" \
-  ODFE_USER="admin" \
-  ODFE_PASSWORD="admin"
+  OPENSEARCH_ENDPOINT="https://localhost:9200" \
+  OPENSEARCH_USER="admin" \
+  OPENSEARCH_PASSWORD="admin"
 
 # this command will start a docker components that we set in docker-compose.yml
 docker.start.components:
@@ -33,7 +33,7 @@ test.unit:
 format:
 	goimports -w .;
 
-# generate odfe-cli file in current directory
-# update GOOS / GOARCH if you want to build for other os and architecture
+# generate opensearch-cli file in current directory
+# update GOOS / GOARCH if you want to build for other core and architecture
 build:
 	go build .

@@ -18,7 +18,7 @@ package mocks
 import (
 	"fmt"
 	"net/http"
-	"odfe-cli/client"
+	"opensearch-cli/client"
 	"os"
 )
 

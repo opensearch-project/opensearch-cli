@@ -33,13 +33,13 @@ var longText = `To enable shell autocompletion:
 
 Bash:
 
-$ source <(odfe-cli completion bash)
+$ source <(opensearch-cli completion bash)
 
 # To enable auto completion for commands for each session, execute once:
 Linux:
-  $ odfe-cli completion bash > /etc/bash_completion.d/odfe-cli
+  $ opensearch-cli completion bash > /etc/bash_completion.d/opensearch-cli
 MacOS:
-  $ odfe-cli completion bash > /usr/local/etc/bash_completion.d/odfe-cli
+  $ opensearch-cli completion bash > /usr/local/etc/bash_completion.d/opensearch-cli
 
 Zsh:
 
@@ -49,23 +49,23 @@ Zsh:
 $ echo "autoload -U compinit; compinit" >> ~/.zshrc
 
 # To enable auto completion for commands for each session, execute once:
-$ odfe-cli completion zsh > "${fpath[1]}/_odfe-cli"
+$ opensearch-cli completion zsh > "${fpath[1]}/_opensearch-cli"
 
 # You will need to start a new shell for this setup to take effect.
 
 Fish:
 
-$ odfe-cli completion fish | source
+$ opensearch-cli completion fish | source
 
 # To enable auto completion for commands for each session, execute once:
-$ odfe-cli completion fish > ~/.config/fish/completions/odfe-cli.fish
+$ opensearch-cli completion fish > ~/.config/fish/completions/opensearch-cli.fish
 
 Powershell:
 
-PS> odfe-cli completion powershell | Out-String | Invoke-Expression
+PS> opensearch-cli completion powershell | Out-String | Invoke-Expression
 
 # To enable auto completion for commands for each session, execute once:
-PS> odfe-cli completion powershell > odfe-cli.ps1
+PS> opensearch-cli completion powershell > opensearch-cli.ps1
 # and source this file from your powershell profile.
 `
 

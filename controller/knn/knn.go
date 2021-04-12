@@ -18,8 +18,8 @@ package knn
 import (
 	"context"
 	"encoding/json"
-	entity "odfe-cli/entity/knn"
-	"odfe-cli/gateway/knn"
+	entity "opensearch-cli/entity/knn"
+	gateway "opensearch-cli/gateway/knn"
 	"strings"
 )
 
@@ -32,7 +32,7 @@ type Controller interface {
 }
 
 type controller struct {
-	gateway knn.Gateway
+	gateway gateway.Gateway
 }
 
 //GetStatistics gets stats data based on nodes and stat names
@@ -41,7 +41,7 @@ func (c controller) GetStatistics(ctx context.Context, nodes string, names strin
 }
 
 //New returns new Controller instance
-func New(gateway knn.Gateway) Controller {
+func New(gateway gateway.Gateway) Controller {
 	return &controller{
 		gateway,
 	}

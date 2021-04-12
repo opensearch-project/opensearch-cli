@@ -15,18 +15,19 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"odfe-cli/client"
-	ctrl "odfe-cli/controller/es"
-	"odfe-cli/entity"
-	"odfe-cli/entity/es"
-	gateway "odfe-cli/gateway/es"
-	"odfe-cli/it"
+	"opensearch-cli/client"
+	ctrl "opensearch-cli/controller/core"
+	"opensearch-cli/entity"
+	"opensearch-cli/entity/core"
+	"opensearch-cli/environment"
+	gateway "opensearch-cli/gateway/core"
+	"opensearch-cli/it"
 	"os"
 	"strings"
 	"testing"
@@ -39,9 +40,9 @@ import (
 
 const GetBulkIndexName = "bulk-user-request"
 
-//ESGetTestSuite suite tests ES GET API REQUESTS
-type ESGetTestSuite struct {
-	it.ODFECLISuite
+//OpenSearchTestSuite suite tests OpenSearch REST API REQUESTS
+type OpenSearchTestSuite struct {
+	it.CLISuite
 	Gateway    gateway.Gateway
 	Controller ctrl.Controller
 }
@@ -51,7 +52,7 @@ type result struct {
 }
 
 //SetupSuite runs once for every test suite
-func (a *ESGetTestSuite) SetupSuite() {
+func (a *OpenSearchTestSuite) SetupSuite() {
 	var err error
 	a.Client, err = client.New(nil)
 	if err != nil {
@@ -60,9 +61,9 @@ func (a *ESGetTestSuite) SetupSuite() {
 	}
 	a.Profile = &entity.Profile{
 		Name:     "test",
-		Endpoint: os.Getenv("ODFE_ENDPOINT"),
-		UserName: os.Getenv("ODFE_USER"),
-		Password: os.Getenv("ODFE_PASSWORD"),
+		Endpoint: os.Getenv(environment.OPENSEARCH_ENDPOINT),
+		UserName: os.Getenv(environment.OPENSEARCH_USER),
+		Password: os.Getenv(environment.OPENSEARCH_PASSWORD),
 	}
 	if err = a.ValidateProfile(); err != nil {
 		fmt.Println(err)
@@ -72,12 +73,12 @@ func (a *ESGetTestSuite) SetupSuite() {
 	a.Controller = ctrl.New(a.Gateway)
 	a.CreateIndex(GetBulkIndexName, "")
 }
-func (a *ESGetTestSuite) TearDownSuite() {
+func (a *OpenSearchTestSuite) TearDownSuite() {
 	a.DeleteIndex(GetBulkIndexName)
 }
 
-func (a *ESGetTestSuite) TestCurlGet() {
-	request := es.CurlCommandRequest{
+func (a *OpenSearchTestSuite) TestCurlGet() {
+	request := core.CurlCommandRequest{
 		Action: "Get",
 		Pretty: true,
 	}
@@ -105,7 +106,7 @@ func (a *ESGetTestSuite) TestCurlGet() {
 		assert.NoError(t, json.Unmarshal(response, &health))
 		assert.True(t, len(health) > 0)
 		assert.EqualValues(t, "yellow", health["status"])
-		assert.EqualValues(t, "odfe-test-cluster", health["cluster_name"])
+		assert.EqualValues(t, "test-cluster", health["cluster_name"])
 		assert.EqualValues(t, 1.0, health["number_of_nodes"])
 	})
 	a.T().Run("health status of a cluster in yaml", func(t *testing.T) {
@@ -124,13 +125,13 @@ func (a *ESGetTestSuite) TestCurlGet() {
 		assert.NoError(t, yaml.Unmarshal(response, &health))
 		assert.True(t, len(health.Status) > 0)
 		assert.EqualValues(t, "yellow", health.Status)
-		assert.EqualValues(t, "odfe-test-cluster", health.Name)
+		assert.EqualValues(t, "test-cluster", health.Name)
 		assert.EqualValues(t, "1", health.Nodes)
 	})
 }
 
-func (a *ESGetTestSuite) TestCurlPost() {
-	request := es.CurlCommandRequest{
+func (a *OpenSearchTestSuite) TestCurlPost() {
+	request := core.CurlCommandRequest{
 		Action: "Post",
 		Pretty: true,
 	}
@@ -192,8 +193,8 @@ func (a *ESGetTestSuite) TestCurlPost() {
 	})
 }
 
-func (a *ESGetTestSuite) TestCurlPut() {
-	request := es.CurlCommandRequest{
+func (a *OpenSearchTestSuite) TestCurlPut() {
+	request := core.CurlCommandRequest{
 		Action: "PUT",
 		Pretty: true,
 	}
@@ -224,8 +225,8 @@ func (a *ESGetTestSuite) TestCurlPut() {
 	})
 }
 
-func (a *ESGetTestSuite) TestCurlDelete() {
-	request := es.CurlCommandRequest{
+func (a *OpenSearchTestSuite) TestCurlDelete() {
+	request := core.CurlCommandRequest{
 		Pretty: true,
 	}
 	a.T().Run("delete index document", func(t *testing.T) {
@@ -284,5 +285,5 @@ func (a *ESGetTestSuite) TestCurlDelete() {
 // In order for 'go test' to run this suite, we need to create
 // a normal test function and pass our suite to suite.Run
 func TestESGETSuite(t *testing.T) {
-	suite.Run(t, new(ESGetTestSuite))
+	suite.Run(t, new(OpenSearchTestSuite))
 }

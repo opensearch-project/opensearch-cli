@@ -18,7 +18,7 @@ package signer
 import (
 	"bytes"
 	"errors"
-	"odfe-cli/entity"
+	"opensearch-cli/entity"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"

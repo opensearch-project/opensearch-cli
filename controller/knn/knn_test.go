@@ -19,8 +19,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"odfe-cli/entity/knn"
-	"odfe-cli/gateway/knn/mocks"
+	entity "opensearch-cli/entity/knn"
+	gateway "opensearch-cli/gateway/knn/mocks"
 	"testing"
 
 	"github.com/golang/mock/gomock"
@@ -32,7 +32,7 @@ func TestControllerGetStatistics(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
 
-		mockGateway := mocks.NewMockGateway(mockCtrl)
+		mockGateway := gateway.NewMockGateway(mockCtrl)
 		ctx := context.Background()
 		mockGateway.EXPECT().GetStatistics(ctx, "", "").Return(nil, errors.New("gateway failed"))
 		ctrl := New(mockGateway)
@@ -42,7 +42,7 @@ func TestControllerGetStatistics(t *testing.T) {
 	t.Run("get stats success", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
-		mockGateway := mocks.NewMockGateway(mockCtrl)
+		mockGateway := gateway.NewMockGateway(mockCtrl)
 		ctx := context.Background()
 		mockGateway.EXPECT().GetStatistics(ctx, "node1", "stats").Return([]byte(`response succeeded`), nil)
 		ctrl := New(mockGateway)
@@ -57,7 +57,7 @@ func TestControllerWarmupIndices(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
 
-		mockGateway := mocks.NewMockGateway(mockCtrl)
+		mockGateway := gateway.NewMockGateway(mockCtrl)
 		ctx := context.Background()
 		mockGateway.EXPECT().WarmupIndices(ctx, "index1").Return(nil, errors.New("gateway failed"))
 		ctrl := New(mockGateway)
@@ -67,10 +67,10 @@ func TestControllerWarmupIndices(t *testing.T) {
 	t.Run("warmup success", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
-		mockGateway := mocks.NewMockGateway(mockCtrl)
+		mockGateway := gateway.NewMockGateway(mockCtrl)
 		ctx := context.Background()
-		expectedResponse := knn.WarmupAPIResponse{
-			Shards: knn.Shards{
+		expectedResponse := entity.WarmupAPIResponse{
+			Shards: entity.Shards{
 				Total:      10,
 				Successful: 8,
 				Failed:     2,

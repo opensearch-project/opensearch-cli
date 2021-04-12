@@ -16,7 +16,7 @@
 package commands
 
 import (
-	"odfe-cli/entity"
+	"opensearch-cli/entity"
 	"os"
 	"runtime"
 	"testing"
@@ -26,8 +26,8 @@ import (
 
 func TestGetConfigFilePath(t *testing.T) {
 
-	t.Run("config file path from os environment variable", func(t *testing.T) {
-		err := os.Setenv(odfeConfigEnvVarName, "test/config.yml")
+	t.Run("config file path from core environment variable", func(t *testing.T) {
+		err := os.Setenv(ConfigEnvVarName, "test/config.yml")
 		assert.NoError(t, err)
 		filePath, err := GetConfigFilePath("")
 		assert.NoError(t, err)

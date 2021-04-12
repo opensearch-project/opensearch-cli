@@ -13,27 +13,27 @@
  * permissions and limitations under the License.
  */
 
-package es
+package core
 
 import (
 	"context"
 	"fmt"
 	"net/http"
 	"net/url"
-	"odfe-cli/client"
-	"odfe-cli/entity"
-	"odfe-cli/entity/es"
-	gw "odfe-cli/gateway"
+	"opensearch-cli/client"
+	"opensearch-cli/entity"
+	"opensearch-cli/entity/core"
+	gw "opensearch-cli/gateway"
 )
 
 const search = "_search"
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_es.go -package=mocks . Gateway
+//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_core.go -package=mocks . Gateway
 
-//Gateway interface to call ES
+//Gateway interface to call OpenSearch
 type Gateway interface {
 	SearchDistinctValues(ctx context.Context, index string, field string) ([]byte, error)
-	Curl(ctx context.Context, request es.CurlRequest) ([]byte, error)
+	Curl(ctx context.Context, request core.CurlRequest) ([]byte, error)
 }
 
 type gateway struct {
@@ -46,12 +46,12 @@ func New(c *client.Client, p *entity.Profile) Gateway {
 		*gw.NewHTTPGateway(c, p),
 	}
 }
-func buildPayload(field string) *es.SearchRequest {
-	return &es.SearchRequest{
+func buildPayload(field string) *core.SearchRequest {
+	return &core.SearchRequest{
 		Size: 0, // This will skip data in the response
-		Agg: es.Aggregate{
-			Group: es.DistinctGroups{
-				Term: es.Terms{
+		Agg: core.Aggregate{
+			Group: core.DistinctGroups{
+				Term: core.Terms{
 					Field: field,
 				},
 			},
@@ -86,7 +86,7 @@ func (g *gateway) SearchDistinctValues(ctx context.Context, index string, field 
 }
 
 //Curl executes REST request based on request parameters
-func (g *gateway) Curl(ctx context.Context, request es.CurlRequest) ([]byte, error) {
+func (g *gateway) Curl(ctx context.Context, request core.CurlRequest) ([]byte, error) {
 
 	requestURL, err := g.buildURL(request)
 	if err != nil {
@@ -108,7 +108,7 @@ func (g *gateway) Curl(ctx context.Context, request es.CurlRequest) ([]byte, err
 	return response, nil
 }
 
-func (g *gateway) buildURL(request es.CurlRequest) (*url.URL, error) {
+func (g *gateway) buildURL(request core.CurlRequest) (*url.URL, error) {
 	endpoint, err := gw.GetValidEndpoint(g.Profile)
 	if err != nil {
 		return nil, err

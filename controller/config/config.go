@@ -17,7 +17,7 @@ package config
 
 import (
 	"io/ioutil"
-	"odfe-cli/entity"
+	"opensearch-cli/entity"
 	"os"
 
 	"gopkg.in/yaml.v3"

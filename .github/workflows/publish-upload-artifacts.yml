@@ -1,0 +1,104 @@
+name: Publish and Upload opensearch-cli
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Version
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/*/}
+          echo "RELEASE_VERSION=${TAG_NAME:1}" >> $GITHUB_ENV
+
+      - name: Set up Go ubuntu-latest
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.2
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          version: latest
+          args: --snapshot --skip-publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload macOS(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-macos-x64
+          path: dist/opensearch-cli_darwin_amd64/opensearch-cli
+
+      - name: Upload Linux(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-linux-x64
+          path: dist/opensearch-cli_linux_amd64/opensearch-cli
+
+      - name: Upload Linux(arm64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-linux-arm64
+          path: dist/opensearch-cli_linux_arm64/opensearch-cli
+
+      - name: Upload Windows(i386) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x86
+          path: dist/opensearch-cli_windows_386/opensearch-cli.exe
+
+      - name: Upload Windows(amd64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64
+          path: dist/opensearch-cli_windows_amd64/opensearch-cli.exe
+
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Zip and copy macOS(amd64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/opensearch-cli_darwin_amd64/
+          zip opensearch-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip opensearch-cli
+          aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-macos-x64.zip ${{ secrets.S3_MACOS_URI }}
+
+      - name: Zip and copy macOS(arm64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/opensearch-cli_darwin_arm64/
+          zip opensearch-cli-${{ env.RELEASE_VERSION }}-macos-arm64.zip opensearch-cli
+          aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-macos-arm64.zip ${{ secrets.S3_MACOS_URI }}
+
+      - name: Zip and copy linux(amd64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/opensearch-cli_linux_amd64
+          zip  opensearch-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip opensearch-cli
+          aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-linux-x64.zip ${{ secrets.S3_LINUX_URI }}
+
+      - name: Zip and copy linux(arm64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/opensearch-cli_linux_arm64/
+          zip  opensearch-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip opensearch-cli
+          aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-linux-arm64.zip ${{ secrets.S3_LINUX_URI }}
+
+      - name: Zip and copy windows(x386) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/opensearch-cli_windows_386
+          zip  opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip opensearch-cli.exe
+          aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x86.zip ${{ secrets.S3_WINDOWS_URI }}
+
+      - name: Zip and copy windows(amd64) artifacts to S3 bucket with the AWS CLI
+        run: |
+          cd dist/opensearch-cli_windows_amd64/
+          zip opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip opensearch-cli.exe
+          aws s3 cp opensearch-cli-${{ env.RELEASE_VERSION }}-windows-x64.zip ${{ secrets.S3_WINDOWS_URI }}

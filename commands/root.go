@@ -17,7 +17,7 @@ package commands
 
 import (
 	"fmt"
-	"odfe-cli/entity"
+	"opensearch-cli/entity"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -31,8 +31,8 @@ const (
 	flagConfig            = "config"
 	flagProfileName       = "profile"
 	folderPermission      = 0755 // only owner can write, while everyone can read and execute
-	odfeConfigEnvVarName  = "ODFE_CLI_CONFIG"
-	RootCommandName       = "odfe-cli"
+	ConfigEnvVarName      = "OPENSEARCH_CLI_CONFIG"
+	RootCommandName       = "opensearch-cli"
 	version               = "1.1.0"
 )
 
@@ -43,7 +43,7 @@ func buildVersionString() string {
 
 var rootCommand = &cobra.Command{
 	Use:     RootCommandName,
-	Short:   "odfe-cli is a unified command line interface for managing ODFE clusters",
+	Short:   "opensearch-cli is a unified command line interface for managing OpenSearch clusters",
 	Version: buildVersionString(),
 }
 
@@ -78,10 +78,10 @@ func getDefaultConfigFolderRootPath() string {
 func init() {
 	cobra.OnInitialize()
 	configFilePath := GetDefaultConfigFilePath()
-	rootCommand.PersistentFlags().StringP(flagConfig, "c", "", fmt.Sprintf("Configuration file for odfe-cli, default is %s", configFilePath))
+	rootCommand.PersistentFlags().StringP(flagConfig, "c", "", fmt.Sprintf("Configuration file for opensearch-cli, default is %s", configFilePath))
 	rootCommand.PersistentFlags().StringP(flagProfileName, "p", "", "Use a specific profile from your configuration file")
-	rootCommand.Flags().BoolP("version", "v", false, "Version for odfe-cli")
-	rootCommand.Flags().BoolP("help", "h", false, "Help for odfe-cli")
+	rootCommand.Flags().BoolP("version", "v", false, "Version for opensearch-cli")
+	rootCommand.Flags().BoolP("help", "h", false, "Help for opensearch-cli")
 }
 
 // GetConfigFilePath gets config file path for execution
@@ -90,7 +90,7 @@ func GetConfigFilePath(configFlagValue string) (string, error) {
 	if configFlagValue != "" {
 		return configFlagValue, nil
 	}
-	if value, ok := os.LookupEnv(odfeConfigEnvVarName); ok {
+	if value, ok := os.LookupEnv(ConfigEnvVarName); ok {
 		return value, nil
 	}
 	if err := createDefaultConfigFileIfNotExists(); err != nil {

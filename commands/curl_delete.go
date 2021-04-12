@@ -23,8 +23,8 @@ const curlDeleteCommandName = "delete"
 
 var curlDeleteExample = `
 # Delete a document from an index. 
-odfe-cli curl delete --path         "my-index/_doc/1" \
-                     --query-params "routing=odfe-node1"
+opensearch-cli curl delete --path         "my-index/_doc/1" \
+                     --query-params "routing=node1"
 `
 
 var curlDeleteCmd = &cobra.Command{

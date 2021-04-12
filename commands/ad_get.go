@@ -19,8 +19,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	entity "odfe-cli/entity/ad"
-	"odfe-cli/handler/ad"
+	entity "opensearch-cli/entity/ad"
+	"opensearch-cli/handler/ad"
 	"os"
 
 	"github.com/spf13/cobra"

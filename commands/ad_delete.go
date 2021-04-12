@@ -16,7 +16,7 @@
 package commands
 
 import (
-	handler "odfe-cli/handler/ad"
+	handler "opensearch-cli/handler/ad"
 
 	"github.com/spf13/cobra"
 )

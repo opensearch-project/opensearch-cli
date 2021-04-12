@@ -17,7 +17,7 @@ package ad
 
 import (
 	"encoding/json"
-	"odfe-cli/entity"
+	"opensearch-cli/entity"
 )
 
 //Feature structure for detector features

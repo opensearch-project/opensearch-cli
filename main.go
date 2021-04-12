@@ -13,11 +13,11 @@
  * permissions and limitations under the License.
  */
 
-// odfe-cli is an unified command line tool for odfe clusters
+// opensearch-cli is an unified command line tool for OpenSearch clusters
 package main
 
 import (
-	"odfe-cli/commands"
+	"opensearch-cli/commands"
 	"os"
 )
 
