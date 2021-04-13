@@ -18,7 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"opensearch-cli/controller/core"
+	"opensearch-cli/controller/platform"
 	entity "opensearch-cli/entity/ad"
 	"opensearch-cli/gateway/ad"
 	"opensearch-cli/mapper"
@@ -50,11 +50,11 @@ type Controller interface {
 type controller struct {
 	reader     io.Reader
 	gateway    ad.Gateway
-	openSearch core.Controller
+	openSearch platform.Controller
 }
 
 //New returns new Controller instance
-func New(reader io.Reader, openSearch core.Controller, gateway ad.Gateway) Controller {
+func New(reader io.Reader, openSearch platform.Controller, gateway ad.Gateway) Controller {
 	return &controller{
 		reader,
 		gateway,
@@ -124,7 +124,7 @@ func (c controller) askForConfirmation(message *string) bool {
 	case "n", "no":
 		return false
 	default:
-		fmt.Printf("please type (y)core or (n)o and then press enter:")
+		fmt.Printf("please type (y)es or (n)o and then press enter:")
 		return c.askForConfirmation(mapper.StringToStringPtr(""))
 	}
 }
@@ -316,7 +316,7 @@ func (c controller) CreateMultiEntityAnomalyDetector(ctx context.Context, reques
 		proceed = c.askForConfirmation(
 			mapper.StringToStringPtr(
 				fmt.Sprintf(
-					"opensearch-cli will create %d detector(s). Do you want to proceed? please type (y)core or (n)o and then press enter:",
+					"opensearch-cli will create %d detector(s). Do you want to proceed? please type (y)es or (n)o and then press enter:",
 					len(filterValues),
 				),
 			),

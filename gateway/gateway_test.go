@@ -73,7 +73,7 @@ func TestGatewayRetryVal(t *testing.T) {
 		assert.EqualValues(t, valAttempt, testClient.HTTPClient.RetryMax)
 	})
 
-	t.Run("override from core variable", func(t *testing.T) {
+	t.Run("override from os variable", func(t *testing.T) {
 		val := os.Getenv(environment.OPENSEARCH_MAX_RETRY)
 		defer func() {
 			assert.NoError(t, os.Setenv(environment.OPENSEARCH_MAX_RETRY, val))
@@ -113,7 +113,7 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 		assert.EqualValues(t, time.Duration(timeout)*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
 	})
 
-	t.Run("override from core variable", func(t *testing.T) {
+	t.Run("override from os variable", func(t *testing.T) {
 		val := os.Getenv(environment.OPENSEARCH_TIMEOUT)
 		defer func() {
 			assert.NoError(t, os.Setenv(environment.OPENSEARCH_TIMEOUT, val))

@@ -25,12 +25,12 @@ import (
 	"net/http"
 	"opensearch-cli/client"
 	adctrl "opensearch-cli/controller/ad"
-	"opensearch-cli/controller/core"
+	"opensearch-cli/controller/platform"
 	"opensearch-cli/entity"
 	adentity "opensearch-cli/entity/ad"
 	"opensearch-cli/environment"
 	adgateway "opensearch-cli/gateway/ad"
-	esg "opensearch-cli/gateway/core"
+	esg "opensearch-cli/gateway/platform"
 	"os"
 	"testing"
 
@@ -50,7 +50,7 @@ type ADTestSuite struct {
 	Detector        adentity.CreateDetector
 	DetectorId      string
 	ADGateway       adgateway.Gateway
-	ESController    core.Controller
+	ESController    platform.Controller
 }
 
 func getRawFeatureAggregation() []byte {
@@ -84,7 +84,7 @@ func (a *ADTestSuite) SetupSuite() {
 	}
 	a.CreateIndex(EcommerceIndexFileName, "")
 	g := esg.New(a.Client, a.Profile)
-	a.ESController = core.New(g)
+	a.ESController = platform.New(g)
 	a.ADGateway = adgateway.New(a.Client, a.Profile)
 	a.DetectorRequest = getCreateDetectorRequest()
 	a.Detector = adentity.CreateDetector{

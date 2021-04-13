@@ -18,9 +18,9 @@ package commands
 import (
 	"opensearch-cli/client"
 	adctrl "opensearch-cli/controller/ad"
-	ctrl "opensearch-cli/controller/core"
+	ctrl "opensearch-cli/controller/platform"
 	adgateway "opensearch-cli/gateway/ad"
-	gateway "opensearch-cli/gateway/core"
+	gateway "opensearch-cli/gateway/platform"
 	handler "opensearch-cli/handler/ad"
 	"os"
 

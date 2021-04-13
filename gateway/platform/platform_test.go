@@ -10,7 +10,7 @@
  * permissions and limitations under the License.
  */
 
-package core
+package platform
 
 import (
 	"bytes"
@@ -21,7 +21,7 @@ import (
 	"opensearch-cli/client"
 	"opensearch-cli/client/mocks"
 	"opensearch-cli/entity"
-	"opensearch-cli/entity/core"
+	"opensearch-cli/entity/platform"
 	"path/filepath"
 	"testing"
 
@@ -42,7 +42,7 @@ func getTestClient(t *testing.T, responseData string, code int) *client.Client {
 		// Test request parameters
 		assert.Equal(t, req.URL.String(), "http://localhost:9200/test_index/_search")
 		resBytes, _ := ioutil.ReadAll(req.Body)
-		var body core.SearchRequest
+		var body platform.SearchRequest
 		err := json.Unmarshal(resBytes, &body)
 		assert.NoError(t, err)
 		assert.EqualValues(t, body.Size, 0)
@@ -136,7 +136,7 @@ func TestGatewayCurl(t *testing.T) {
 		expectedResponse := "OK"
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health", []byte(``), map[string]string{}, expectedResponse, 200)
 		testGateway := New(testClient, p)
-		actual, err := testGateway.Curl(ctx, core.CurlRequest{
+		actual, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "",
@@ -153,7 +153,7 @@ func TestGatewayCurl(t *testing.T) {
 		expectedHeader := map[string]string{}
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, "OK", 200)
 		testGateway := New(testClient, p)
-		actual, err := testGateway.Curl(ctx, core.CurlRequest{
+		actual, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "params=true&v=true",
@@ -175,7 +175,7 @@ func TestGatewayCurl(t *testing.T) {
 		}
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, "OK", 200)
 		testGateway := New(testClient, p)
-		actual, err := testGateway.Curl(ctx, core.CurlRequest{
+		actual, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "params=true&v=true",
@@ -196,7 +196,7 @@ func TestGatewayCurl(t *testing.T) {
 		responseData := getErrorResponse()
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, string(responseData), 400)
 		testGateway := New(testClient, p)
-		_, err := testGateway.Curl(ctx, core.CurlRequest{
+		_, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "params=true&v=true",
@@ -204,8 +204,8 @@ func TestGatewayCurl(t *testing.T) {
 			Data:        expectedData,
 		})
 		assert.EqualErrorf(t, err, "400 Client Error: SOME OUTPUT for url: http://localhost:9200/_cluster/health?params=true&v=true", "failed to receive expected error")
-		assert.IsType(t, &core.RequestError{}, err, "failed to type cast error")
-		requestError, _ := err.(*core.RequestError)
+		assert.IsType(t, &platform.RequestError{}, err, "failed to type cast error")
+		requestError, _ := err.(*platform.RequestError)
 		assert.True(t, len(requestError.GetResponse()) > 0)
 		assert.EqualValues(t, 400, requestError.StatusCode())
 	})
@@ -220,7 +220,7 @@ func TestGatewayCurl(t *testing.T) {
 		responseData := getErrorResponse()
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, string(responseData), 501)
 		testGateway := New(testClient, p)
-		_, err := testGateway.Curl(ctx, core.CurlRequest{
+		_, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "params=true&v=true",
@@ -228,8 +228,8 @@ func TestGatewayCurl(t *testing.T) {
 			Data:        expectedData,
 		})
 		assert.EqualErrorf(t, err, "501 Server Error: SOME OUTPUT for url: http://localhost:9200/_cluster/health?params=true&v=true", "failed to receive expected error")
-		assert.IsType(t, &core.RequestError{}, err, "failed to type cast error")
-		requestError, _ := err.(*core.RequestError)
+		assert.IsType(t, &platform.RequestError{}, err, "failed to type cast error")
+		requestError, _ := err.(*platform.RequestError)
 		assert.True(t, len(requestError.GetResponse()) > 0)
 		assert.EqualValues(t, 501, requestError.StatusCode())
 	})

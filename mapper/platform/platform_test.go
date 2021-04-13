@@ -13,12 +13,12 @@
  * permissions and limitations under the License.
  */
 
-package core
+package platform
 
 import (
 	"io/ioutil"
 	"net/http"
-	"opensearch-cli/entity/core"
+	"opensearch-cli/entity/platform"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -35,18 +35,18 @@ func helperLoadBytes(t *testing.T, name string) []byte {
 
 func TestCommandToCurlRequestParameter(t *testing.T) {
 	type args struct {
-		request core.CurlCommandRequest
+		request platform.CurlCommandRequest
 	}
 	tests := []struct {
 		name       string
 		args       args
-		wantResult core.CurlRequest
+		wantResult platform.CurlRequest
 		wantErr    bool
 	}{
 		{
 			"success: with data from file",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "post",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -55,7 +55,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			core.CurlRequest{
+			platform.CurlRequest{
 				Action:      http.MethodPost,
 				Path:        "sample-path/two",
 				QueryParams: "a=b&c=d",
@@ -70,7 +70,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"success: with data from stdin",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "post",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -79,7 +79,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      true,
 				},
 			},
-			core.CurlRequest{
+			platform.CurlRequest{
 				Action:      http.MethodPost,
 				Path:        "sample-path/two",
 				QueryParams: "a=b&c=d&pretty=true",
@@ -94,7 +94,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"success: with basic data",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:       "post",
 					Path:         "",
 					QueryParams:  "",
@@ -104,7 +104,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					OutputFormat: "yaml",
 				},
 			},
-			core.CurlRequest{
+			platform.CurlRequest{
 				Action:      http.MethodPost,
 				Path:        "",
 				QueryParams: "&pretty=true&format=yaml",
@@ -116,7 +116,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"fail: invalid action",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "test",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -125,13 +125,13 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			core.CurlRequest{},
+			platform.CurlRequest{},
 			true,
 		},
 		{
 			"fail: empty action",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -140,13 +140,13 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			core.CurlRequest{},
+			platform.CurlRequest{},
 			true,
 		},
 		{
 			"fail: invalid header",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "post",
 					Path:        "sample-path/two",
 					QueryParams: "a=b&c=d",
@@ -155,13 +155,13 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			core.CurlRequest{},
+			platform.CurlRequest{},
 			true,
 		},
 		{
 			"success:  empty header",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "Get",
 					Path:        "  ",
 					QueryParams: "",
@@ -170,7 +170,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      true,
 				},
 			},
-			core.CurlRequest{
+			platform.CurlRequest{
 				Action:      http.MethodGet,
 				QueryParams: "&pretty=true",
 				Headers:     map[string]string{},
@@ -181,7 +181,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 		{
 			"fail: invalid data",
 			args{
-				request: core.CurlCommandRequest{
+				request: platform.CurlCommandRequest{
 					Action:      "post",
 					Path:        "",
 					QueryParams: "",
@@ -190,7 +190,7 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 					Pretty:      false,
 				},
 			},
-			core.CurlRequest{},
+			platform.CurlRequest{},
 			true,
 		},
 	}

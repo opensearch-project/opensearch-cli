@@ -12,24 +12,24 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package core
+package platform
 
 import (
 	"context"
 	"encoding/json"
-	"opensearch-cli/entity/core"
-	osg "opensearch-cli/gateway/core"
-	mapper "opensearch-cli/mapper/core"
+	"opensearch-cli/entity/platform"
+	osg "opensearch-cli/gateway/platform"
+	mapper "opensearch-cli/mapper/platform"
 
 	"fmt"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_core.go -package=mocks . Controller
+//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_platform.go -package=mocks . Controller
 
 //Controller is an interface for OpenSearch
 type Controller interface {
 	GetDistinctValues(ctx context.Context, index string, field string) ([]interface{}, error)
-	Curl(ctx context.Context, param core.CurlCommandRequest) ([]byte, error)
+	Curl(ctx context.Context, param platform.CurlCommandRequest) ([]byte, error)
 }
 
 type controller struct {
@@ -52,7 +52,7 @@ func (c controller) GetDistinctValues(ctx context.Context, index string, field s
 	if err != nil {
 		return nil, err
 	}
-	var data core.Response
+	var data platform.Response
 	err = json.Unmarshal(response, &data)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (c controller) GetDistinctValues(ctx context.Context, index string, field s
 }
 
 //Curl accept user request and convert to format which OpenSearch can understand
-func (c controller) Curl(ctx context.Context, param core.CurlCommandRequest) ([]byte, error) {
+func (c controller) Curl(ctx context.Context, param platform.CurlCommandRequest) ([]byte, error) {
 	curlRequest, err := mapper.CommandToCurlRequestParameter(param)
 	if err != nil {
 		return nil, err

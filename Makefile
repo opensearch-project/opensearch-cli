@@ -34,6 +34,6 @@ format:
 	goimports -w .;
 
 # generate opensearch-cli file in current directory
-# update GOOS / GOARCH if you want to build for other core and architecture
+# update GOOS / GOARCH if you want to build for other operating systems and architecture
 build:
 	go build .
