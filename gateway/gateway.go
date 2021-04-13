@@ -25,7 +25,7 @@ import (
 	"net/url"
 	"opensearch-cli/client"
 	"opensearch-cli/entity"
-	"opensearch-cli/entity/core"
+	"opensearch-cli/entity/platform"
 	"opensearch-cli/environment"
 	"opensearch-cli/gateway/aws/signer"
 	"os"
@@ -91,7 +91,7 @@ func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 	// client error if 400 <= status code < 500
 	if response.StatusCode >= http.StatusBadRequest && response.StatusCode < http.StatusInternalServerError {
 
-		return core.NewRequestError(
+		return platform.NewRequestError(
 			response.StatusCode,
 			response.Body,
 			fmt.Errorf("%d Client Error: %s for url: %s", response.StatusCode, response.Status, response.Request.URL))
@@ -99,7 +99,7 @@ func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 	// server error if status code >= 500
 	if response.StatusCode >= http.StatusInternalServerError {
 
-		return core.NewRequestError(
+		return platform.NewRequestError(
 			response.StatusCode,
 			response.Body,
 			fmt.Errorf("%d Server Error: %s for url: %s", response.StatusCode, response.Status, response.Request.URL))
@@ -137,7 +137,7 @@ func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, 
 	if err == nil {
 		return resBytes, nil
 	}
-	r, ok := err.(*core.RequestError)
+	r, ok := err.(*platform.RequestError)
 	if !ok {
 		return nil, err
 	}

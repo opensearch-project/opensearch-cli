@@ -19,7 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	mockController "opensearch-cli/controller/core/mocks"
+	mockController "opensearch-cli/controller/platform/mocks"
 	entity "opensearch-cli/entity/ad"
 	gateway "opensearch-cli/gateway/ad/mocks"
 	"opensearch-cli/mapper"
@@ -462,7 +462,7 @@ func TestController_CreateMultiEntityAnomalyDetector(t *testing.T) {
 		_, err := ctrl.CreateMultiEntityAnomalyDetector(ctx, r, false, false)
 		assert.EqualError(t, err, "failed to get values for partition field: ip, check whether any data is available in index [order*]")
 	})
-	t.Run("create detector failed since core controller failed", func(t *testing.T) {
+	t.Run("create detector failed since platform controller failed", func(t *testing.T) {
 		mockCtrl := gomock.NewController(t)
 		defer mockCtrl.Finish()
 		ctx := context.Background()

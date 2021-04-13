@@ -18,10 +18,10 @@ package commands
 import (
 	"fmt"
 	"opensearch-cli/client"
-	ctrl "opensearch-cli/controller/core"
-	entity "opensearch-cli/entity/core"
-	gateway "opensearch-cli/gateway/core"
-	handler "opensearch-cli/handler/core"
+	ctrl "opensearch-cli/controller/platform"
+	entity "opensearch-cli/entity/platform"
+	gateway "opensearch-cli/gateway/platform"
+	handler "opensearch-cli/handler/platform"
 
 	"github.com/spf13/cobra"
 )
@@ -40,7 +40,7 @@ const (
 //curlCommand is base command for OpenSearch REST APIs.
 var curlCommand = &cobra.Command{
 	Use:   curlCommandName,
-	Short: "Manage OpenSearch core features",
+	Short: "Manage OpenSearch platform features",
 	Long:  "Use the curl command to execute any REST API calls against the cluster.",
 }
 

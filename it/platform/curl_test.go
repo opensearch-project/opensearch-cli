@@ -15,18 +15,18 @@
  * permissions and limitations under the License.
  */
 
-package core
+package platform
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"opensearch-cli/client"
-	ctrl "opensearch-cli/controller/core"
+	ctrl "opensearch-cli/controller/platform"
 	"opensearch-cli/entity"
-	"opensearch-cli/entity/core"
+	"opensearch-cli/entity/platform"
 	"opensearch-cli/environment"
-	gateway "opensearch-cli/gateway/core"
+	gateway "opensearch-cli/gateway/platform"
 	"opensearch-cli/it"
 	"os"
 	"strings"
@@ -78,7 +78,7 @@ func (a *OpenSearchTestSuite) TearDownSuite() {
 }
 
 func (a *OpenSearchTestSuite) TestCurlGet() {
-	request := core.CurlCommandRequest{
+	request := platform.CurlCommandRequest{
 		Action: "Get",
 		Pretty: true,
 	}
@@ -131,7 +131,7 @@ func (a *OpenSearchTestSuite) TestCurlGet() {
 }
 
 func (a *OpenSearchTestSuite) TestCurlPost() {
-	request := core.CurlCommandRequest{
+	request := platform.CurlCommandRequest{
 		Action: "Post",
 		Pretty: true,
 	}
@@ -194,7 +194,7 @@ func (a *OpenSearchTestSuite) TestCurlPost() {
 }
 
 func (a *OpenSearchTestSuite) TestCurlPut() {
-	request := core.CurlCommandRequest{
+	request := platform.CurlCommandRequest{
 		Action: "PUT",
 		Pretty: true,
 	}
@@ -226,7 +226,7 @@ func (a *OpenSearchTestSuite) TestCurlPut() {
 }
 
 func (a *OpenSearchTestSuite) TestCurlDelete() {
-	request := core.CurlCommandRequest{
+	request := platform.CurlCommandRequest{
 		Pretty: true,
 	}
 	a.T().Run("delete index document", func(t *testing.T) {

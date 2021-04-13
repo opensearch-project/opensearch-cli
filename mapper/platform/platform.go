@@ -13,7 +13,7 @@
  * permissions and limitations under the License.
  */
 
-package core
+package platform
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"opensearch-cli/entity/core"
+	"opensearch-cli/entity/platform"
 	"strings"
 )
 
@@ -36,16 +36,16 @@ const (
 )
 
 //CommandToCurlRequestParameter map user input to OpenSearch request
-func CommandToCurlRequestParameter(request core.CurlCommandRequest) (result core.CurlRequest, err error) {
+func CommandToCurlRequestParameter(request platform.CurlCommandRequest) (result platform.CurlRequest, err error) {
 
 	if result.Action, err = toHTTPAction(request.Action); err != nil {
-		return core.CurlRequest{}, err
+		return platform.CurlRequest{}, err
 	}
 	if result.Headers, err = toHTTPHeaders(request.Headers); err != nil {
-		return core.CurlRequest{}, err
+		return platform.CurlRequest{}, err
 	}
 	if result.Data, err = toCurlPayload(request.Data); err != nil {
-		return core.CurlRequest{}, err
+		return platform.CurlRequest{}, err
 	}
 	if !isEmpty(request.Path) {
 		result.Path = request.Path

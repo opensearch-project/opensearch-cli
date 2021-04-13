@@ -13,15 +13,15 @@
  * permissions and limitations under the License.
  */
 
-package core
+package platform
 
 import (
 	"context"
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"opensearch-cli/entity/core"
-	"opensearch-cli/gateway/core/mocks"
+	"opensearch-cli/entity/platform"
+	"opensearch-cli/gateway/platform/mocks"
 	"path/filepath"
 	"testing"
 
@@ -105,7 +105,7 @@ func TestController_GetDistinctValues(t *testing.T) {
 }
 
 func TestController_Curl(t *testing.T) {
-	commandRequest := core.CurlCommandRequest{
+	commandRequest := platform.CurlCommandRequest{
 		Action:      "post",
 		Path:        "",
 		QueryParams: "",
@@ -114,7 +114,7 @@ func TestController_Curl(t *testing.T) {
 		Pretty:      false,
 	}
 
-	request := core.CurlRequest{
+	request := platform.CurlRequest{
 		Action:      http.MethodPost,
 		Path:        "",
 		QueryParams: "",
@@ -149,7 +149,7 @@ func TestController_Curl(t *testing.T) {
 		ctx := context.Background()
 		//mockGateway.EXPECT().Curl(ctx, request).Return(nil, errors.New("gateway failed"))
 		ctrl := New(mockGateway)
-		_, err := ctrl.Curl(ctx, core.CurlCommandRequest{})
+		_, err := ctrl.Curl(ctx, platform.CurlCommandRequest{})
 		assert.EqualErrorf(t, err, "action cannot be empty", "wrong error message")
 	})
 }

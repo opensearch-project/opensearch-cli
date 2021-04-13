@@ -13,21 +13,21 @@
  * permissions and limitations under the License.
  */
 
-package core
+package platform
 
 import (
 	"context"
-	"opensearch-cli/controller/core"
-	entity "opensearch-cli/entity/core"
+	"opensearch-cli/controller/platform"
+	entity "opensearch-cli/entity/platform"
 )
 
 //Handler is facade for controller
 type Handler struct {
-	core.Controller
+	platform.Controller
 }
 
 // New returns new Handler instance
-func New(controller core.Controller) *Handler {
+func New(controller platform.Controller) *Handler {
 	return &Handler{
 		controller,
 	}

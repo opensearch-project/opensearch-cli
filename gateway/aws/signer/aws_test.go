@@ -43,7 +43,7 @@ func TestV4Signer(t *testing.T) {
 		}()
 		err := SignRequest(req, entity.AWSIAM{
 			ProfileName: "test1",
-			ServiceName: "core",
+			ServiceName: "es",
 		}, func(c *credentials.Credentials) *v4.Signer {
 			return buildSigner()
 		})
@@ -61,7 +61,7 @@ func TestV4Signer(t *testing.T) {
 		}()
 		err := SignRequest(req, entity.AWSIAM{
 			ProfileName: "test1",
-			ServiceName: "core",
+			ServiceName: "es",
 		}, func(c *credentials.Credentials) *v4.Signer {
 			return buildSigner()
 		})
