@@ -19,6 +19,7 @@ import (
 	"opensearch-cli/client/mocks"
 	"opensearch-cli/entity"
 	"opensearch-cli/environment"
+	"opensearch-cli/mapper"
 	"os"
 	"testing"
 	"time"
@@ -58,7 +59,8 @@ func TestGatewayRetryVal(t *testing.T) {
 			Endpoint: "https://localhost:9200",
 		}
 		testClient := mocks.NewTestClient(nil)
-		NewHTTPGateway(testClient, &profile)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
 		assert.EqualValues(t, 4, testClient.HTTPClient.RetryMax)
 	})
 	t.Run("profile retry max value", func(t *testing.T) {
@@ -69,7 +71,8 @@ func TestGatewayRetryVal(t *testing.T) {
 			MaxRetry: &valAttempt,
 		}
 		testClient := mocks.NewTestClient(nil)
-		NewHTTPGateway(testClient, &profile)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
 		assert.EqualValues(t, valAttempt, testClient.HTTPClient.RetryMax)
 	})
 
@@ -86,7 +89,8 @@ func TestGatewayRetryVal(t *testing.T) {
 			MaxRetry: &valAttempt,
 		}
 		testClient := mocks.NewTestClient(nil)
-		NewHTTPGateway(testClient, &profile)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
 		assert.EqualValues(t, 10, testClient.HTTPClient.RetryMax)
 	})
 }
@@ -98,7 +102,8 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 			Endpoint: "https://localhost:9200",
 		}
 		testClient := mocks.NewTestClient(nil)
-		NewHTTPGateway(testClient, &profile)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
 		assert.EqualValues(t, 10*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
 	})
 	t.Run("configure profile timeout", func(t *testing.T) {
@@ -109,7 +114,8 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 			Timeout:  &timeout,
 		}
 		testClient := mocks.NewTestClient(nil)
-		NewHTTPGateway(testClient, &profile)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
 		assert.EqualValues(t, time.Duration(timeout)*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
 	})
 
@@ -126,7 +132,56 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 			Timeout:  &timeout,
 		}
 		testClient := mocks.NewTestClient(nil)
-		NewHTTPGateway(testClient, &profile)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
 		assert.EqualValues(t, 5*time.Second, testClient.HTTPClient.HTTPClient.Timeout)
+	})
+}
+
+func TestGatewayTLSConnection(t *testing.T) {
+
+	t.Run("valid certificate path", func(t *testing.T) {
+		profile := entity.Profile{
+			Name:     "test1",
+			Endpoint: "https://localhost:9200",
+			Certificate: &entity.Trust{
+				CAFilePath:                mapper.StringToStringPtr("testdata/ca.cert"),
+				ClientCertificateFilePath: mapper.StringToStringPtr("testdata/client.cert"),
+				ClientKeyFilePath:         mapper.StringToStringPtr("testdata/client.key"),
+			},
+		}
+		testClient := mocks.NewTestClient(nil)
+		val, err := NewHTTPGateway(testClient, &profile)
+		assert.NoError(t, err)
+		assert.NotNil(t, val)
+	})
+	t.Run("invalid CA certificate path", func(t *testing.T) {
+		profile := entity.Profile{
+			Name:     "test1",
+			Endpoint: "https://localhost:9200",
+			Certificate: &entity.Trust{
+				CAFilePath:                mapper.StringToStringPtr("testdata/ca1.cert"),
+				ClientCertificateFilePath: mapper.StringToStringPtr("testdata/client.cert"),
+				ClientKeyFilePath:         mapper.StringToStringPtr("testdata/client.key"),
+			},
+		}
+		testClient := mocks.NewTestClient(nil)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.EqualError(t, err, "error opening certificate file testdata/ca1.cert, error: open testdata/ca1.cert: no such file or directory")
+	})
+
+	t.Run("invalid client certificate path", func(t *testing.T) {
+		profile := entity.Profile{
+			Name:     "test1",
+			Endpoint: "https://localhost:9200",
+			Certificate: &entity.Trust{
+				CAFilePath:                mapper.StringToStringPtr("testdata/ca.cert"),
+				ClientCertificateFilePath: mapper.StringToStringPtr("testdata/client1.cert"),
+				ClientKeyFilePath:         mapper.StringToStringPtr("testdata/client.key"),
+			},
+		}
+		testClient := mocks.NewTestClient(nil)
+		_, err := NewHTTPGateway(testClient, &profile)
+		assert.EqualError(t, err, "error creating x509 keypair from client cert file testdata/client1.cert and client key file testdata/client.key")
 	})
 }

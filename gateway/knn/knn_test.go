@@ -52,11 +52,12 @@ func TestGatewayGetStatistics(t *testing.T) {
 	t.Run("full stats succeeded", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/stats", 200, []byte("success"))
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		actual, err := testGateway.GetStatistics(ctx, "", "")
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
@@ -64,11 +65,12 @@ func TestGatewayGetStatistics(t *testing.T) {
 	t.Run("filtered node and stats succeeded", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/node1,node2/stats/stat1", 200, []byte("success"))
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		actual, err := testGateway.GetStatistics(ctx, "node1,node2", "stat1")
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
@@ -76,11 +78,12 @@ func TestGatewayGetStatistics(t *testing.T) {
 	t.Run("filtered node succeeded", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/node1,node2/stats/", 200, []byte("success"))
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		actual, err := testGateway.GetStatistics(ctx, "node1,node2", "")
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
@@ -88,11 +91,12 @@ func TestGatewayGetStatistics(t *testing.T) {
 	t.Run("filtered stats succeeded", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn//stats/stat1,stat2", 200, []byte("success"))
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		actual, err := testGateway.GetStatistics(ctx, "", "stat1,stat2")
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
@@ -100,12 +104,13 @@ func TestGatewayGetStatistics(t *testing.T) {
 	t.Run("gateway failed due to gateway user config", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/stats", 400, []byte("failed"))
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.GetStatistics(ctx, "", "")
+		assert.NoError(t, err)
+		_, err = testGateway.GetStatistics(ctx, "", "")
 		assert.Error(t, err)
 	})
 	t.Run("failed due to invalid stat names", func(t *testing.T) {
@@ -122,12 +127,13 @@ func TestGatewayGetStatistics(t *testing.T) {
 			Status: 404,
 		})
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/index1/stats/invalid-stats", 404, response)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.GetStatistics(ctx, "index1", "invalid-stats")
+		assert.NoError(t, err)
+		_, err = testGateway.GetStatistics(ctx, "index1", "invalid-stats")
 		assert.EqualErrorf(t, err, reason, "failed to parse error")
 	})
 }
@@ -137,11 +143,12 @@ func TestGatewayWarmupIndices(t *testing.T) {
 	t.Run("warmup indices", func(t *testing.T) {
 
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/warmup/index1,index2", 200, []byte("success"))
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		actual, err := testGateway.WarmupIndices(ctx, "index1,index2")
 		assert.NoError(t, err)
 		assert.EqualValues(t, string(actual), "success")
@@ -160,12 +167,13 @@ func TestGatewayWarmupIndices(t *testing.T) {
 			Status: 404,
 		})
 		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/warmup/index1", 404, response)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.WarmupIndices(ctx, "index1")
+		assert.NoError(t, err)
+		_, err = testGateway.WarmupIndices(ctx, "index1")
 		assert.EqualErrorf(t, err, "no such index", "failed to parse error")
 	})
 }

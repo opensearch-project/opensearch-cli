@@ -83,9 +83,9 @@ func (a *ADTestSuite) SetupSuite() {
 		os.Exit(1)
 	}
 	a.CreateIndex(EcommerceIndexFileName, "")
-	g := esg.New(a.Client, a.Profile)
+	g, _ := esg.New(a.Client, a.Profile)
 	a.ESController = platform.New(g)
-	a.ADGateway = adgateway.New(a.Client, a.Profile)
+	a.ADGateway, _ = adgateway.New(a.Client, a.Profile)
 	a.DetectorRequest = getCreateDetectorRequest()
 	a.Detector = adentity.CreateDetector{
 		Name:        "setup-detector-it1",

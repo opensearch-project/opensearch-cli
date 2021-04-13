@@ -64,12 +64,13 @@ func TestGateway_StartDetector(t *testing.T) {
 	t.Run("connection failed", func(t *testing.T) {
 		testClient := getTestClient(t, `connection failed`, 400, http.MethodPost, "/_start")
 
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		err := testGateway.StartDetector(ctx, "id")
+		assert.NoError(t, err)
+		err = testGateway.StartDetector(ctx, "id")
 		assert.EqualError(t, err, "connection failed")
 	})
 	t.Run("started successfully", func(t *testing.T) {
@@ -79,12 +80,13 @@ func TestGateway_StartDetector(t *testing.T) {
 		  "_seq_no" : 6,
 		  "_primary_term" : 1
 		}`, 200, http.MethodPost, "/_start")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		err := testGateway.StartDetector(ctx, "id")
+		assert.NoError(t, err)
+		err = testGateway.StartDetector(ctx, "id")
 		assert.NoError(t, err)
 	})
 }
@@ -93,21 +95,23 @@ func TestGateway_StopDetector(t *testing.T) {
 	t.Run("connection failed", func(t *testing.T) {
 		testClient := getTestClient(t, `connection failed`, 400, http.MethodPost, "/_stop")
 
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.StopDetector(ctx, "id")
+		assert.NoError(t, err)
+		_, err = testGateway.StopDetector(ctx, "id")
 		assert.EqualError(t, err, "connection failed")
 	})
 	t.Run("stop successfully", func(t *testing.T) {
 		testClient := getTestClient(t, `Stopped detector: id`, 200, http.MethodPost, "/_stop")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		res, err := testGateway.StopDetector(ctx, "id")
 		assert.NoError(t, err)
 		assert.EqualValues(t, *res, "Stopped detector: id")
@@ -118,12 +122,13 @@ func TestGateway_DeleteDetector(t *testing.T) {
 	ctx := context.Background()
 	t.Run("connection failed", func(t *testing.T) {
 		testClient := getTestClient(t, `connection failed`, 400, http.MethodDelete, "")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		err := testGateway.DeleteDetector(ctx, "id")
+		assert.NoError(t, err)
+		err = testGateway.DeleteDetector(ctx, "id")
 		assert.EqualError(t, err, "connection failed")
 	})
 	t.Run("delete success", func(t *testing.T) {
@@ -143,12 +148,13 @@ func TestGateway_DeleteDetector(t *testing.T) {
 		  "_seq_no" : 6,
 		  "_primary_term" : 1
 		}`, 200, http.MethodDelete, "")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		err := testGateway.DeleteDetector(ctx, "id")
+		assert.NoError(t, err)
+		err = testGateway.DeleteDetector(ctx, "id")
 		assert.NoError(t, err)
 	})
 }
@@ -159,11 +165,12 @@ func TestGateway_SearchDetector(t *testing.T) {
 	t.Run("search succeeded", func(t *testing.T) {
 
 		testClient := getSearchClient(t, responseData, 200)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		response, err := testGateway.SearchDetector(ctx, ad.SearchRequest{
 			Query: ad.SearchQuery{
 				Match: ad.Match{
@@ -176,12 +183,13 @@ func TestGateway_SearchDetector(t *testing.T) {
 	t.Run("search failed due to 404", func(t *testing.T) {
 
 		testClient := getSearchClient(t, []byte("No connection found"), 400)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.SearchDetector(ctx, ad.SearchRequest{
+		assert.NoError(t, err)
+		_, err = testGateway.SearchDetector(ctx, ad.SearchRequest{
 			Query: ad.SearchQuery{
 				Match: ad.Match{
 					Name: "detector-name",
@@ -197,11 +205,12 @@ func TestGateway_CreateDetector(t *testing.T) {
 	t.Run("create succeeded", func(t *testing.T) {
 
 		testClient := getCreateClient(t, responseData, 201)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		response, err := testGateway.CreateDetector(ctx, getCreateDetector())
 		assert.NoError(t, err)
 		assert.EqualValues(t, response, responseData)
@@ -210,12 +219,13 @@ func TestGateway_CreateDetector(t *testing.T) {
 	t.Run("create failed due to 400", func(t *testing.T) {
 
 		testClient := getCreateClient(t, []byte("No connection found"), 400)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.CreateDetector(ctx, getCreateDetector())
+		assert.NoError(t, err)
+		_, err = testGateway.CreateDetector(ctx, getCreateDetector())
 		assert.EqualError(t, err, "No connection found")
 	})
 }
@@ -304,21 +314,23 @@ func TestGateway_GetDetector(t *testing.T) {
 	ctx := context.Background()
 	t.Run("connection failed", func(t *testing.T) {
 		testClient := getTestClient(t, `connection failed`, 400, http.MethodGet, "")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.GetDetector(ctx, "id")
+		assert.NoError(t, err)
+		_, err = testGateway.GetDetector(ctx, "id")
 		assert.EqualError(t, err, "connection failed")
 	})
 	t.Run("get success", func(t *testing.T) {
 		testClient := getTestClient(t, string(helperLoadBytes(t, "get_result.json")), 200, http.MethodGet, "")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		resp, err := testGateway.GetDetector(ctx, "id")
 		assert.NoError(t, err)
 		assert.EqualValues(t, helperLoadBytes(t, "get_result.json"), resp)
@@ -329,22 +341,24 @@ func TestGateway_UpdateDetector(t *testing.T) {
 	ctx := context.Background()
 	t.Run("connection failed", func(t *testing.T) {
 		testClient := getTestClient(t, `connection failed`, 400, http.MethodPut, "")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		err := testGateway.UpdateDetector(ctx, "id", nil)
+		assert.NoError(t, err)
+		err = testGateway.UpdateDetector(ctx, "id", nil)
 		assert.EqualError(t, err, "connection failed")
 	})
 	t.Run("update success", func(t *testing.T) {
 		testClient := getTestClient(t, "ok", 200, http.MethodPut, "")
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		err := testGateway.UpdateDetector(ctx, "id", nil)
+		assert.NoError(t, err)
+		err = testGateway.UpdateDetector(ctx, "id", nil)
 		assert.NoError(t, err)
 	})
 }

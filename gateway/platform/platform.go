@@ -41,10 +41,12 @@ type gateway struct {
 }
 
 // New returns new Gateway instance
-func New(c *client.Client, p *entity.Profile) Gateway {
-	return &gateway{
-		*gw.NewHTTPGateway(c, p),
+func New(c *client.Client, p *entity.Profile) (Gateway, error) {
+	g, err := gw.NewHTTPGateway(c, p)
+	if err != nil {
+		return nil, err
 	}
+	return &gateway{*g}, nil
 }
 func buildPayload(field string) *platform.SearchRequest {
 	return &platform.SearchRequest{
