@@ -59,8 +59,14 @@ func GetADHandler() (*handler.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	g := adgateway.New(c, profile)
-	esg := gateway.New(c, profile)
+	g, err := adgateway.New(c, profile)
+	if err != nil {
+		return nil, err
+	}
+	esg, err := gateway.New(c, profile)
+	if err != nil {
+		return nil, err
+	}
 	esc := ctrl.New(esg)
 	ctr := adctrl.New(os.Stdin, esc, g)
 	return handler.New(ctr), nil

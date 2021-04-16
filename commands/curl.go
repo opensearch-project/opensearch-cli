@@ -70,7 +70,10 @@ func getCurlHandler() (*handler.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	g := gateway.New(c, profile)
+	g, err := gateway.New(c, profile)
+	if err != nil {
+		return nil, err
+	}
 	facade := ctrl.New(g)
 	return handler.New(facade), nil
 }

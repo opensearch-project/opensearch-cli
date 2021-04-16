@@ -17,6 +17,8 @@ package gateway
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -47,9 +49,43 @@ func GetDefaultHeaders() map[string]string {
 		"content-type": "application/json",
 	}
 }
+func GetTLSConfig(trust *entity.Trust) (*tls.Config, error) {
+	config := &tls.Config{}
+	if trust.ClientCertificateFilePath != nil && trust.ClientKeyFilePath != nil {
+		cert, err := tls.LoadX509KeyPair(*trust.ClientCertificateFilePath, *trust.ClientKeyFilePath)
+		if err != nil {
+			return nil, fmt.Errorf(
+				"error creating x509 keypair from client cert file %s and client key file %s",
+				*trust.ClientCertificateFilePath, *trust.ClientKeyFilePath)
+		}
+		config.Certificates = []tls.Certificate{cert}
+	}
+	caCertPool := x509.NewCertPool()
+	if trust.CAFilePath != nil {
+		caCert, err := ioutil.ReadFile(*trust.CAFilePath)
+		if err != nil {
+			return nil, fmt.Errorf("error opening certificate file %s, error: %s", *trust.CAFilePath, err)
+		}
+		caCertPool.AppendCertsFromPEM(caCert)
+		config.RootCAs = caCertPool
+	}
+
+	return config, nil
+}
 
 //NewHTTPGateway creates new HTTPGateway instance
-func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
+func NewHTTPGateway(c *client.Client, p *entity.Profile) (*HTTPGateway, error) {
+
+	if p.Certificate != nil {
+		tlsConfig, err := GetTLSConfig(p.Certificate)
+		if err != nil {
+			return nil, err
+		}
+		c.HTTPClient.HTTPClient.Transport = &http.Transport{
+			TLSClientConfig: tlsConfig,
+		}
+	}
+
 	// set max retry if provided by command
 	if p.MaxRetry != nil {
 		c.HTTPClient.RetryMax = *p.MaxRetry
@@ -67,10 +103,11 @@ func NewHTTPGateway(c *client.Client, p *entity.Profile) *HTTPGateway {
 	if duration, ok := overrideValue(p, environment.OPENSEARCH_TIMEOUT); ok {
 		c.HTTPClient.HTTPClient.Timeout = time.Duration(*duration) * time.Second
 	}
+
 	return &HTTPGateway{
 		Client:  c,
 		Profile: p,
-	}
+	}, nil
 }
 
 func overrideValue(p *entity.Profile, envVariable string) (*int, bool) {

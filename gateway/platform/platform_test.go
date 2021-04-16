@@ -88,23 +88,25 @@ func TestGateway_SearchDistinctValues(t *testing.T) {
 	t.Run("search succeeded", func(t *testing.T) {
 
 		testClient := getTestClient(t, string(responseData), 200)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
+		assert.NoError(t, err)
 		actual, err := testGateway.SearchDistinctValues(ctx, "test_index", "day_of_week")
 		assert.NoError(t, err)
 		assert.EqualValues(t, actual, responseData)
 	})
 	t.Run("search failed due to 404", func(t *testing.T) {
 		testClient := getTestClient(t, "No connection found", 404)
-		testGateway := New(testClient, &entity.Profile{
+		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
 			Password: "admin",
 		})
-		_, err := testGateway.SearchDistinctValues(ctx, "test_index", "day_of_week")
+		assert.NoError(t, err)
+		_, err = testGateway.SearchDistinctValues(ctx, "test_index", "day_of_week")
 		assert.EqualError(t, err, "No connection found")
 	})
 }
@@ -135,7 +137,8 @@ func TestGatewayCurl(t *testing.T) {
 		expectedHeader := map[string]string{}
 		expectedResponse := "OK"
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health", []byte(``), map[string]string{}, expectedResponse, 200)
-		testGateway := New(testClient, p)
+		testGateway, err := New(testClient, p)
+		assert.NoError(t, err)
 		actual, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
@@ -152,7 +155,8 @@ func TestGatewayCurl(t *testing.T) {
 		expectedData := []byte(``)
 		expectedHeader := map[string]string{}
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, "OK", 200)
-		testGateway := New(testClient, p)
+		testGateway, err := New(testClient, p)
+		assert.NoError(t, err)
 		actual, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
@@ -174,7 +178,8 @@ func TestGatewayCurl(t *testing.T) {
 			"content-type": "gzip",
 		}
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, "OK", 200)
-		testGateway := New(testClient, p)
+		testGateway, err := New(testClient, p)
+		assert.NoError(t, err)
 		actual, err := testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
@@ -195,8 +200,9 @@ func TestGatewayCurl(t *testing.T) {
 		}
 		responseData := getErrorResponse()
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, string(responseData), 400)
-		testGateway := New(testClient, p)
-		_, err := testGateway.Curl(ctx, platform.CurlRequest{
+		testGateway, err := New(testClient, p)
+		assert.NoError(t, err)
+		_, err = testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "params=true&v=true",
@@ -219,8 +225,9 @@ func TestGatewayCurl(t *testing.T) {
 		}
 		responseData := getErrorResponse()
 		testClient := getCurlTestClient(t, "http://localhost:9200/_cluster/health?params=true&v=true", expectedData, expectedHeader, string(responseData), 501)
-		testGateway := New(testClient, p)
-		_, err := testGateway.Curl(ctx, platform.CurlRequest{
+		testGateway, err := New(testClient, p)
+		assert.NoError(t, err)
+		_, err = testGateway.Curl(ctx, platform.CurlRequest{
 			Action:      http.MethodGet,
 			Path:        "_cluster/health",
 			QueryParams: "params=true&v=true",

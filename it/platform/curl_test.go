@@ -69,7 +69,7 @@ func (a *OpenSearchTestSuite) SetupSuite() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	a.Gateway = gateway.New(a.Client, a.Profile)
+	a.Gateway, _ = gateway.New(a.Client, a.Profile)
 	a.Controller = ctrl.New(a.Gateway)
 	a.CreateIndex(GetBulkIndexName, "")
 }

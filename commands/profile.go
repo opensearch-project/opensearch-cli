@@ -100,6 +100,8 @@ var createProfileCmd = &cobra.Command{
 			getBasicAuthDetails(&newProfile)
 		case "aws-iam":
 			getAWSIAMAuthDetails(&newProfile)
+		case "cert":
+			getCertificateAuthDetails(&newProfile)
 		default:
 			DisplayError(errors.New("invalid value for auth-type. Use --help -h command to see permitted values"), CreateNewProfileCommandName)
 			return
@@ -178,6 +180,7 @@ func init() {
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateEndpoint)
 	createProfileCmd.Flags().StringP(FlagProfileCreateAuthType, "a", "", "Authentication type. Options are disabled, basic and aws-iam."+
 		"\nIf security is disabled, provide --auth-type='disabled'.\nIf security uses HTTP basic authentication, provide --auth-type='basic'.\n"+
+		"If security uses client certificate authentication, provide --auth-type='cert'.\n"+
 		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nopensearch-cli asks for additional information based on your choice of authentication type.")
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateAuthType)
 	createProfileCmd.Flags().IntP(FlagProfileMaxRetry, "m", 3, "Maximum retry attempts allowed if transient problems occur.\n"+
@@ -238,6 +241,24 @@ func getAWSIAMAuthDetails(newProfile *entity.Profile) {
 	fmt.Printf("AWS service name where your cluster is deployed (for Amazon Elasticsearch Service, use 'es'. For EC2, use 'ec2'): ")
 	awsIAM.ServiceName = getUserInputAsText(checkInputIsNotEmpty)
 	newProfile.AWS = awsIAM
+}
+
+// getCertificateAuthDetails gets certificate and key paths profile information from user using command line
+func getCertificateAuthDetails(newProfile *entity.Profile) {
+	certificate := &entity.Trust{}
+	fmt.Printf("Certificate file path (leave blank if N/A): ")
+	if val := getUserInputAsText(nil); len(val) > 0 {
+		certificate.ClientCertificateFilePath = &val
+		fmt.Printf("Key file path: ")
+		if val := getUserInputAsText(checkInputIsNotEmpty); len(val) > 0 {
+			certificate.ClientKeyFilePath = &val
+		}
+	}
+	fmt.Printf("Certificate Authroity's (CA) certificate file path (leave blank if N/A): ")
+	if val := getUserInputAsText(nil); len(val) > 0 {
+		certificate.CAFilePath = &val
+	}
+	newProfile.Certificate = certificate
 }
 
 // getUserInputAsText get value from user as text

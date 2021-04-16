@@ -143,7 +143,10 @@ func GetKNNHandler() (*handler.Handler, error) {
 	if err != nil {
 		return nil, err
 	}
-	g := gateway.New(c, profile)
+	g, err := gateway.New(c, profile)
+	if err != nil {
+		return nil, err
+	}
 	ctr := ctrl.New(g)
 	return handler.New(ctr), nil
 }
