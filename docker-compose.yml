@@ -1,9 +1,9 @@
-# Copied from https://opendistro.github.io/for-elasticsearch-docs/docs/install/docker/
-# removed node-2 since we don't need to create two node cluster for integration test
+# Copied from https://github.com/opensearch-project/opensearch-build/blob/main/release/docker/dockercomposefiles/docker-compose.yml
+# removed node-2 and dashboard since we don't need to create two node cluster for integration test
 version: '3'
 services:
   test-node1:
-    image: amazon/opendistro-for-elasticsearch:${ODFE_VERSION:-latest}
+    image: opensearchproject/opensearch:${OPENSEARCH_VERSION:-latest}
     container_name: test-node1
     environment:
       - cluster.name=test-cluster
@@ -20,7 +20,7 @@ services:
         soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
         hard: 65536
     volumes:
-      - test-data1:/usr/share/elasticsearch/data
+      - test-data1:/usr/share/opensearch/data
     ports:
       - 9200:9200
       - 9600:9600 # required for Performance Analyzer
