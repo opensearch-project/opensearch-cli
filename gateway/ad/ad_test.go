@@ -53,7 +53,7 @@ func helperLoadBytes(t *testing.T, name string) []byte {
 func getTestClient(t *testing.T, response string, code int, method string, action string) *client.Client {
 	testClient := mocks.NewTestClient(func(req *http.Request) *http.Response {
 		// Test request parameters
-		assert.Equal(t, req.URL.String(), "http://localhost:9200/_opendistro/_anomaly_detection/detectors/id"+action)
+		assert.Equal(t, req.URL.String(), "http://localhost:9200/_plugins/_anomaly_detection/detectors/id"+action)
 		assert.EqualValues(t, req.Method, method)
 		assert.EqualValues(t, len(req.Header), 2)
 		return &http.Response{
@@ -243,7 +243,7 @@ func TestGateway_CreateDetector(t *testing.T) {
 func getSearchClient(t *testing.T, responseData []byte, code int) *client.Client {
 	testClient := mocks.NewTestClient(func(req *http.Request) *http.Response {
 		// Test request parameters
-		assert.Equal(t, req.URL.String(), "http://localhost:9200/_opendistro/_anomaly_detection/detectors/_search")
+		assert.Equal(t, req.URL.String(), "http://localhost:9200/_plugins/_anomaly_detection/detectors/_search")
 		assert.EqualValues(t, req.Method, http.MethodPost)
 		resBytes, _ := ioutil.ReadAll(req.Body)
 		var body ad.SearchRequest
@@ -300,7 +300,7 @@ func getCreateDetector() ad.CreateDetector {
 func getCreateClient(t *testing.T, responseData []byte, code int) *client.Client {
 	return mocks.NewTestClient(func(req *http.Request) *http.Response {
 		// Test request parameters
-		assert.Equal(t, req.URL.String(), "http://localhost:9200/_opendistro/_anomaly_detection/detectors")
+		assert.Equal(t, req.URL.String(), "http://localhost:9200/_plugins/_anomaly_detection/detectors")
 		assert.EqualValues(t, req.Method, http.MethodPost)
 		resBytes, _ := ioutil.ReadAll(req.Body)
 		var body ad.CreateDetector

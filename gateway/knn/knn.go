@@ -39,7 +39,7 @@ import (
 )
 
 const (
-	baseURL                  = "_opendistro/_knn"
+	baseURL                  = "_plugins/_knn"
 	statsURL                 = baseURL + "/stats"
 	nodeStatsURLTemplate     = baseURL + "/%s/stats/%s"
 	warmupIndicesURLTemplate = baseURL + "/warmup/%s"
@@ -93,7 +93,7 @@ func (g *gateway) buildWarmupURL(indices string) (*url.URL, error) {
 }
 
 /*GetStatistics provides information about the current status of the KNN Plugin.
-GET /_opendistro/_knn/stats
+GET /_plugins/_knn/stats
 {
     "_nodes" : {
         "total" : 1,
@@ -133,7 +133,7 @@ GET /_opendistro/_knn/stats
     }
 }
 To filter stats query by nodeID and statName:
-GET /_opendistro/_knn/nodeId1,nodeId2/stats/statName1,statName2
+GET /_plugins/_knn/nodeId1,nodeId2/stats/statName1,statName2
 */
 func (g gateway) GetStatistics(ctx context.Context, nodes string, names string) ([]byte, error) {
 	statsURL, err := g.buildStatsURL(nodes, names)
@@ -165,7 +165,7 @@ func processKNNError(err error) error {
 }
 
 /* WarmupIndices will perform warmup on given indices
-GET /_opendistro/_knn/warmup/index1,index2,index3?pretty
+GET /_plugins/_knn/warmup/index1,index2,index3?pretty
 {
 	"_shards" : {
 		"total" : 6,

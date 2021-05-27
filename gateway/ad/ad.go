@@ -37,7 +37,7 @@ import (
 )
 
 const (
-	baseURL           = "_opendistro/_anomaly_detection/detectors"
+	baseURL           = "_plugins/_anomaly_detection/detectors"
 	startURLTemplate  = baseURL + "/%s/" + "_start"
 	stopURLTemplate   = baseURL + "/%s/" + "_stop"
 	searchURLTemplate = baseURL + "/_search"
@@ -82,7 +82,7 @@ func (g *gateway) buildCreateURL() (*url.URL, error) {
 }
 
 /*CreateDetector Creates an anomaly detector job.
-It calls http request: POST _opendistro/_anomaly_detection/detectors
+It calls http request: POST _plugins/_anomaly_detection/detectors
 Sample Input:
 {
  "name": "test-detector",
@@ -157,7 +157,7 @@ func (g *gateway) buildStartURL(ID string) (*url.URL, error) {
 }
 
 // StartDetector Starts an anomaly detector job.
-// It calls http request: POST _opendistro/_anomaly_detection/detectors/<detectorId>/_start
+// It calls http request: POST _plugins/_anomaly_detection/detectors/<detectorId>/_start
 func (g *gateway) StartDetector(ctx context.Context, ID string) error {
 	startURL, err := g.buildStartURL(ID)
 	if err != nil {
@@ -184,7 +184,7 @@ func (g *gateway) buildStopURL(ID string) (*url.URL, error) {
 }
 
 // StopDetector Stops an anomaly detector job.
-// It calls http request: POST _opendistro/_anomaly_detection/detectors/<detectorId>/_stop
+// It calls http request: POST _plugins/_anomaly_detection/detectors/<detectorId>/_stop
 func (g *gateway) StopDetector(ctx context.Context, ID string) (*string, error) {
 	stopURL, err := g.buildStopURL(ID)
 	if err != nil {
@@ -211,7 +211,7 @@ func (g *gateway) buildSearchURL() (*url.URL, error) {
 }
 
 /*SearchDetector Returns all anomaly detectors for a search query.
-It calls http request: POST _opendistro/_anomaly_detection/detectors/_search
+It calls http request: POST _plugins/_anomaly_detection/detectors/_search
 sample input
 Sample Input:
 {
@@ -246,7 +246,7 @@ func (g *gateway) buildDeleteURL(ID string) (*url.URL, error) {
 }
 
 // DeleteDetector Deletes a detector based on the detector_id.
-// It calls http request: DELETE _opendistro/_anomaly_detection/detectors/<detectorId>
+// It calls http request: DELETE _plugins/_anomaly_detection/detectors/<detectorId>
 func (g *gateway) DeleteDetector(ctx context.Context, ID string) error {
 	deleteURL, err := g.buildDeleteURL(ID)
 	if err != nil {
@@ -273,7 +273,7 @@ func (g *gateway) buildGetURL(ID string) (*url.URL, error) {
 }
 
 // GetDetector Returns all information about a detector based on the detector_id.
-// It calls http request: GET _opendistro/_anomaly_detection/detectors/<detectorId>
+// It calls http request: GET _plugins/_anomaly_detection/detectors/<detectorId>
 func (g *gateway) GetDetector(ctx context.Context, ID string) ([]byte, error) {
 	getURL, err := g.buildGetURL(ID)
 	if err != nil {
@@ -300,7 +300,7 @@ func (g *gateway) buildUpdateURL(ID string) (*url.URL, error) {
 }
 
 /*UpdateDetector Updates a detector with any changes, including the description or adding or removing of features.
-It calls http request: PUT _opendistro/_anomaly_detection/detectors/<detectorId>
+It calls http request: PUT _plugins/_anomaly_detection/detectors/<detectorId>
 Sample Input:
 {
  "name": "test-detector",

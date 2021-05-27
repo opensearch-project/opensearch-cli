@@ -51,7 +51,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 	ctx := context.Background()
 	t.Run("full stats succeeded", func(t *testing.T) {
 
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/stats", 200, []byte("success"))
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/stats", 200, []byte("success"))
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -64,7 +64,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 	})
 	t.Run("filtered node and stats succeeded", func(t *testing.T) {
 
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/node1,node2/stats/stat1", 200, []byte("success"))
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/node1,node2/stats/stat1", 200, []byte("success"))
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -77,7 +77,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 	})
 	t.Run("filtered node succeeded", func(t *testing.T) {
 
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/node1,node2/stats/", 200, []byte("success"))
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/node1,node2/stats/", 200, []byte("success"))
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -90,7 +90,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 	})
 	t.Run("filtered stats succeeded", func(t *testing.T) {
 
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn//stats/stat1,stat2", 200, []byte("success"))
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn//stats/stat1,stat2", 200, []byte("success"))
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -103,7 +103,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 	})
 	t.Run("gateway failed due to gateway user config", func(t *testing.T) {
 
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/stats", 400, []byte("failed"))
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/stats", 400, []byte("failed"))
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -114,7 +114,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 		assert.Error(t, err)
 	})
 	t.Run("failed due to invalid stat names", func(t *testing.T) {
-		reason := "request [/_opendistro/_knn//stats/graph_count] contains unrecognized stat: [stat1]"
+		reason := "request [/_plugins/_knn//stats/graph_count] contains unrecognized stat: [stat1]"
 		response, _ := json.Marshal(knn.ErrorResponse{
 			KNNError: knn.Error{
 				RootCause: []knn.RootCause{
@@ -126,7 +126,7 @@ func TestGatewayGetStatistics(t *testing.T) {
 			},
 			Status: 404,
 		})
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/index1/stats/invalid-stats", 404, response)
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/index1/stats/invalid-stats", 404, response)
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -142,7 +142,7 @@ func TestGatewayWarmupIndices(t *testing.T) {
 	ctx := context.Background()
 	t.Run("warmup indices", func(t *testing.T) {
 
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/warmup/index1,index2", 200, []byte("success"))
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/warmup/index1,index2", 200, []byte("success"))
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
@@ -166,7 +166,7 @@ func TestGatewayWarmupIndices(t *testing.T) {
 			},
 			Status: 404,
 		})
-		testClient := getTestClient(t, "http://localhost:9200/_opendistro/_knn/warmup/index1", 404, response)
+		testClient := getTestClient(t, "http://localhost:9200/_plugins/_knn/warmup/index1", 404, response)
 		testGateway, err := New(testClient, &entity.Profile{
 			Endpoint: "http://localhost:9200",
 			UserName: "admin",
