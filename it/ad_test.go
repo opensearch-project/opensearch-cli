@@ -148,7 +148,7 @@ func (a *ADTestSuite) AfterTest(suiteName, testName string) {
 
 //DeleteDetectorUsingRESTAPI helper to delete detector using rest api
 func (a *ADTestSuite) DeleteDetectorUsingRESTAPI(t *testing.T, ID string) {
-	indexURL := fmt.Sprintf("%s/_opendistro/_anomaly_detection/detectors/%s", a.Profile.Endpoint, ID)
+	indexURL := fmt.Sprintf("%s/_plugins/_anomaly_detection/detectors/%s", a.Profile.Endpoint, ID)
 	_, err := a.callRequest(http.MethodDelete, []byte(""), indexURL)
 	if err != nil {
 		t.Fatal(err)
@@ -160,7 +160,7 @@ func (a *ADTestSuite) StartDetectorUsingRESTAPI(t *testing.T, ID string) {
 	if ID == "" {
 		t.Fatal("Detector ID cannot be empty")
 	}
-	indexURL := fmt.Sprintf("%s/_opendistro/_anomaly_detection/detectors/%s/_start", a.Profile.Endpoint, ID)
+	indexURL := fmt.Sprintf("%s/_plugins/_anomaly_detection/detectors/%s/_start", a.Profile.Endpoint, ID)
 	_, err := a.callRequest(http.MethodPost, []byte(""), indexURL)
 	if err != nil {
 		t.Fatal(err)
@@ -172,7 +172,7 @@ func (a *ADTestSuite) StopDetectorUsingRESTAPI(t *testing.T, ID string) {
 	if ID == "" {
 		t.Fatal("Detector ID cannot be empty")
 	}
-	indexURL := fmt.Sprintf("%s/_opendistro/_anomaly_detection/detectors/%s/_stop", a.Profile.Endpoint, ID)
+	indexURL := fmt.Sprintf("%s/_plugins/_anomaly_detection/detectors/%s/_stop", a.Profile.Endpoint, ID)
 	_, err := a.callRequest(http.MethodPost, []byte(""), indexURL)
 	if err != nil {
 		t.Fatal(err)
@@ -181,7 +181,7 @@ func (a *ADTestSuite) StopDetectorUsingRESTAPI(t *testing.T, ID string) {
 
 //CreateDetectorUsingRESTAPI helper to create detector using rest api
 func (a *ADTestSuite) CreateDetectorUsingRESTAPI(t *testing.T) {
-	indexURL := fmt.Sprintf("%s/_opendistro/_anomaly_detection/detectors", a.Profile.Endpoint)
+	indexURL := fmt.Sprintf("%s/_plugins/_anomaly_detection/detectors", a.Profile.Endpoint)
 	reqBytes, err := json.Marshal(a.Detector)
 	if err != nil {
 		t.Fatal(err)
