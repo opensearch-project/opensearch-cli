@@ -43,7 +43,7 @@ const (
 	folderPermission      = 0755 // only owner can write, while everyone can read and execute
 	ConfigEnvVarName      = "OPENSEARCH_CLI_CONFIG"
 	RootCommandName       = "opensearch-cli"
-	version               = "1.1.0"
+	version               = "1.0.0"
 )
 
 func buildVersionString() string {
