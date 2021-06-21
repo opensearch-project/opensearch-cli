@@ -25,6 +25,13 @@ opensearch-cli ad delete  ecommerce-count-qualtity      --profile stg
 You can download the binaries directly from the [downloads](https://opendistro.github.io/for-elasticsearch/downloads.html) page
 or from the [releases](https://github.com/opensearch-project/opensearch-cli/releases) section.
 
+## Supported versions and Interoperability
+
+### Product Compatibility
+
+| OpenSearch CLI  | OpenSearch      |
+| -------------   | --------------- |
+|  1.0.0          |  1.0.0          |
 
 ## Development
 
