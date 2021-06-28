@@ -1,5 +1,5 @@
 [![tests](https://github.com/opensearch-project/opensearch-cli/actions/workflows/test-build-workflow.yml/badge.svg?branch=main)](https://github.com/opensearch-project/opensearch-cli/actions/workflows/test-build-workflow.yml)
-[![codecov](https://codecov.io/gh/opendistro-for-elasticsearch/odfe-cli/branch/main/graph/badge.svg?flag=odfe-cli)](https://codecov.io/gh/opendistro-for-elasticsearch/odfe-cli)
+[![codecov](https://codecov.io/gh/opensearch-project/opensearch-cli/branch/main/graph/badge.svg?token=BTU8GI0LJP)](https://codecov.io/gh/opensearch-project/opensearch-cli)
 [![Documentation](https://img.shields.io/badge/doc-reference-blue)](https://opendistro.github.io/for-elasticsearch-docs/docs/cli/)
 [![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://discuss.opendistrocommunity.dev/c/cli/55)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
