@@ -35,6 +35,12 @@ jobs:
           name: opensearch-cli-${{ env.RELEASE_VERSION }}-macos-x64
           path: dist/opensearch-cli_darwin_amd64/opensearch-cli
 
+      - name: Upload macOS(arm64) Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: opensearch-cli-${{ env.RELEASE_VERSION }}-macos-arm64
+          path: dist/opensearch-cli_darwin_arm64/opensearch-cli
+
       - name: Upload Linux(amd64) Artifact
         uses: actions/upload-artifact@v2
         with:
