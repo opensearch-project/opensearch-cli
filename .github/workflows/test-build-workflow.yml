@@ -51,15 +51,15 @@ jobs:
           go test ./...  -coverprofile=coverage.out
           go tool cover -func=coverage.out
 
-#      - name: Run Docker Image
-#        run: |
-#          make docker.start.components
-#          sleep 60
-#
-#      - name: Run Integration Tests
-#        env:
-#          GOPROXY: "https://proxy.golang.org"
-#        run: make test.integration
+      - name: Run Docker Image
+        run: |
+          make docker.start.components
+          sleep 60
+
+      - name: Run Integration Tests
+        env:
+          GOPROXY: "https://proxy.golang.org"
+        run: make test.integration
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.3
