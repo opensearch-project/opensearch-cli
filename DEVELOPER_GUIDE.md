@@ -2,10 +2,16 @@
 
 So you want to contribute code to OpenSearch CLI?  Excellent!  We're glad you're here.  Here's what you need to do:
 
-### Minimum requirements
+- [Prerequisites](#prerequisites)
+- [Unit Testing](#unit-testing)
+- [Integration Testing](#integration-testing)
+- [Submitting your changes](#submitting-your-changes)
 
-opensearch-cli shares [minimum requirements](https://github.com/golang/go/wiki/MinimumRequirements#minimum-requirements) as Go
-and [docker](https://docs.docker.com/get-docker/) to run integration tests.
+
+## Prerequisites
+
+* see [minimum requirements for Go](https://github.com/golang/go/wiki/MinimumRequirements#minimum-requirements) as OpenSearch shares the same requirements
+* [docker](https://docs.docker.com/get-docker/) to run integration tests.
 
 ### Build from source
 1. Install [Go](https://golang.org/doc/install) > = 1.16
@@ -24,7 +30,7 @@ and [docker](https://docs.docker.com/get-docker/) to run integration tests.
     chmod +x ./opensearch-cli
     ```
 
-### Unit Testing
+## Unit Testing
 Go has a simple tool for running tests. To run every unit test, use this command:
  ```
 go test ./...
@@ -36,16 +42,16 @@ cd folder-path/to/test;
 go test -v -run TestName; 
 ```
 
-### Integration Testing
+## Integration Testing
 In order to test opensearch-cli end-to-end, we need a running OpenSearch cluster. We can use Docker to accomplish this. 
 The [Docker Compose file](./docker-compose.yml) supports the ability to run integration tests for the project in local environments respectively.
-If you have not installed docker-compose, you can install it from this [link](https://docs.docker.com/compose/install/).
+If you have not installed docker-compose, you can install it from this [link](https://docs.docker.com/compose/install/)
 
 Integration tests are often slower, so you may want to only run them after the unit test. In order to differentiate unit tests from integration tests, Go has a built-in mechanism for allowing you to logically separate your tests
 with build tags. The build tag needs to be placed as close to the top of the file as possible, and must have a blank line beneath it.   
 We recommend you to create all integration tests inside [this](./it) folder with build tag 'integration'.
 
-#### Execute test integration command from your CLI
+### Execute test integration command from your CLI
 1. Run docker compose to start containers, by default it will launch latest OpenSearch cluster.
     ```
     docker-compose up -d;
@@ -55,7 +61,7 @@ We recommend you to create all integration tests inside [this](./it) folder with
     go test -tags=integration ./it/...
     ```
 
-### Submitting your changes
+## Submitting your changes
 
 Once your changes and tests are ready to submit for review:
 
@@ -95,24 +101,3 @@ request. Note that squashing at the end of the review process should
 also not be done, that can be done when the pull request is [integrated
 via GitHub](https://github.com/blog/2141-squash-your-commits).
 
-
-### Reviewing and accepting your contribution
-
-We deeply appreciate everyone who takes the time to make a contribution.  We will review all contributions as quickly as possible, but there are a few things you can do to help us with the process:
-
-First and foremost, opening an issue and discussing your change before you make it is the best way to smooth the PR process.  This will prevent a rejection because someone else is already working on the problem, or because the solution is incompatible with our architectural direction.
-
-Additionally:
-1) Please make sure you've run `make format` before submitting to format according to our guideline.
-2) Please make sure your change includes the tests that correspond with your changes.
-3) Please make sure local tests pass, add unit tests for all the new code paths introduced by your change.
-4) Please write both unit tests and integration test for your change
-5) Smaller changes are easier to digest than large ones.
-6) Given the limits of the team, we will reject PRs that are simple refactorings or "tidying up".  So make sure you're clear about what problem your PR is solving.
-
-During the PR process, expect that they'll be some back and forth.  Please try to respond to comments in a timely fashion, and if you don't wish to continue with the PR, let us know.  If a PR takes too many iterations for its complexity or size, we may reject it.  Additionally, if you stop responding, we may close the PR as abandoned.  In either case, if you feel this was done in error, please add a comment on the PR.
-
-If we accept the PR, we will merge your change and usually take care of backporting it to appropriate branches ourselves.
-
-If we reject the PR, we will close the pull request with a comment explaining why. This decision isn't always final: if you feel we have
-misunderstood your intended change or otherwise think that we should reconsider then please continue the conversation with a comment on the pull request, and we'll do our best to address any further points you raise.
