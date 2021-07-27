@@ -1,9 +1,21 @@
+<img src="https://opensearch.org/assets/brand/SVG/Logo/opensearch_logo_default.svg" height="64px"/>
+
+- [OpenSearch Command Line Interface](#opensearch-command-line-interface)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Getting Help](#getting-help)
+- [Code of Conduct](#code-of-conduct)
+- [Security](#security)
+- [License](#license)
+- [Copyright](#copyright)
+
 [![tests](https://github.com/opensearch-project/opensearch-cli/actions/workflows/test-build-workflow.yml/badge.svg?branch=main)](https://github.com/opensearch-project/opensearch-cli/actions/workflows/test-build-workflow.yml)
 [![codecov](https://codecov.io/gh/opensearch-project/opensearch-cli/branch/main/graph/badge.svg?token=BTU8GI0LJP)](https://codecov.io/gh/opensearch-project/opensearch-cli)
 [![Documentation](https://img.shields.io/badge/doc-reference-blue)](https://opendistro.github.io/for-elasticsearch-docs/docs/cli/)
 [![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://discuss.opendistrocommunity.dev/c/cli/55)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
-# OpenSearch Command Line Interface
+
+## OpenSearch Command Line Interface
 
 OpenSearch Command Line Interface (opensearch-cli) is an open source tool that lets you manage your OpenSearch cluster from the command line
 and automate tasks. In addition to standard OpenSearch operations, you can configure,
@@ -20,73 +32,11 @@ opensearch-cli ad start   ecommerce-count-qualtity.json --profile prod
 opensearch-cli ad stop    ecommerce-count-qualtity      --profile stg
 opensearch-cli ad delete  ecommerce-count-qualtity      --profile stg
 ```
-## Installation:
+
+## Installing
 
 You can download the binaries directly from the [downloads](https://opendistro.github.io/for-elasticsearch/downloads.html) page
 or from the [releases](https://github.com/opensearch-project/opensearch-cli/releases) section.
-
-## Supported versions and Interoperability
-
-### Product Compatibility
-
-| OpenSearch CLI  | OpenSearch      |
-| -------------   | --------------- |
-|  1.0.0          |  1.0.0          |
-
-## Development
-
-### Minimum requirements
-
-opensearch-cli shares [minimum requirements](https://github.com/golang/go/wiki/MinimumRequirements#minimum-requirements) as Go
-and [docker](https://docs.docker.com/get-docker/) to run integration tests.
-
-### Build from source
-1. Install [Go](https://golang.org/doc/install) > = 1.16
-2. Clone the repository:
-    ```
-    cd $GOPATH/src
-    git clone git@github.com:opensearch-project/opensearch-cli.git
-    ```
-3. Run build from source directory to generate binary:
-   ```
-   cd opensearch-cli
-   go build .
-   ```
-4. Make binary executable:
-    ```
-    chmod +x ./opensearch-cli
-    ```
-
-### Unit Testing
-Go has a simple tool for running tests. To run every unit test, use this command:
- ```
-go test ./...
-```
- 
-However, often when writing tests, you may want to run your new test as below
-```
-cd folder-path/to/test;
-go test -v -run TestName; 
-```
-
-### Integration Testing
-In order to test opensearch-cli end-to-end, we need a running OpenSearch cluster. We can use Docker to accomplish this. 
-The [Docker Compose file](./docker-compose.yml) supports the ability to run integration tests for the project in local environments respectively.
-If you have not installed docker-compose, you can install it from this [link](https://docs.docker.com/compose/install/)
-
-Integration tests are often slower, so you may want to only run them after the unit test. In order to differentiate unit tests from integration tests, Go has a built-in mechanism for allowing you to logically separate your tests
-with build tags. The build tag needs to be placed as close to the top of the file as possible, and must have a blank line beneath it.   
-We recommend you to create all integration tests inside [this](./it) folder with build tag 'integration'.
-
-#### Execute test integration command from your CLI
-1. Run docker compose to start containers, by default it will launch latest OpenSearch cluster.
-    ```
-    docker-compose up -d;
-    ```
-2. Run all integration tests with build tag 'integration'
-    ```
-    go test -tags=integration ./it/...
-    ```
 
 ## Usage
 
@@ -119,9 +69,8 @@ A profile is a collection of credentials that will be applied to the opensearch-
 the settings and credentials of that profile will be used to execute the command.
 Users can create one profile with the name "default", and is used when no profile is explicitly referenced. 
 
-#### Examples:
+#### Example: Create default profile where the cluster's security uses HTTP basic authentication.
 
-1. Create default profile where the cluster's security uses HTTP basic authentication.
 ```
 $ opensearch-cli profile create --auth-type "basic" \
                           --name "default" \
@@ -130,7 +79,8 @@ Username: admin
 Password: *******
 Profile created successfully.
 ```
-2. Create default profile where the cluster's security uses AWS IAM ARNs as users.
+#### Example: Create default profile where the cluster's security uses AWS IAM ARNs as users.
+
 AWS credentials can be provided either by specifying aws profile name or using [environment variables](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html).
 You can find details about creating aws profiles [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html).
 ```
@@ -141,7 +91,8 @@ AWS profile name (leave blank if you want to provide credentials using environme
 AWS service name where your cluster is deployed (for Amazon Elasticsearch Service, use 'es'. For EC2, use 'ec2'): es
 Profile created successfully.
 ```
-3. Create default profile where the cluster's security plugin is disabled.
+#### Example: Create default profile where the cluster's security plugin is disabled.
+
 ```
 $ opensearch-cli profile create --auth-type "disabled" \
                           --name "default" \
@@ -183,11 +134,28 @@ You can specify profiles in two ways.
    These variables last for the duration of your shell session, but you can add them to .zshenv or .bash_profile
    for a more permanent option.
     
+## Contributing
+
+See [developer guide](DEVELOPER_GUIDE.md) and [how to contribute to this project](CONTRIBUTING.md). 
+
+## Getting Help
+
+If you find a bug, or have a feature request, please don't hesitate to open an issue in this repository.
+
+For more information, see [project website](https://opensearch.org/) and [documentation](https://docs-beta.opensearch.org/). If you need help and are unsure where to open an issue, try [forums](https://discuss.opendistrocommunity.dev/).
+
+## Code of Conduct
+
+This project has adopted the [Amazon Open Source Code of Conduct](CODE_OF_CONDUCT.md). For more information see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq), or contact [opensource-codeofconduct@amazon.com](mailto:opensource-codeofconduct@amazon.com) with any additional questions or comments.
+
 ## Security
 
-See [CONTRIBUTING](https://github.com/opensearch-project/opensearch-cli/blob/main/CONTRIBUTING.md#security-issue-notifications) for more information.
+If you discover a potential security issue in this project we ask that you notify AWS/Amazon Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public GitHub issue.
 
 ## License
 
-This project is licensed under the Apache-2.0 License.
+This project is licensed under the [Apache v2.0 License](LICENSE.txt).
 
+## Copyright
+
+Copyright 2020-2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
