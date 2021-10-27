@@ -211,6 +211,16 @@ func getProfileController(cfgFlagValue string) (profile.Controller, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to get config file due to: %w", err)
 	}
+	//check for config file permission
+	info, err := os.Stat(configFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get config file info due to: %w", err)
+	}
+	mode := info.Mode().Perm()
+
+	if mode != FilePermission {
+		return nil, fmt.Errorf("permissions %o for '%s' are too open. It is required that your config file is NOT accessible by others", mode, configFilePath)
+	}
 	configController := config.New(configFilePath)
 	profileController := profile.New(configController)
 	return profileController, nil
