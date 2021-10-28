@@ -198,6 +198,9 @@ func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, 
 //BuildRequest builds request based on method and appends payload for given url with headers
 // TODO: Deprecate this method by replace this with BuildCurlRequest
 func (g *HTTPGateway) BuildRequest(ctx context.Context, method string, payload interface{}, url string, headers map[string]string) (*retryablehttp.Request, error) {
+	if payload == nil {
+		return g.BuildCurlRequest(ctx, method, nil, url, headers)
+	}
 	reqBytes, err := json.Marshal(payload)
 	if err != nil {
 		return nil, err
