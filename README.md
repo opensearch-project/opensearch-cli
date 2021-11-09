@@ -191,3 +191,6 @@ See [CONTRIBUTING](https://github.com/opensearch-project/opensearch-cli/blob/mai
 
 This project is licensed under the Apache-2.0 License.
 
+## Copyright
+
+Copyright OpenSearch CLI Contributors. See [NOTICE](NOTICE.txt) for details.
