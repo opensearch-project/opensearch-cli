@@ -1,14 +1,18 @@
-Contributing to OpenSearch CLI
-=============================
-
-OpenSearch CLI is a community project that is built and maintained by people just like **you**.  We're glad you're interested in helping out.  There are several different ways you can do it, but before we talk about that, let's talk about how to get started.
-
-## Table of Contents:
+- [Contributing to OpenSearch](#contributing-to-opensearch)
 - [First Things First](#first-things-first)
 - [Ways to Contribute](#ways-to-contribute)
+    - [Bug Reports](#bug-reports)
+    - [Feature Requests](#feature-requests)
+    - [Documentation Changes](#documentation-changes)
+    - [Contributing Code](#contributing-code)
 - [Developer Certificate of Origin](#developer-certificate-of-origin)
+- [License Headers](#license-headers)
 - [Review Process](#review-process)
 
+
+## Contributing to OpenSearch
+
+OpenSearch is a community project that is built and maintained by people just like **you**.  We're glad you're interested in helping out.  There are several different ways you can do it, but before we talk about that, let's talk about how to get started.
 
 ## First Things First
 
@@ -102,6 +106,31 @@ Each commit must include a DCO which looks like this
 Signed-off-by: Jane Smith <jane.smith@email.com>
 ```
 You may type this line on your own when writing your commit messages.  However, if your user.name and user.email are set in your git configs, you can use `-s` or `– – signoff` to add the `Signed-off-by` line to the end of the commit message.
+
+## License Headers
+
+New files in your code contributions should contain the following license header. If you are modifying existing files with license headers, or including new files that already have license headers, do not remove or modify them without guidance.
+
+### Java
+
+```
+/*
+ * Copyright OpenSearch Contributors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+```
+
+### Python
+```
+# Copyright OpenSearch Contributors
+# SPDX-License-Identifier: Apache-2.0
+```
+
+### Shell
+```
+# Copyright OpenSearch Contributors
+# SPDX-License-Identifier: Apache-2.0
+```
 
 ## Review Process
 
