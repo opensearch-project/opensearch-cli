@@ -77,7 +77,10 @@ func createTempConfigFile(testFilePath string) (*os.File, error) {
 		os.Remove(tmpfile.Name()) // clean up
 		return nil, err
 	}
-	if err := tmpfile.Chmod(FilePermission); err != nil {
+	if runtime.GOOS == "windows" {
+		return tmpfile, nil
+	}
+	if err := tmpfile.Chmod(0600); err != nil {
 		os.Remove(tmpfile.Name()) // clean up
 		return nil, err
 	}
@@ -139,6 +142,10 @@ func TestGetProfile(t *testing.T) {
 		assert.EqualError(t, err, "failed to get config file info due to: stat testdata/config1.yaml: no such file or directory", "unexpected error")
 	})
 	t.Run("invalid config file permission", func(t *testing.T) {
+
+		if runtime.GOOS == "windows" {
+			t.Skipf("test case does not work on %s", runtime.GOOS)
+		}
 		root := GetRoot()
 		assert.NotNil(t, root)
 		profileFile, err := createTempConfigFile("testdata/config.yaml")

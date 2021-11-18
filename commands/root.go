@@ -26,8 +26,6 @@ const (
 	defaultConfigFileName = "config"
 	flagConfig            = "config"
 	flagProfileName       = "profile"
-	FolderPermission      = 0700 // only owner can read, write and execute
-	FilePermission        = 0600 // only owner can read and write
 	ConfigEnvVarName      = "OPENSEARCH_CLI_CONFIG"
 	RootCommandName       = "opensearch-cli"
 	version               = "1.1.0"
@@ -94,30 +92,6 @@ func GetConfigFilePath(configFlagValue string) (string, error) {
 		return "", err
 	}
 	return GetDefaultConfigFilePath(), nil
-}
-
-// createDefaultConfigFolderIfNotExists creates default config file along with folder if
-// it doesn't exists
-func createDefaultConfigFileIfNotExists() error {
-	defaultFilePath := GetDefaultConfigFilePath()
-	if isExists(defaultFilePath) {
-		return nil
-	}
-	folderPath := filepath.Dir(defaultFilePath)
-	if !isExists(folderPath) {
-		err := os.Mkdir(folderPath, FolderPermission)
-		if err != nil {
-			return err
-		}
-	}
-	f, err := os.Create(defaultFilePath)
-	if err != nil {
-		return err
-	}
-	if err = f.Chmod(FilePermission); err != nil {
-		return err
-	}
-	return f.Close()
 }
 
 //isExists check if given path exists or not
