@@ -24,3 +24,5 @@ bin
 
 opensearch-cli
 opensearch-cli.exe
+
+dist/
