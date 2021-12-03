@@ -1,5 +1,12 @@
-# This is an example goreleaser.yaml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
+# SPDX-License-Identifier: Apache-2.0
+#
+# The OpenSearch Contributors require contributions made to
+# this file be licensed under the Apache-2.0 license or a
+# compatible open source license.
+#
+# Modifications Copyright OpenSearch Contributors. See
+# GitHub history for details.
+
 project_name: opensearch-cli
 dist: ./dist
 before:
@@ -16,24 +23,29 @@ builds:
     goarch:
       - 386
       - amd64
-      - arm
       - arm64
     ignore:
       - goos: darwin
         goarch: 386
+      - goos: linux
+        goarch: 386
 archives:
   -
-    name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
+      darwin: macos
+      386: x86
+      amd64: x64
+    files:
+      - none*
     format_overrides:
       - goos: windows
+        format: zip
+      - goos: linux
+        format: zip
+      - goos: darwin
         format: zip
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
 snapshot:
-  name_template: '{{ .ProjectName }}_{{ .Version }}'
+  name_template: '{{ .Version }}'
