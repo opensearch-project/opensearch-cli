@@ -73,6 +73,7 @@ func appendQueryParameter(path string, param []string) string {
 func getSupportedHTTPAction() []string {
 	return []string{
 		http.MethodGet,
+		http.MethodPatch,
 		http.MethodPut,
 		http.MethodPost,
 		http.MethodDelete,

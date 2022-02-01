@@ -170,7 +170,7 @@ The following examples show different ways that you can use command completion:
 * Partially enter a command and press Tab to display a suggested list of commands.                                                                                      
 ```
 opensearch-cli curl p[tab key]
-post    put 
+patch    post    put
 ```
 * Partially enter a parameter and press Tab to display a suggested list of parameters.
 
@@ -182,7 +182,7 @@ opensearch-cli curl get --[tab key]
 * Enter a command and press Tab to display sub commands.
 ```
 opensearch-cli curl [tab key]
-delete  get     post    put     
+delete  get     patch     post    put     
 ```
 
 ## Environment variables
