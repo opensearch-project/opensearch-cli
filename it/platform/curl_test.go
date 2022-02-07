@@ -122,6 +122,53 @@ func (a *OpenSearchTestSuite) TestCurlGet() {
 	})
 }
 
+func (a *OpenSearchTestSuite) TestCurlPatch() {
+	plugins := []string{"opensearch-security"}
+	if !a.IsPluginFromInputInstalled(plugins) {
+		a.T().Skipf("plugin %s is not installed", plugins)
+	}
+	request := platform.CurlCommandRequest{
+		Action: "PATCH",
+		Pretty: true,
+	}
+	a.T().Run("add user to a role mapping", func(t *testing.T) {
+		ctx := context.Background()
+		request.Path = "_plugins/_security/api/rolesmapping"
+		request.QueryParams = ""
+		request.Data = `[{ "op": "add", "path": "/all_access/users", "value": ["testuser"] }]`
+		response, err := a.Controller.Curl(ctx, request)
+		assert.NoError(t, err, "failed to get response")
+		assert.NotNil(t, response)
+
+		var result map[string]interface{}
+		assert.NoError(t, json.Unmarshal(response, &result))
+		assert.True(t, len(result) > 0)
+		assert.EqualValues(t, "OK", result["status"])
+		assert.EqualValues(t, "Resource updated.", result["message"])
+
+		//get rolemappings
+		request.Action = "GET"
+		request.Path = "_plugins/_security/api/rolesmapping"
+		request.QueryParams = ""
+		request.Data = ""
+		response, err = a.Controller.Curl(ctx, request)
+		assert.NoError(t, err, "failed to get response")
+		assert.NotNil(t, response)
+
+		var rolemappings map[string]struct {
+			Hosts           []string `json:"hosts"`
+			Users           []string `json:"users"`
+			Reserved        bool     `json:"reserved"`
+			Hidden          bool     `json:"hidden"`
+			BackendRoles    []string `json:"backend_roles"`
+			AndBackendRoles []string `json:"and_backend_roles"`
+		}
+		assert.NoError(t, json.Unmarshal(response, &rolemappings))
+		assert.True(t, len(rolemappings["all_access"].Users) > 0)
+		assert.EqualValues(t, "testuser", rolemappings["all_access"].Users[0])
+	})
+}
+
 func (a *OpenSearchTestSuite) TestCurlPost() {
 	request := platform.CurlCommandRequest{
 		Action: "Post",
