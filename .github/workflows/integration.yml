@@ -1,0 +1,44 @@
+name: Integration Test opensearch-cli
+on:
+  push:
+    branches:
+      - main
+      - opensearch-*
+  pull_request:
+    branches:
+      - main
+      - opensearch-*
+
+jobs:
+  integ-test:
+    strategy:
+      matrix:
+        opensearch-version: [ 1.0.1 , 1.1.0, 1.2.4 ]
+        go-version: [ 1.16.2 ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+
+      - name: Run Docker Image
+        env:
+          OPENSEARCH_VERSION: ${{ matrix.opensearch-version }}
+        run: |
+          make docker.start.components
+          sleep 60
+
+      - name: Run Integration Tests
+        env:
+          GOPROXY: "https://proxy.golang.org"
+        run: make test.integration
+
+
+      - name: Stop and Clean Docker Components
+        run: |
+          make docker.stop
+          make docker.clean
