@@ -22,7 +22,7 @@ jobs:
         run:  go get golang.org/x/tools/cmd/goimports
 
       - name: Check out source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Format check
         run: goimports -w .
@@ -74,7 +74,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Check out source code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Build for ${{ matrix.platform }}-${{ matrix.go-version }}
         env:
