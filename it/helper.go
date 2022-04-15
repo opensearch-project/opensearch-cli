@@ -58,8 +58,8 @@ func (a *CLISuite) ValidateProfile() error {
 	if a.Profile.Endpoint == "" {
 		return fmt.Errorf("endpoint cannot be empty. set env %s", environment.OPENSEARCH_ENDPOINT)
 	}
-	if a.Profile.UserName == "" {
-		return fmt.Errorf("user cannot be empty. set env %s", environment.OPENSEARCH_USER)
+	if len(a.Profile.UserName) == 0 {
+		return nil
 	}
 	if a.Profile.Password == "" {
 		return fmt.Errorf("password cannot be empty. set env %s", environment.OPENSEARCH_PASSWORD)
