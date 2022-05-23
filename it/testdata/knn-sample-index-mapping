@@ -1,8 +1,8 @@
 {
-"settings" : {
-  "number_of_shards" :   1,
-  "number_of_replicas" : 0,
-  "index.knn" : true
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "index.knn": true
   },
   "mappings": {
     "properties": {
@@ -10,8 +10,8 @@
         "type": "knn_vector",
         "dimension": 2
       },
-      "color" : {
-        "type" : "keyword"
+      "color": {
+        "type": "keyword"
       }
     }
   }
