@@ -35,8 +35,9 @@ import (
 )
 
 const (
-	EcommerceIndexName     = "ecommerce"
-	EcommerceIndexFileName = "ecommerce"
+	EcommerceIndexName            = "ecommerce"
+	EcommerceIndexFileName        = "ecommerce"
+	EcommerceIndexMappingFileName = "ecommerce-mapping"
 )
 
 //ADTestSuite suite specific to AD plugin
@@ -78,7 +79,7 @@ func (a *ADTestSuite) SetupSuite() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	a.CreateIndex(EcommerceIndexFileName, "")
+	a.CreateIndex(EcommerceIndexFileName, EcommerceIndexMappingFileName)
 	g, _ := esg.New(a.Client, a.Profile)
 	a.ESController = platform.New(g)
 	a.ADGateway, _ = adgateway.New(a.Client, a.Profile)
