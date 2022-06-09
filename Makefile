@@ -25,6 +25,11 @@ test.integration:
 	go clean -testcache;
 	$(ENV_LOCAL_TEST) go test -tags=integration $(INTEGRATION_TEST_PATH);
 
+# this command will trigger integration test for cluster without security
+test.integration.insecure:
+	go clean -testcache;
+	OPENSEARCH_ENDPOINT="http://localhost:9200" go test -tags=integration $(INTEGRATION_TEST_PATH);
+
 test.unit:
 	go clean -testcache;
 	go test ./...;

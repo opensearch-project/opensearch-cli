@@ -9,7 +9,7 @@ on:
       - main
       - opensearch-*
 env:
-  OPENSEARCH_VERSION: '2.0'
+  OPENSEARCH_VERSION: '2.x'
 
 jobs:
   integ-test:
@@ -54,5 +54,4 @@ jobs:
         env:
           GOPROXY: "https://proxy.golang.org"
           OPENSEARCH_ENDPOINT: "http://localhost:9200"
-        run: |
-          go test -tags=integration ./it/platform/...
+        run: make test.integration.insecure
