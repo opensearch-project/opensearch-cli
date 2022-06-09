@@ -121,6 +121,11 @@ func (a *CLISuite) callRequest(method string, reqBytes []byte, url string) ([]by
 
 // isPluginInstalled checks whether dependent plugins are insalled or not
 func (a *CLISuite) IsPluginInstalled() bool {
+	return a.IsPluginFromInputInstalled(a.Plugins)
+}
+
+// IsPluginFromInputInstalled checks whether input plugins are insalled or not
+func (a *CLISuite) IsPluginFromInputInstalled(plugins []string) bool {
 	pluginListsInBytes, err := a.callRequest(http.MethodGet, []byte(""), fmt.Sprintf("%s/%s", a.Profile.Endpoint, getPluginNamesURL))
 	if err != nil {
 		fmt.Println(err)
@@ -128,7 +133,7 @@ func (a *CLISuite) IsPluginInstalled() bool {
 	}
 	pluginListsAsString := string(pluginListsInBytes[:])
 	pluginArray := strings.Split(pluginListsAsString, newLine)
-	for _, plugin := range a.Plugins {
+	for _, plugin := range plugins {
 		if !contains(pluginArray, plugin) {
 			return false
 		}
