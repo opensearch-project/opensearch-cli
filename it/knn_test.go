@@ -61,6 +61,7 @@ func (a *KNNTestSuite) SetupSuite() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	a.Plugins = append(a.Plugins, "opensearch-knn")
 	a.Gateway, _ = gateway.New(a.Client, a.Profile)
 	a.Controller = ctrl.New(a.Gateway)
 	a.CreateIndex(KNNSampleIndexFileName, KnnSampleIndexMappingFileName)
@@ -80,6 +81,9 @@ func (a *KNNTestSuite) GetNodesIDUsingRESTAPI(t *testing.T) string {
 }
 
 func (a *KNNTestSuite) TestGetStatistics() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("test get full stats", func(t *testing.T) {
 		ctx := context.Background()
 		response, err := a.Controller.GetStatistics(ctx, "", "")
@@ -161,6 +165,9 @@ func (a *KNNTestSuite) TestGetStatistics() {
 }
 
 func (a *KNNTestSuite) TestWarmupIndices() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("test warmup success", func(t *testing.T) {
 		ctx := context.Background()
 		response, err := a.Controller.WarmupIndices(ctx, []string{KNNSampleIndexFileName})

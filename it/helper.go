@@ -22,15 +22,22 @@ import (
 	"opensearch-cli/environment"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/stretchr/testify/suite"
+)
+
+const (
+	newLine           = "\n"
+	getPluginNamesURL = "_cat/plugins?h=c"
 )
 
 type CLISuite struct {
 	suite.Suite
 	Client  *client.Client
 	Profile *entity.Profile
+	Plugins []string
 }
 
 //HelperLoadBytes loads file from testdata and stream contents
@@ -110,4 +117,29 @@ func (a *CLISuite) callRequest(method string, reqBytes []byte, url string) ([]by
 		}
 	}()
 	return ioutil.ReadAll(response.Body)
+}
+
+func (a *CLISuite) isPluginInstalled() bool {
+	pluginListsInBytes, err := a.callRequest(http.MethodGet, []byte(""), fmt.Sprintf("%s/%s", a.Profile.Endpoint, getPluginNamesURL))
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	pluginListsAsString := string(pluginListsInBytes[:])
+	pluginArray := strings.Split(pluginListsAsString, newLine)
+	for _, plugin := range a.Plugins {
+		if contains(pluginArray, plugin) == false {
+			return false
+		}
+	}
+	return true
+}
+
+func contains(container []string, value string) bool {
+	for _, item := range container {
+		if item == value {
+			return true
+		}
+	}
+	return false
 }

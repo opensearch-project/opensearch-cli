@@ -64,6 +64,7 @@ func getRawFeatureAggregation() []byte {
 //SetupSuite runs once for every test suite
 func (a *ADTestSuite) SetupSuite() {
 	var err error
+	a.Plugins = append(a.Plugins, "opensearch-anomaly-detection")
 	a.Client, err = client.New(nil)
 	if err != nil {
 		fmt.Println(err)
@@ -112,12 +113,18 @@ func (a *ADTestSuite) SetupSuite() {
 }
 
 func (a *ADTestSuite) TearDownSuite() {
+	if a.isPluginInstalled() == false {
+		return
+	}
 	a.DeleteIndex(EcommerceIndexName)
 }
 
 // This will run right before the test starts
 // and receives the suite and test names as input
 func (a *ADTestSuite) BeforeTest(suiteName, testName string) {
+	if a.isPluginInstalled() == false {
+		return
+	}
 	// We don't need to create detector for create use case
 	if testName != "TestCreateDetectors" {
 		a.CreateDetectorUsingRESTAPI(a.T())
@@ -127,6 +134,9 @@ func (a *ADTestSuite) BeforeTest(suiteName, testName string) {
 // This will run after test finishes
 // and receives the suite and test names as input
 func (a *ADTestSuite) AfterTest(suiteName, testName string) {
+	if a.isPluginInstalled() == false {
+		return
+	}
 	if testName != "TestCreateDetectors" || a.DetectorId != "" {
 		a.StopDetectorUsingRESTAPI(a.T(), a.DetectorId)
 		a.DeleteDetectorUsingRESTAPI(a.T(), a.DetectorId)
@@ -220,6 +230,9 @@ func getCreateDetectorRequest() adentity.CreateDetectorRequest {
 
 func (a *ADTestSuite) TestCreateDetectors() {
 	a.T().Run("create success", func(t *testing.T) {
+		if a.isPluginInstalled() == false {
+			t.Skipf("plugin %s is not installed", a.Plugins)
+		}
 		ctx := context.Background()
 		ctrl := adctrl.New(os.Stdin, a.ESController, a.ADGateway)
 		response, err := ctrl.CreateAnomalyDetector(ctx, a.DetectorRequest)
@@ -230,6 +243,9 @@ func (a *ADTestSuite) TestCreateDetectors() {
 }
 
 func (a *ADTestSuite) TestStopDetectors() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("stop success", func(t *testing.T) {
 		a.StartDetectorUsingRESTAPI(t, a.DetectorId)
 		ctx := context.Background()
@@ -242,6 +258,9 @@ func (a *ADTestSuite) TestStopDetectors() {
 }
 
 func (a *ADTestSuite) TestStartDetectors() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("start success", func(t *testing.T) {
 		a.StopDetectorUsingRESTAPI(t, a.DetectorId)
 		ctx := context.Background()
@@ -253,6 +272,9 @@ func (a *ADTestSuite) TestStartDetectors() {
 	})
 }
 func (a *ADTestSuite) TestDeleteDetectorsForce() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("delete force success", func(t *testing.T) {
 		a.StartDetectorUsingRESTAPI(t, a.DetectorId)
 		ctx := context.Background()
@@ -265,6 +287,9 @@ func (a *ADTestSuite) TestDeleteDetectorsForce() {
 }
 
 func (a *ADTestSuite) TestDeleteDetectors() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("delete stopped success", func(t *testing.T) {
 		ctx := context.Background()
 		var stdin bytes.Buffer
@@ -276,6 +301,9 @@ func (a *ADTestSuite) TestDeleteDetectors() {
 }
 
 func (a *ADTestSuite) TestGetDetectors() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("get detector success", func(t *testing.T) {
 		ctx := context.Background()
 		var stdin bytes.Buffer
@@ -289,6 +317,9 @@ func (a *ADTestSuite) TestGetDetectors() {
 }
 
 func (a *ADTestSuite) TestUpdateDetectorsForce() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("update detector success", func(t *testing.T) {
 		a.StartDetectorUsingRESTAPI(t, a.DetectorId)
 		ctx := context.Background()
@@ -320,6 +351,9 @@ func (a *ADTestSuite) TestUpdateDetectorsForce() {
 
 }
 func (a *ADTestSuite) TestUpdateDetectors() {
+	if a.isPluginInstalled() == false {
+		a.T().Skipf("plugin %s is not installed", a.Plugins)
+	}
 	a.T().Run("update detector success", func(t *testing.T) {
 		ctx := context.Background()
 		ctrl := adctrl.New(os.Stdin, a.ESController, a.ADGateway)
