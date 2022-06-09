@@ -81,7 +81,7 @@ func (a *KNNTestSuite) GetNodesIDUsingRESTAPI(t *testing.T) string {
 }
 
 func (a *KNNTestSuite) TestGetStatistics() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("test get full stats", func(t *testing.T) {
@@ -165,7 +165,7 @@ func (a *KNNTestSuite) TestGetStatistics() {
 }
 
 func (a *KNNTestSuite) TestWarmupIndices() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("test warmup success", func(t *testing.T) {

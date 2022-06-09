@@ -113,7 +113,7 @@ func (a *ADTestSuite) SetupSuite() {
 }
 
 func (a *ADTestSuite) TearDownSuite() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		return
 	}
 	a.DeleteIndex(EcommerceIndexName)
@@ -122,7 +122,7 @@ func (a *ADTestSuite) TearDownSuite() {
 // This will run right before the test starts
 // and receives the suite and test names as input
 func (a *ADTestSuite) BeforeTest(suiteName, testName string) {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		return
 	}
 	// We don't need to create detector for create use case
@@ -134,7 +134,7 @@ func (a *ADTestSuite) BeforeTest(suiteName, testName string) {
 // This will run after test finishes
 // and receives the suite and test names as input
 func (a *ADTestSuite) AfterTest(suiteName, testName string) {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		return
 	}
 	if testName != "TestCreateDetectors" || a.DetectorId != "" {
@@ -230,7 +230,7 @@ func getCreateDetectorRequest() adentity.CreateDetectorRequest {
 
 func (a *ADTestSuite) TestCreateDetectors() {
 	a.T().Run("create success", func(t *testing.T) {
-		if a.isPluginInstalled() == false {
+		if !a.IsPluginInstalled() {
 			t.Skipf("plugin %s is not installed", a.Plugins)
 		}
 		ctx := context.Background()
@@ -243,7 +243,7 @@ func (a *ADTestSuite) TestCreateDetectors() {
 }
 
 func (a *ADTestSuite) TestStopDetectors() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("stop success", func(t *testing.T) {
@@ -258,7 +258,7 @@ func (a *ADTestSuite) TestStopDetectors() {
 }
 
 func (a *ADTestSuite) TestStartDetectors() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("start success", func(t *testing.T) {
@@ -272,7 +272,7 @@ func (a *ADTestSuite) TestStartDetectors() {
 	})
 }
 func (a *ADTestSuite) TestDeleteDetectorsForce() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("delete force success", func(t *testing.T) {
@@ -287,7 +287,7 @@ func (a *ADTestSuite) TestDeleteDetectorsForce() {
 }
 
 func (a *ADTestSuite) TestDeleteDetectors() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("delete stopped success", func(t *testing.T) {
@@ -301,7 +301,7 @@ func (a *ADTestSuite) TestDeleteDetectors() {
 }
 
 func (a *ADTestSuite) TestGetDetectors() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("get detector success", func(t *testing.T) {
@@ -317,7 +317,7 @@ func (a *ADTestSuite) TestGetDetectors() {
 }
 
 func (a *ADTestSuite) TestUpdateDetectorsForce() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("update detector success", func(t *testing.T) {
@@ -351,7 +351,7 @@ func (a *ADTestSuite) TestUpdateDetectorsForce() {
 
 }
 func (a *ADTestSuite) TestUpdateDetectors() {
-	if a.isPluginInstalled() == false {
+	if !a.IsPluginInstalled() {
 		a.T().Skipf("plugin %s is not installed", a.Plugins)
 	}
 	a.T().Run("update detector success", func(t *testing.T) {

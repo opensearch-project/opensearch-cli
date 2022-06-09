@@ -119,7 +119,8 @@ func (a *CLISuite) callRequest(method string, reqBytes []byte, url string) ([]by
 	return ioutil.ReadAll(response.Body)
 }
 
-func (a *CLISuite) isPluginInstalled() bool {
+// isPluginInstalled checks whether dependent plugins are insalled or not
+func (a *CLISuite) IsPluginInstalled() bool {
 	pluginListsInBytes, err := a.callRequest(http.MethodGet, []byte(""), fmt.Sprintf("%s/%s", a.Profile.Endpoint, getPluginNamesURL))
 	if err != nil {
 		fmt.Println(err)
@@ -128,7 +129,7 @@ func (a *CLISuite) isPluginInstalled() bool {
 	pluginListsAsString := string(pluginListsInBytes[:])
 	pluginArray := strings.Split(pluginListsAsString, newLine)
 	for _, plugin := range a.Plugins {
-		if contains(pluginArray, plugin) == false {
+		if !contains(pluginArray, plugin) {
 			return false
 		}
 	}
