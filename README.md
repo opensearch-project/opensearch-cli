@@ -31,7 +31,9 @@ or from the [releases](https://github.com/opensearch-project/opensearch-cli/rele
 
 | OpenSearch CLI  | OpenSearch      |
 | -------------   | --------------- |
-|  1.0.0          |  1.0.0          |
+| 1.0.0           | 1.0.0           |
+| 1.1.0           | 1.x             |
+| 1.1.0           | 2.0.0           |
 
 ## Development
 
