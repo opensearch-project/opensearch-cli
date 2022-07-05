@@ -174,7 +174,7 @@ func init() {
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateName)
 	createProfileCmd.Flags().StringP(FlagProfileCreateEndpoint, "e", "", "Create profile with this endpoint or host")
 	_ = createProfileCmd.MarkFlagRequired(FlagProfileCreateEndpoint)
-	createProfileCmd.Flags().StringP(FlagProfileCreateAuthType, "a", "", "Authentication type. Options are disabled, basic and aws-iam."+
+	createProfileCmd.Flags().StringP(FlagProfileCreateAuthType, "a", "", "Authentication type. Options are disabled, basic, cert and aws-iam."+
 		"\nIf security is disabled, provide --auth-type='disabled'.\nIf security uses HTTP basic authentication, provide --auth-type='basic'.\n"+
 		"If security uses client certificate authentication, provide --auth-type='cert'.\n"+
 		"If security uses AWS IAM ARNs as users, provide --auth-type='aws-iam'.\nopensearch-cli asks for additional information based on your choice of authentication type.")
