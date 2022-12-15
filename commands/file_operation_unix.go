@@ -57,7 +57,7 @@ func checkConfigFilePermission(configFilePath string) error {
 	mode := info.Mode().Perm()
 
 	if mode != FilePermission {
-		return fmt.Errorf("permissions %o for '%s' are too open. It is required that your config file is NOT accessible by others", mode, configFilePath)
+		return fmt.Errorf("config file '%s' permissions %o must be changed to %o, this will limit access to only your user", configFilePath, mode, FilePermission)
 	}
 	return nil
 }
