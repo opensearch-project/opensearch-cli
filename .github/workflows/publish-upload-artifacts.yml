@@ -16,7 +16,7 @@ jobs:
       - name: Set up Go ubuntu-latest
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16.2
+          go-version: 1.18.2
 
       - name: Check out source code
         uses: actions/checkout@v2
