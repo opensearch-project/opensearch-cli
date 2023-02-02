@@ -288,7 +288,7 @@ func getUserInputAsMaskedText(isValid func(string) bool) string {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	value := fmt.Sprintf("%s", maskedValue)
+	value := string(maskedValue)
 	if !isValid(value) {
 		return getUserInputAsMaskedText(isValid)
 	}

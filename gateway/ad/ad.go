@@ -184,7 +184,7 @@ func (g *gateway) StopDetector(ctx context.Context, ID string) (*string, error) 
 	if err != nil {
 		return nil, err
 	}
-	return mapper.StringToStringPtr(fmt.Sprintf("%s", res)), nil
+	return mapper.StringToStringPtr(string(res)), nil
 }
 
 func (g *gateway) buildSearchURL() (*url.URL, error) {
