@@ -44,7 +44,7 @@ func CommandToCurlRequestParameter(request platform.CurlCommandRequest) (result 
 	if result.Data, err = toCurlPayload(request.Data); err != nil {
 		return platform.CurlRequest{}, err
 	}
-	if result.FormDataFile, err = toFormData(request.FormDataFile); err != nil {
+	if result.FormDataFile, err = toFormDataFile(request.FormDataFile); err != nil {
 		return platform.CurlRequest{}, err
 	}
 	if !isEmpty(request.Path) {
@@ -151,9 +151,9 @@ func toCurlPayload(data string) (payload []byte, err error) {
 	return []byte(data), nil
 }
 
-func toFormData(file string) (string, error) {
+func toFormDataFile(file string) (output string, err error) {
 	if isEmpty(file) {
-		return "", errors.New("multipart/form-data file cannot be empty")
+		return
 	}
 	// check if file exists
 	if _, err := os.Stat(file); errors.Is(err, os.ErrNotExist) {
