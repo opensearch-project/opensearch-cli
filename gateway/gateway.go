@@ -12,13 +12,16 @@
 package gateway
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"opensearch-cli/client"
@@ -33,13 +36,13 @@ import (
 	"github.com/hashicorp/go-retryablehttp"
 )
 
-//HTTPGateway type for gateway client
+// HTTPGateway type for gateway client
 type HTTPGateway struct {
 	Client  *client.Client
 	Profile *entity.Profile
 }
 
-//GetDefaultHeaders returns common headers
+// GetDefaultHeaders returns common headers
 func GetDefaultHeaders() map[string]string {
 	return map[string]string{
 		"content-type": "application/json",
@@ -69,7 +72,7 @@ func GetTLSConfig(trust *entity.Trust) (*tls.Config, error) {
 	return config, nil
 }
 
-//NewHTTPGateway creates new HTTPGateway instance
+// NewHTTPGateway creates new HTTPGateway instance
 func NewHTTPGateway(c *client.Client, p *entity.Profile) (*HTTPGateway, error) {
 
 	if p.Certificate != nil {
@@ -116,7 +119,7 @@ func overrideValue(p *entity.Profile, envVariable string) (*int, bool) {
 	return nil, false
 }
 
-//isValidResponse checks whether the response is valid or not by checking the status code
+// isValidResponse checks whether the response is valid or not by checking the status code
 func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 	if response == nil {
 		return errors.New("response is nil")
@@ -140,7 +143,7 @@ func (g *HTTPGateway) isValidResponse(response *http.Response) error {
 	return nil
 }
 
-//Execute calls request using http and check if status code is ok or not
+// Execute calls request using http and check if status code is ok or not
 func (g *HTTPGateway) Execute(req *retryablehttp.Request) ([]byte, error) {
 	if g.Profile.AWS != nil {
 		//sign request
@@ -164,7 +167,7 @@ func (g *HTTPGateway) Execute(req *retryablehttp.Request) ([]byte, error) {
 	return ioutil.ReadAll(response.Body)
 }
 
-//Call calls request using http and return error if status code is not expected
+// Call calls request using http and return error if status code is not expected
 func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, error) {
 	resBytes, err := g.Execute(req)
 	if err == nil {
@@ -181,7 +184,7 @@ func (g *HTTPGateway) Call(req *retryablehttp.Request, statusCode int) ([]byte, 
 
 }
 
-//BuildRequest builds request based on method and appends payload for given url with headers
+// BuildRequest builds request based on method and appends payload for given url with headers
 // TODO: Deprecate this method by replace this with BuildCurlRequest
 func (g *HTTPGateway) BuildRequest(ctx context.Context, method string, payload interface{}, url string, headers map[string]string) (*retryablehttp.Request, error) {
 	if payload == nil {
@@ -194,7 +197,7 @@ func (g *HTTPGateway) BuildRequest(ctx context.Context, method string, payload i
 	return g.BuildCurlRequest(ctx, method, reqBytes, url, headers)
 }
 
-//BuildCurlRequest builds request based on method and add payload (in byte)
+// BuildCurlRequest builds request based on method and add payload (in byte)
 func (g *HTTPGateway) BuildCurlRequest(ctx context.Context, method string, payload []byte, url string, headers map[string]string) (*retryablehttp.Request, error) {
 	r, err := retryablehttp.NewRequest(method, url, payload)
 	if err != nil {
@@ -213,7 +216,39 @@ func (g *HTTPGateway) BuildCurlRequest(ctx context.Context, method string, paylo
 	return req, nil
 }
 
-//GetValidEndpoint get url based on user config
+// BuildCurlMultipartFormRequest builds multipart file-upload request based on method and add payload (in byte)
+func (g *HTTPGateway) BuildCurlMultipartFormRequest(ctx context.Context, method string, filePath string, url string, headers map[string]string) (*retryablehttp.Request, error) {
+	file, _ := os.Open(filePath)
+	defer file.Close()
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, _ := writer.CreateFormFile("file", filePath)
+	io.Copy(part, file)
+	writer.Close()
+
+	r, err := retryablehttp.NewRequest(method, url, body)
+
+	r.Header.Add("Content-Type", writer.FormDataContentType())
+
+	if err != nil {
+		return nil, err
+	}
+	req := r.WithContext(ctx)
+	if len(g.Profile.UserName) != 0 {
+		req.SetBasicAuth(g.Profile.UserName, g.Profile.Password)
+	}
+	if len(headers) == 0 {
+		return req, nil
+	}
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
+	return req, nil
+
+}
+
+// GetValidEndpoint get url based on user config
 func GetValidEndpoint(profile *entity.Profile) (*url.URL, error) {
 	u, err := url.ParseRequestURI(profile.Endpoint)
 	if err != nil {
