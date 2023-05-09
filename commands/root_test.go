@@ -157,6 +157,6 @@ func TestGetProfile(t *testing.T) {
 		_, err = root.ExecuteC()
 		assert.NoError(t, err)
 		_, err = GetProfile()
-		assert.EqualError(t, err, fmt.Sprintf("permissions 750 for '%s' are too open. It is required that your config file is NOT accessible by others", filePath), "unexpected error")
+		assert.EqualError(t, err, fmt.Sprintf("config file '%s' permissions 750 must be changed to %o, this will limit access to only your user", filePath, FilePermission), "unexpected error")
 	})
 }
