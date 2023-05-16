@@ -67,7 +67,7 @@ Flags:
   -h, --help   Help for Anomaly Detection
 
 Global Flags:
-  -c, --config string    Configuration file for opensearch-cli, default is /Users/opendistro/.opensearch-cli/config.yaml
+  -c, --config string    Configuration file for opensearch-cli, default is /Users/opensearch/.opensearch-cli/config.yaml
   -p, --profile string   Use a specific profile from your configuration file
 
 Use "opensearch-cli ad [command] --help" for more information about a command.
@@ -81,7 +81,7 @@ The opensearch-cli uses a multipart structure on the command line that must be s
 
 1. The base call to the `opensearch-cli` program.
 
-1. The top-level command, which typically corresponds to OpenDistro plugins supported by the opensearch-cli.
+1. The top-level command, which typically corresponds to OpenSearch plugins supported by the opensearch-cli.
 
 1. The subcommand that specifies which operation to perform.
 
@@ -158,7 +158,7 @@ Flags:
   -h, --help   help for completion
 
 Global Flags:
-  -c, --config string    Configuration file for opensearch-cli, default is /Users/opendistro/.opensearch-cli/config.yaml
+  -c, --config string    Configuration file for opensearch-cli, default is /Users/opensearch/.opensearch-cli/config.yaml
   -p, --profile string   Use a specific profile from your configuration file
 
 ```
