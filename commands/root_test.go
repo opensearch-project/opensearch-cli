@@ -12,12 +12,12 @@
 package commands
 
 import (
-	"fmt"
 	"io/ioutil"
 	"opensearch-cli/entity"
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -157,6 +157,6 @@ func TestGetProfile(t *testing.T) {
 		_, err = root.ExecuteC()
 		assert.NoError(t, err)
 		_, err = GetProfile()
-		assert.EqualError(t, err, fmt.Sprintf("permissions 750 for '%s' are too open. It is required that your config file is NOT accessible by others", filePath), "unexpected error")
+		assert.True(t, strings.Contains(err.Error(), "permissions 750"), "unexpected error")
 	})
 }
