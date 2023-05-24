@@ -1,8 +1,15 @@
 [![tests](https://github.com/opensearch-project/opensearch-cli/actions/workflows/test-build-workflow.yml/badge.svg?branch=main)](https://github.com/opensearch-project/opensearch-cli/actions/workflows/test-build-workflow.yml)
 [![codecov](https://codecov.io/gh/opensearch-project/opensearch-cli/branch/main/graph/badge.svg?token=BTU8GI0LJP)](https://codecov.io/gh/opensearch-project/opensearch-cli)
-[![Documentation](https://img.shields.io/badge/doc-reference-blue)](https://opendistro.github.io/for-elasticsearch-docs/docs/cli/)
-[![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://discuss.opendistrocommunity.dev/c/cli/55)
+[![Documentation](https://img.shields.io/badge/doc-reference-blue)](https://opensearch.org/docs/latest/tools/cli/)
+[![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://forum.opensearch.org/)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
+
+- [OpenSearch Command Line Interface](#opensearch-command-line-interface)
+  - [User Guide](#user-guide)
+  - [Compatibility with OpenSearch](#compatibility-with-opensearch)
+  - [Security](#security)
+  - [License](#license)
+  - [Copyright](#copyright)
 
 # OpenSearch Command Line Interface
 
@@ -24,12 +31,11 @@ opensearch-cli ad delete  ecommerce-count-qualtity      --profile stg
 
 ## Installation:
 
-You can download the binaries directly from the [downloads](https://opendistro.github.io/for-elasticsearch/downloads.html) page
-or from the [releases](https://github.com/opensearch-project/opensearch-cli/releases) section.
+## User Guide
 
-## Supported versions and Interoperability
+See [User Guide](USER_GUIDE.md).
 
-### Product Compatibility
+## Compatibility with OpenSearch
 
 | OpenSearch CLI | OpenSearch |
 | -------------- | ---------- |
@@ -248,14 +254,20 @@ You can specify profiles in two ways.
    These variables last for the duration of your shell session, but you can add them to .zshenv or .bash_profile
    for a more permanent option.
 
+
+See [Compatibility](COMPATIBILITY.md).
+    
+
 ## Security
 
-See [CONTRIBUTING](https://github.com/opensearch-project/opensearch-cli/blob/main/CONTRIBUTING.md#security-issue-notifications) for more information.
+See [SECURITY](SECURITY.md) for more information.
 
 ## License
 
-This project is licensed under the Apache-2.0 License.
+This project is licensed under the [Apache v2.0 License](LICENSE.txt).
 
 ## Copyright
 
-Copyright OpenSearch Contributors. See [NOTICE](NOTICE) for details.
+
+Copyright OpenSearch Contributors. See [NOTICE](NOTICE.txt) for details.
+
