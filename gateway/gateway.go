@@ -224,7 +224,7 @@ func (g *HTTPGateway) BuildCurlMultipartFormRequest(ctx context.Context, method 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	part, _ := writer.CreateFormFile("file", filePath)
-	io.Copy(part, file)
+	_, _ = io.Copy(part, file)
 	writer.Close()
 
 	r, err := retryablehttp.NewRequest(method, url, body)
