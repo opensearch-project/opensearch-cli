@@ -24,7 +24,7 @@ Any committer, who fixed issues, **related to above use case**, should notify ad
 * Any new commands ( could be a new plugin, a new sub command for any plugin ). A new command could be a new API that was released long ago but being included in new opensearch-cli release or new API that will be  released in next OpenSearch release.
     * eg: on-board new plugin, add auto-complete feature for cli commands.
 * New parameter/flags for any command.
-    * eg: opensearch-cli 1.0.0 only displays detector configuration using get command for given name, if user would also like to see [detector job](https://opendistro.github.io/for-elasticsearch-docs/docs/ad/api/#get-detector), they can add new flag (job) to get command to enable this feature.
+    * eg: opensearch-cli 1.0.0 only displays detector configuration using get command for given name, if user would also like to see [detector job](https://opensearch.org/docs/latest/observing-your-data/ad/api/#get-detector), they can add new flag (job) to get command to enable this feature.
 * Any incompatible changes that were introduced with respect to API changes.
     * eg: if API is added in OpenSearch 1.13.0 and updated in a backward incompatible way in later releases, this will be addressed in CLI as minor version
 

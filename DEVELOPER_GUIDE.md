@@ -1,3 +1,11 @@
+- [Developer Guide](#developer-guide)
+    - [Minimum requirements](#minimum-requirements)
+    - [Build from source](#build-from-source)
+    - [Unit Testing](#unit-testing)
+    - [Integration Testing](#integration-testing)
+      - [Execute test integration command from your CLI](#execute-test-integration-command-from-your-cli)
+    - [Submitting your changes](#submitting-your-changes)
+    - [Reviewing and accepting your contribution](#reviewing-and-accepting-your-contribution)
 # Developer Guide
 
 So you want to contribute code to OpenSearch CLI?  Excellent!  We're glad you're here.  Here's what you need to do:
