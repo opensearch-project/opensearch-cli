@@ -189,6 +189,46 @@ func TestCommandToCurlRequestParameter(t *testing.T) {
 			platform.CurlRequest{},
 			true,
 		},
+		{
+			"fail: not existing form-data-file",
+			args{
+				request: platform.CurlCommandRequest{
+					Action:       "post",
+					FormDataFile: "notExistingFile.json",
+					Path:         "",
+					QueryParams:  "",
+					Headers:      "",
+					Data:         "",
+					Pretty:       false,
+				},
+			},
+			platform.CurlRequest{},
+			true,
+		},
+		{
+			"success: form-data-file upload",
+			args{
+				request: platform.CurlCommandRequest{
+					Action:       "post",
+					FormDataFile: "testdata/index.json",
+					Path:         "sample-path/one",
+					QueryParams:  "createNewCopies=true",
+					Headers:      "content-type:multipart/form-data",
+					Data:         "",
+					Pretty:       false,
+				},
+			},
+			platform.CurlRequest{
+				Action: http.MethodPost,
+				Path:   "sample-path/one",
+				Headers: map[string]string{
+					"content-type": "multipart/form-data",
+				},
+				QueryParams:  "createNewCopies=true",
+				FormDataFile: "testdata/index.json",
+			},
+			false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

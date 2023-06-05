@@ -20,13 +20,15 @@ import (
 	"opensearch-cli/entity"
 	"opensearch-cli/entity/platform"
 	gw "opensearch-cli/gateway"
+
+	"github.com/hashicorp/go-retryablehttp"
 )
 
 const search = "_search"
 
 //go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_platform.go -package=mocks . Gateway
 
-//Gateway interface to call OpenSearch
+// Gateway interface to call OpenSearch
 type Gateway interface {
 	SearchDistinctValues(ctx context.Context, index string, field string) ([]byte, error)
 	Curl(ctx context.Context, request platform.CurlRequest) ([]byte, error)
@@ -66,7 +68,7 @@ func (g *gateway) buildSearchURL(index string) (*url.URL, error) {
 	return endpoint, nil
 }
 
-//SearchDistinctValues gets distinct values on index for given field
+// SearchDistinctValues gets distinct values on index for given field
 func (g *gateway) SearchDistinctValues(ctx context.Context, index string, field string) ([]byte, error) {
 	searchURL, err := g.buildSearchURL(index)
 	if err != nil {
@@ -83,9 +85,8 @@ func (g *gateway) SearchDistinctValues(ctx context.Context, index string, field 
 	return response, nil
 }
 
-//Curl executes REST request based on request parameters
+// Curl executes REST request based on request parameters
 func (g *gateway) Curl(ctx context.Context, request platform.CurlRequest) ([]byte, error) {
-
 	requestURL, err := g.buildURL(request)
 	if err != nil {
 		return nil, err
@@ -95,9 +96,20 @@ func (g *gateway) Curl(ctx context.Context, request platform.CurlRequest) ([]byt
 	for k, v := range request.Headers {
 		headers[k] = v
 	}
-	curlRequest, err := g.BuildCurlRequest(ctx, request.Action, request.Data, requestURL.String(), headers)
-	if err != nil {
-		return nil, err
+
+	var curlRequest *retryablehttp.Request
+	var buildErr error
+
+	// when formDataFile is provided, build multipart/form-data request
+	if len(request.FormDataFile) > 0 {
+		curlRequest, buildErr = g.BuildCurlMultipartFormRequest(ctx, request.Action, request.FormDataFile, requestURL.String(), request.Headers)
+	} else {
+		// else build "normal" rest request
+		curlRequest, buildErr = g.BuildCurlRequest(ctx, request.Action, request.Data, requestURL.String(), headers)
+	}
+
+	if buildErr != nil {
+		return nil, buildErr
 	}
 	response, err := g.Execute(curlRequest)
 	if err != nil {

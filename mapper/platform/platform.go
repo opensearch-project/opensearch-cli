@@ -18,6 +18,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"opensearch-cli/entity/platform"
+	"os"
 	"strings"
 )
 
@@ -31,7 +32,7 @@ const (
 	FilterPathQueryParameterTemplate = "filter_path=%s"
 )
 
-//CommandToCurlRequestParameter map user input to OpenSearch request
+// CommandToCurlRequestParameter map user input to OpenSearch request
 func CommandToCurlRequestParameter(request platform.CurlCommandRequest) (result platform.CurlRequest, err error) {
 
 	if result.Action, err = toHTTPAction(request.Action); err != nil {
@@ -41,6 +42,9 @@ func CommandToCurlRequestParameter(request platform.CurlCommandRequest) (result 
 		return platform.CurlRequest{}, err
 	}
 	if result.Data, err = toCurlPayload(request.Data); err != nil {
+		return platform.CurlRequest{}, err
+	}
+	if result.FormDataFile, err = toFormDataFile(request.FormDataFile); err != nil {
 		return platform.CurlRequest{}, err
 	}
 	if !isEmpty(request.Path) {
@@ -145,4 +149,15 @@ func toCurlPayload(data string) (payload []byte, err error) {
 		return nil, fmt.Errorf("invalid data: %s, data can be either valid json or filename with prefix '@'", data)
 	}
 	return []byte(data), nil
+}
+
+func toFormDataFile(file string) (output string, err error) {
+	if isEmpty(file) {
+		return
+	}
+	// check if file exists
+	if _, err := os.Stat(file); errors.Is(err, os.ErrNotExist) {
+		return "", err
+	}
+	return file, nil
 }

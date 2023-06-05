@@ -46,7 +46,7 @@ opensearch-cli curl post --path "my-index-01/_doc" \
                         "ip": {
                             "address": "127.0.0.1"
                         }
-                    }'
+                    }' 
 
 `
 var curlPostCmd = &cobra.Command{
@@ -68,6 +68,8 @@ func init() {
 	curlPostCmd.Flags().StringP(
 		curlDataFlagName, "d", "",
 		"Data for the REST API. If value starts with '@', the rest should be a file name to read the data from.")
+	curlPostCmd.Flags().StringP(curlFormDataFileFlagName, "F", "", "Specify multipart upload file. This causes curl to POST data using the Content- Type multipart/form-data according to RFC2388."+
+		"Value should be a file name to read the data from.")
 	curlPostCmd.Flags().StringP(
 		curlHeadersFlagName, "H", "",
 		"Headers for the REST API. Consists of case-insensitive name followed by a colon (`:`), then by its value. Use ';' to separate multiple parameters. Ex: -H \"content-type:json;accept-encoding:gzip\"")

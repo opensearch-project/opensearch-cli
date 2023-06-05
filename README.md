@@ -3,12 +3,14 @@
 [![Documentation](https://img.shields.io/badge/doc-reference-blue)](https://opensearch.org/docs/latest/tools/cli/)
 [![Chat](https://img.shields.io/badge/chat-on%20forums-blue)](https://forum.opensearch.org/)
 ![PRs welcome!](https://img.shields.io/badge/PRs-welcome!-success)
+
 - [OpenSearch Command Line Interface](#opensearch-command-line-interface)
   - [User Guide](#user-guide)
   - [Compatibility with OpenSearch](#compatibility-with-opensearch)
   - [Security](#security)
   - [License](#license)
   - [Copyright](#copyright)
+
 # OpenSearch Command Line Interface
 
 OpenSearch Command Line Interface (opensearch-cli) is an open source tool that lets you manage your OpenSearch cluster from the command line
@@ -34,7 +36,7 @@ See [User Guide](USER_GUIDE.md).
 ## Compatibility with OpenSearch
 
 See [Compatibility](COMPATIBILITY.md).
-    
+
 ## Security
 
 See [SECURITY](SECURITY.md) for more information.

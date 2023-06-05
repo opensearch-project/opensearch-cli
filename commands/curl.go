@@ -28,12 +28,13 @@ const (
 	curlPathFlagName             = "path"
 	curlQueryParamsFlagName      = "query-params"
 	curlDataFlagName             = "data"
+	curlFormDataFileFlagName     = "form-data-file"
 	curlHeadersFlagName          = "headers"
 	curlOutputFormatFlagName     = "output-format"
 	curlOutputFilterPathFlagName = "filter-path"
 )
 
-//curlCommand is base command for OpenSearch REST APIs.
+// curlCommand is base command for OpenSearch REST APIs.
 var curlCommand = &cobra.Command{
 	Use:   curlCommandName,
 	Short: "Manage OpenSearch platform features",
@@ -50,13 +51,13 @@ func init() {
 	GetRoot().AddCommand(curlCommand)
 }
 
-//GetCurlCommand returns Curl base command, since this will be needed for subcommands
-//to add as parent later
+// GetCurlCommand returns Curl base command, since this will be needed for subcommands
+// to add as parent later
 func GetCurlCommand() *cobra.Command {
 	return curlCommand
 }
 
-//getCurlHandler returns handler by wiring the dependency manually
+// getCurlHandler returns handler by wiring the dependency manually
 func getCurlHandler() (*handler.Handler, error) {
 	c, err := client.New(nil)
 	if err != nil {
@@ -74,7 +75,7 @@ func getCurlHandler() (*handler.Handler, error) {
 	return handler.New(facade), nil
 }
 
-//CurlActionExecute executes API based on user request
+// CurlActionExecute executes API based on user request
 func CurlActionExecute(input entity.CurlCommandRequest) error {
 
 	commandHandler, err := getCurlHandler()
@@ -113,6 +114,7 @@ func Run(cmd cobra.Command, cmdName string) {
 	input.Path, _ = cmd.Flags().GetString(curlPathFlagName)
 	input.QueryParams, _ = cmd.Flags().GetString(curlQueryParamsFlagName)
 	input.Data, _ = cmd.Flags().GetString(curlDataFlagName)
+	input.FormDataFile, _ = cmd.Flags().GetString(curlFormDataFileFlagName)
 	input.Headers, _ = cmd.Flags().GetString(curlHeadersFlagName)
 	err := CurlActionExecute(input)
 	DisplayError(err, cmdName)
