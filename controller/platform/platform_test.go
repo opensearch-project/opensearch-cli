@@ -14,10 +14,10 @@ package platform
 import (
 	"context"
 	"errors"
-	"io/ioutil"
 	"net/http"
 	"opensearch-cli/entity/platform"
 	"opensearch-cli/gateway/platform/mocks"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -27,7 +27,7 @@ import (
 
 func helperLoadBytes(t *testing.T, name string) []byte {
 	path := filepath.Join("testdata", name) // relative path
-	bytes, err := ioutil.ReadFile(path)
+	bytes, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}

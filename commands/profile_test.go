@@ -14,7 +14,6 @@ package commands
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"opensearch-cli/controller/profile/mocks"
 	"opensearch-cli/entity"
 	"os"
@@ -95,7 +94,7 @@ func TestCreateProfile(t *testing.T) {
 		assert.EqualErrorf(t, err, "required flag(s) \"auth-type\", \"endpoint\", \"name\" not set", "unexpected error")
 	})
 	t.Run("create security disabled profile", func(t *testing.T) {
-		f, err := ioutil.TempFile("", "profile")
+		f, err := os.CreateTemp("", "profile")
 		assert.NoError(t, err)
 		defer func() {
 			err := os.Remove(f.Name())
@@ -116,7 +115,7 @@ func TestCreateProfile(t *testing.T) {
 		})
 		_, err = root.ExecuteC()
 		assert.NoError(t, err)
-		contents, _ := ioutil.ReadFile(f.Name())
+		contents, _ := os.ReadFile(f.Name())
 		var actual entity.Config
 		assert.NoError(t, yaml.Unmarshal(contents, &actual))
 		retryVal := 2
@@ -135,7 +134,7 @@ func TestCreateProfile(t *testing.T) {
 
 func TestDeleteProfileCommand(t *testing.T) {
 	t.Run("test delete profile command", func(t *testing.T) {
-		f, err := ioutil.TempFile("", "profile-delete")
+		f, err := os.CreateTemp("", "profile-delete")
 		assert.NoError(t, err)
 		defer func() {
 			err := os.Remove(f.Name())
@@ -144,7 +143,7 @@ func TestDeleteProfileCommand(t *testing.T) {
 		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile()}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
-		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
+		assert.NoError(t, os.WriteFile(f.Name(), bytes, 0644))
 		assert.NoError(t, f.Sync())
 		root := GetRoot()
 		assert.NotNil(t, root)
@@ -155,7 +154,7 @@ func TestDeleteProfileCommand(t *testing.T) {
 		assert.NoError(t, err)
 		assert.EqualValues(t, expected, f.Name())
 		var expectedConfig entity.Config
-		contents, err := ioutil.ReadFile(f.Name())
+		contents, err := os.ReadFile(f.Name())
 		assert.NoError(t, err)
 		err = yaml.Unmarshal(contents, &expectedConfig)
 		assert.NoError(t, err)
@@ -165,7 +164,7 @@ func TestDeleteProfileCommand(t *testing.T) {
 
 func TestListsProfileCommand(t *testing.T) {
 	t.Run("list profiles", func(t *testing.T) {
-		f, err := ioutil.TempFile("", "profile-list")
+		f, err := os.CreateTemp("", "profile-list")
 		assert.NoError(t, err)
 		defer func() {
 			err := os.Remove(f.Name())
@@ -174,7 +173,7 @@ func TestListsProfileCommand(t *testing.T) {
 		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile()}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
-		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
+		assert.NoError(t, os.WriteFile(f.Name(), bytes, 0644))
 		assert.NoError(t, f.Sync())
 		root := GetRoot()
 		assert.NotNil(t, root)
@@ -186,7 +185,7 @@ func TestListsProfileCommand(t *testing.T) {
 		assert.EqualValues(t, expected, f.Name())
 	})
 	t.Run("list profiles with verbose", func(t *testing.T) {
-		f, err := ioutil.TempFile("", "profile-list")
+		f, err := os.CreateTemp("", "profile-list")
 		assert.NoError(t, err)
 		defer func() {
 			err := os.Remove(f.Name())
@@ -195,7 +194,7 @@ func TestListsProfileCommand(t *testing.T) {
 		config := entity.Config{Profiles: []entity.Profile{fakeInputProfile()}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
-		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
+		assert.NoError(t, os.WriteFile(f.Name(), bytes, 0644))
 		assert.NoError(t, f.Sync())
 		root := GetRoot()
 		assert.NotNil(t, root)
@@ -207,7 +206,7 @@ func TestListsProfileCommand(t *testing.T) {
 		assert.EqualValues(t, expected, f.Name())
 	})
 	t.Run("no profiles found", func(t *testing.T) {
-		f, err := ioutil.TempFile("", "profile")
+		f, err := os.CreateTemp("", "profile")
 		assert.NoError(t, err)
 		defer func() {
 			err := os.Remove(f.Name())
@@ -216,7 +215,7 @@ func TestListsProfileCommand(t *testing.T) {
 		config := entity.Config{Profiles: []entity.Profile{}}
 		bytes, err := yaml.Marshal(config)
 		assert.NoError(t, err)
-		assert.NoError(t, ioutil.WriteFile(f.Name(), bytes, 0644))
+		assert.NoError(t, os.WriteFile(f.Name(), bytes, 0644))
 		assert.NoError(t, f.Sync())
 		root := GetRoot()
 		assert.NotNil(t, root)

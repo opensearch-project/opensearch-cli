@@ -20,7 +20,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -61,7 +60,7 @@ func GetTLSConfig(trust *entity.Trust) (*tls.Config, error) {
 	}
 	caCertPool := x509.NewCertPool()
 	if trust.CAFilePath != nil {
-		caCert, err := ioutil.ReadFile(*trust.CAFilePath)
+		caCert, err := os.ReadFile(*trust.CAFilePath)
 		if err != nil {
 			return nil, fmt.Errorf("error opening certificate file %s, error: %s", *trust.CAFilePath, err)
 		}
@@ -164,7 +163,7 @@ func (g *HTTPGateway) Execute(req *retryablehttp.Request) ([]byte, error) {
 	if err = g.isValidResponse(response); err != nil {
 		return nil, err
 	}
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 // Call calls request using http and return error if status code is not expected

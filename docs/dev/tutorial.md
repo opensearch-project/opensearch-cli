@@ -309,7 +309,7 @@ func (h *Handler) CreateAnomalyDetector(fileName string) error {
 			fmt.Println("failed to close json:", err)
 		}
 	}()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := io.ReadAll(jsonFile)
 	var request entity.CreateDetectorRequest
 	err = json.Unmarshal(byteValue, &request)
 	if err != nil {

@@ -15,7 +15,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"opensearch-cli/entity/platform"
 	"os"
@@ -142,7 +141,7 @@ func toCurlPayload(data string) (payload []byte, err error) {
 	}
 	// if data is file name, read file contents
 	if strings.HasPrefix(data, FileNameIdentifier) && !isEmpty(strings.TrimPrefix(data, FileNameIdentifier)) {
-		return ioutil.ReadFile(data[1:])
+		return os.ReadFile(data[1:])
 	}
 	// if data is invalid json string
 	if !json.Valid([]byte(data)) {

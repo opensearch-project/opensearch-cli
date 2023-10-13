@@ -15,14 +15,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"opensearch-cli/controller/ad"
 	entity "opensearch-cli/entity/ad"
 	"opensearch-cli/mapper"
 	"os"
 )
 
-//Handler is facade for controller
+// Handler is facade for controller
 type Handler struct {
 	ad.Controller
 }
@@ -34,12 +34,12 @@ func New(controller ad.Controller) *Handler {
 	}
 }
 
-//CreateAnomalyDetector creates detector based on file configurations
+// CreateAnomalyDetector creates detector based on file configurations
 func CreateAnomalyDetector(h *Handler, fileName string) error {
 	return h.CreateAnomalyDetector(fileName)
 }
 
-//GenerateAnomalyDetector generate sample detector to provide skeleton for users
+// GenerateAnomalyDetector generate sample detector to provide skeleton for users
 func GenerateAnomalyDetector() ([]byte, error) {
 	return json.MarshalIndent(entity.CreateDetectorRequest{
 		Name:        "Detector Name",
@@ -61,7 +61,7 @@ func GenerateAnomalyDetector() ([]byte, error) {
 	}, "", "  ")
 }
 
-//CreateAnomalyDetector creates detector based on file configurations
+// CreateAnomalyDetector creates detector based on file configurations
 func (h *Handler) CreateAnomalyDetector(fileName string) error {
 	if len(fileName) < 1 {
 		return fmt.Errorf("file name cannot be empty")
@@ -77,7 +77,7 @@ func (h *Handler) CreateAnomalyDetector(fileName string) error {
 			fmt.Println("failed to close json:", err)
 		}
 	}()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := io.ReadAll(jsonFile)
 	var request entity.CreateDetectorRequest
 	err = json.Unmarshal(byteValue, &request)
 	if err != nil {
@@ -96,12 +96,12 @@ func (h *Handler) CreateAnomalyDetector(fileName string) error {
 	return err
 }
 
-//DeleteAnomalyDetectorByID deletes detector based on detectorId
+// DeleteAnomalyDetectorByID deletes detector based on detectorId
 func DeleteAnomalyDetectorByID(h *Handler, detectorID string, force bool) error {
 	return h.DeleteAnomalyDetectorByID(detectorID, force)
 }
 
-//DeleteAnomalyDetectorByID deletes detector based on detectorId
+// DeleteAnomalyDetectorByID deletes detector based on detectorId
 func (h *Handler) DeleteAnomalyDetectorByID(detectorID string, force bool) error {
 
 	ctx := context.Background()
@@ -112,12 +112,12 @@ func (h *Handler) DeleteAnomalyDetectorByID(detectorID string, force bool) error
 	return err
 }
 
-//DeleteAnomalyDetectorByNamePattern deletes detector based on detectorName
+// DeleteAnomalyDetectorByNamePattern deletes detector based on detectorName
 func DeleteAnomalyDetectorByNamePattern(h *Handler, detectorName string, force bool) error {
 	return h.DeleteAnomalyDetectorByNamePattern(detectorName, force)
 }
 
-//DeleteAnomalyDetectorByNamePattern deletes detector based on detectorName
+// DeleteAnomalyDetectorByNamePattern deletes detector based on detectorName
 func (h *Handler) DeleteAnomalyDetectorByNamePattern(detectorName string, force bool) error {
 
 	ctx := context.Background()
@@ -128,12 +128,12 @@ func (h *Handler) DeleteAnomalyDetectorByNamePattern(detectorName string, force 
 	return err
 }
 
-//StartAnomalyDetectorByID starts detector based on detector id
+// StartAnomalyDetectorByID starts detector based on detector id
 func StartAnomalyDetectorByID(h *Handler, detector string) error {
 	return h.StartAnomalyDetectorByID(detector)
 }
 
-//StartAnomalyDetectorByID starts detector based on detector id
+// StartAnomalyDetectorByID starts detector based on detector id
 func (h *Handler) StartAnomalyDetectorByID(detector string) error {
 
 	ctx := context.Background()
@@ -224,7 +224,7 @@ func (h *Handler) GetAnomalyDetectorByID(name string) (*entity.DetectorOutput, e
 	return detector, nil
 }
 
-//UpdateDetector updates detector based on file configurations
+// UpdateDetector updates detector based on file configurations
 func (h *Handler) UpdateDetector(fileName string, force bool, start bool) error {
 	if len(fileName) < 1 {
 		return fmt.Errorf("file name cannot be empty")
@@ -240,7 +240,7 @@ func (h *Handler) UpdateDetector(fileName string, force bool, start bool) error 
 			fmt.Println("failed close json file due to ", err)
 		}
 	}()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, _ := io.ReadAll(jsonFile)
 	var request entity.UpdateDetectorUserInput
 	err = json.Unmarshal(byteValue, &request)
 	if err != nil {
