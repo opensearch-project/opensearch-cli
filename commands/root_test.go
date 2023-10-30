@@ -59,7 +59,7 @@ func TestVersionString(t *testing.T) {
 		root.SetArgs([]string{"--version"})
 		cmd, err := root.ExecuteC()
 		assert.NoError(t, err)
-		expected := "1.1.0 " + runtime.GOOS + "/" + runtime.GOARCH
+		expected := "1.2.0 " + runtime.GOOS + "/" + runtime.GOARCH
 		assert.EqualValues(t, expected, cmd.Version)
 	})
 }

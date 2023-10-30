@@ -28,7 +28,7 @@ const (
 	flagProfileName       = "profile"
 	ConfigEnvVarName      = "OPENSEARCH_CLI_CONFIG"
 	RootCommandName       = "opensearch-cli"
-	version               = "1.1.0"
+	version               = "1.2.0"
 )
 
 func buildVersionString() string {
