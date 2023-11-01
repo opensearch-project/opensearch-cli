@@ -12,7 +12,6 @@
 package commands
 
 import (
-	"io/ioutil"
 	"opensearch-cli/entity"
 	"os"
 	"path/filepath"
@@ -65,11 +64,11 @@ func TestVersionString(t *testing.T) {
 }
 
 func createTempConfigFile(testFilePath string) (*os.File, error) {
-	content, err := ioutil.ReadFile(testFilePath)
+	content, err := os.ReadFile(testFilePath)
 	if err != nil {
 		return nil, err
 	}
-	tmpfile, err := ioutil.TempFile(os.TempDir(), "test-file")
+	tmpfile, err := os.CreateTemp(os.TempDir(), "test-file")
 	if err != nil {
 		return nil, err
 	}

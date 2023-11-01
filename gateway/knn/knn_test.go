@@ -15,7 +15,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"opensearch-cli/client"
 	"opensearch-cli/client/mocks"
@@ -34,7 +34,7 @@ func getTestClient(t *testing.T, url string, code int, response []byte) *client.
 		return &http.Response{
 			StatusCode: code,
 			// Send response to be tested
-			Body: ioutil.NopCloser(bytes.NewBuffer(response)),
+			Body: io.NopCloser(bytes.NewBuffer(response)),
 			// Must be set to non-nil value or it panics
 			Header:  make(http.Header),
 			Status:  "SOME OUTPUT",

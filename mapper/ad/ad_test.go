@@ -12,9 +12,9 @@
 package ad
 
 import (
-	"io/ioutil"
 	"opensearch-cli/entity/ad"
 	"opensearch-cli/mapper"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -23,7 +23,7 @@ import (
 
 func helperLoadBytes(t *testing.T, name string) []byte {
 	path := filepath.Join("testdata", name) // relative path
-	contents, err := ioutil.ReadFile(path)
+	contents, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}

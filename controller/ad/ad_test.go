@@ -17,7 +17,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	mockController "opensearch-cli/controller/platform/mocks"
 	entity "opensearch-cli/entity/ad"
 	gateway "opensearch-cli/gateway/ad/mocks"
@@ -35,7 +34,7 @@ const mockDetectorName = "detector"
 
 func helperLoadBytes(t *testing.T, name string) []byte {
 	path := filepath.Join("testdata", name) // relative path
-	contents, err := ioutil.ReadFile(path)
+	contents, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}

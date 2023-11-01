@@ -15,12 +15,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"opensearch-cli/client"
 	"opensearch-cli/client/mocks"
 	"opensearch-cli/entity"
 	"opensearch-cli/entity/platform"
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -29,7 +30,7 @@ import (
 
 func helperLoadBytes(t *testing.T, name string) []byte {
 	path := filepath.Join("testdata", name) // relative path
-	contents, err := ioutil.ReadFile(path)
+	contents, err := os.ReadFile(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -40,7 +41,7 @@ func getTestClient(t *testing.T, responseData string, code int) *client.Client {
 	return mocks.NewTestClient(func(req *http.Request) *http.Response {
 		// Test request parameters
 		assert.Equal(t, req.URL.String(), "http://localhost:9200/test_index/_search")
-		resBytes, _ := ioutil.ReadAll(req.Body)
+		resBytes, _ := io.ReadAll(req.Body)
 		var body platform.SearchRequest
 		err := json.Unmarshal(resBytes, &body)
 		assert.NoError(t, err)
@@ -50,7 +51,7 @@ func getTestClient(t *testing.T, responseData string, code int) *client.Client {
 		return &http.Response{
 			StatusCode: code,
 			// Send response to be tested
-			Body: ioutil.NopCloser(bytes.NewBufferString(responseData)),
+			Body: io.NopCloser(bytes.NewBufferString(responseData)),
 			// Must be set to non-nil value or it panics
 			Header:  make(http.Header),
 			Status:  "SOME OUTPUT",
@@ -63,7 +64,7 @@ func getCurlTestClient(t *testing.T, expectedURL string, expectedData []byte, ex
 	return mocks.NewTestClient(func(req *http.Request) *http.Response {
 		// Test request parameters
 		assert.Equal(t, expectedURL, req.URL.String())
-		resBytes, _ := ioutil.ReadAll(req.Body)
+		resBytes, _ := io.ReadAll(req.Body)
 		assert.EqualValues(t, expectedData, resBytes)
 
 		for k, v := range expectedHeader {
@@ -72,7 +73,7 @@ func getCurlTestClient(t *testing.T, expectedURL string, expectedData []byte, ex
 		return &http.Response{
 			StatusCode: code,
 			// Send response to be tested
-			Body: ioutil.NopCloser(bytes.NewBufferString(responseData)),
+			Body: io.NopCloser(bytes.NewBufferString(responseData)),
 			// Must be set to non-nil value or it panics
 			Header:  make(http.Header),
 			Status:  "SOME OUTPUT",

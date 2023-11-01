@@ -12,7 +12,6 @@
 package config
 
 import (
-	"io/ioutil"
 	"opensearch-cli/entity"
 	"os"
 
@@ -29,9 +28,9 @@ type controller struct {
 	path string
 }
 
-//Read deserialize config file into entity.Config
+// Read deserialize config file into entity.Config
 func (c controller) Read() (result entity.Config, err error) {
-	contents, err := ioutil.ReadFile(c.path)
+	contents, err := os.ReadFile(c.path)
 	if err != nil {
 		return
 	}
@@ -39,7 +38,7 @@ func (c controller) Read() (result entity.Config, err error) {
 	return
 }
 
-//Write serialize entity.Config into file path
+// Write serialize entity.Config into file path
 func (c controller) Write(config entity.Config) (err error) {
 	file, err := os.Create(c.path) //overwrite if file exists
 	if err != nil {
@@ -59,7 +58,7 @@ func (c controller) Write(config entity.Config) (err error) {
 	return file.Sync()
 }
 
-//New returns config controller instance
+// New returns config controller instance
 func New(path string) Controller {
 	return controller{
 		path: path,

@@ -13,7 +13,6 @@ package config
 
 import (
 	"fmt"
-	"io/ioutil"
 	"opensearch-cli/entity"
 	"os"
 	"path/filepath"
@@ -60,7 +59,7 @@ func TestControllerRead(t *testing.T) {
 }
 func TestControllerWrite(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		f, err := ioutil.TempFile("", "config")
+		f, err := os.CreateTemp("", "config")
 		assert.NoError(t, err)
 		defer func() {
 			err = os.Remove(f.Name())
@@ -69,7 +68,7 @@ func TestControllerWrite(t *testing.T) {
 		ctrl := New(f.Name())
 		err = ctrl.Write(getSampleConfig())
 		assert.NoError(t, err)
-		contents, err := ioutil.ReadFile(f.Name())
+		contents, err := os.ReadFile(f.Name())
 		assert.NoError(t, err)
 		var config entity.Config
 		err = yaml.Unmarshal(contents, &config)

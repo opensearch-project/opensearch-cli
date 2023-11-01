@@ -15,7 +15,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"opensearch-cli/client"
 	"opensearch-cli/entity"
@@ -40,10 +40,10 @@ type CLISuite struct {
 	Plugins []string
 }
 
-//HelperLoadBytes loads file from testdata and stream contents
+// HelperLoadBytes loads file from testdata and stream contents
 func HelperLoadBytes(name string) []byte {
 	path := filepath.Join("testdata", name) // relative path
-	contents, err := ioutil.ReadFile(path)
+	contents, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -74,7 +74,7 @@ func (a *CLISuite) ValidateProfile() error {
 	return nil
 }
 
-//CreateIndex creates test data for plugin processing
+// CreateIndex creates test data for plugin processing
 func (a *CLISuite) CreateIndex(indexFileName string, mappingFileName string) {
 	if mappingFileName != "" {
 		mapping, err := a.callRequest(
@@ -116,7 +116,7 @@ func (a *CLISuite) callRequest(method string, reqBytes []byte, url string) ([]by
 			return
 		}
 	}()
-	return ioutil.ReadAll(response.Body)
+	return io.ReadAll(response.Body)
 }
 
 // isPluginInstalled checks whether dependent plugins are insalled or not
