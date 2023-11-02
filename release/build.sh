@@ -24,7 +24,7 @@ echo 'setting cli version'
 export VERSION="1.2.0"
 
 echo 'Generating artifacts'
-goreleaser --snapshot --skip-publish --rm-dist
+goreleaser --snapshot --skip-publish --clean
 
 # goreleaser generates folder and binary too. Remove unwanted files to keep only
 # relevant files inside dist folder

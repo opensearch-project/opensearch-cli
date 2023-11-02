@@ -33,11 +33,15 @@ builds:
         goarch: 386
 archives:
   -
-    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    replacements:
-      darwin: macos
-      386: x86
-      amd64: x64
+    name_template: >-
+      {{- .ProjectName }}-
+      {{- .Version }}-
+      {{- .Os }}-
+      {{- if eq .Arch "amd64" }}x64
+      {{- else if eq .Arch "386" }}x86
+      {{- else if eq .Arch "darwin" }}macos
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end -}}
     files:
       - none*
     format_overrides:
