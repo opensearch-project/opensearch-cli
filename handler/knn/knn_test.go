@@ -18,8 +18,8 @@ import (
 	entity "opensearch-cli/entity/knn"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
 
 func TestHandlerGetStatistics(t *testing.T) {

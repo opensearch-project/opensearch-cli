@@ -17,7 +17,7 @@ import (
 	entity "opensearch-cli/entity/platform"
 )
 
-//Handler is facade for controller
+// Handler is facade for controller
 type Handler struct {
 	platform.Controller
 }
@@ -29,12 +29,12 @@ func New(controller platform.Controller) *Handler {
 	}
 }
 
-//Curl executes REST API as defined by curl command
+// Curl executes REST API as defined by curl command
 func Curl(h *Handler, request entity.CurlCommandRequest) ([]byte, error) {
 	return h.Curl(request)
 }
 
-//Curl executes REST API as defined by curl command
+// Curl executes REST API as defined by curl command
 func (h *Handler) Curl(request entity.CurlCommandRequest) ([]byte, error) {
 	ctx := context.Background()
 	return h.Controller.Curl(ctx, request)

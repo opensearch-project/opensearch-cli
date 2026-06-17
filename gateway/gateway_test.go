@@ -77,7 +77,7 @@ func TestGatewayRetryVal(t *testing.T) {
 		defer func() {
 			assert.NoError(t, os.Setenv(environment.OPENSEARCH_MAX_RETRY, val))
 		}()
-		os.Setenv(environment.OPENSEARCH_MAX_RETRY, "10")
+		_ = os.Setenv(environment.OPENSEARCH_MAX_RETRY, "10")
 		valAttempt := 2
 		profile := entity.Profile{
 			Name:     "test1",
@@ -120,7 +120,7 @@ func TestGatewayConnectionTimeout(t *testing.T) {
 		defer func() {
 			assert.NoError(t, os.Setenv(environment.OPENSEARCH_TIMEOUT, val))
 		}()
-		os.Setenv(environment.OPENSEARCH_TIMEOUT, "5")
+		_ = os.Setenv(environment.OPENSEARCH_TIMEOUT, "5")
 		timeout := int64(60)
 		profile := entity.Profile{
 			Name:     "test1",

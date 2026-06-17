@@ -11,7 +11,7 @@
 
 package entity
 
-//Config represents config file structure
+// Config represents config file structure
 type Config struct {
 	Profiles []Profile `yaml:"profiles"`
 }

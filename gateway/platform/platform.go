@@ -26,7 +26,7 @@ import (
 
 const search = "_search"
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_platform.go -package=mocks . Gateway
+//go:generate go run -mod=mod go.uber.org/mock/mockgen  -destination=mocks/mock_platform.go -package=mocks . Gateway
 
 // Gateway interface to call OpenSearch
 type Gateway interface {

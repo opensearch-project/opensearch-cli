@@ -27,7 +27,7 @@ const (
 	adCommandName = "ad"
 )
 
-//adCommand is base command for Anomaly Detection plugin.
+// adCommand is base command for Anomaly Detection plugin.
 var adCommand = &cobra.Command{
 	Use:   adCommandName,
 	Short: "Manage the Anomaly Detection plugin",
@@ -39,13 +39,13 @@ func init() {
 	GetRoot().AddCommand(adCommand)
 }
 
-//GetADCommand returns AD base command, since this will be needed for subcommands
-//to add as parent later
+// GetADCommand returns AD base command, since this will be needed for subcommands
+// to add as parent later
 func GetADCommand() *cobra.Command {
 	return adCommand
 }
 
-//GetADHandler returns handler by wiring the dependency manually
+// GetADHandler returns handler by wiring the dependency manually
 func GetADHandler() (*handler.Handler, error) {
 	c, err := client.New(nil)
 	if err != nil {

@@ -1,6 +1,5 @@
 # Copied from https://github.com/opensearch-project/opensearch-build/blob/main/release/docker/dockercomposefiles/docker-compose.yml
 # removed node-2 and dashboard since we don't need to create two node cluster for integration test
-version: '3'
 services:
   test-node1:
     image: opensearchproject/opensearch:${OPENSEARCH_VERSION:-latest}
@@ -12,6 +11,7 @@ services:
       - cluster.initial_master_nodes=test-node1
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=MyStr0ngP@ssw0rd!
     ulimits:
       memlock:
         soft: -1

@@ -29,7 +29,7 @@ import (
 	"strings"
 	"testing"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -37,7 +37,7 @@ import (
 
 const GetBulkIndexName = "bulk-user-request"
 
-//OpenSearchTestSuite suite tests OpenSearch REST API REQUESTS
+// OpenSearchTestSuite suite tests OpenSearch REST API REQUESTS
 type OpenSearchTestSuite struct {
 	it.CLISuite
 	Gateway    gateway.Gateway
@@ -48,7 +48,7 @@ type result struct {
 	Source map[string]interface{} `json:"_source"`
 }
 
-//SetupSuite runs once for every test suite
+// SetupSuite runs once for every test suite
 func (a *OpenSearchTestSuite) SetupSuite() {
 	var err error
 	a.Client, err = client.New(nil)

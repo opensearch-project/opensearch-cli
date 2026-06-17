@@ -72,7 +72,7 @@ var completionCmd = &cobra.Command{
 	Long:                  longText,
 	DisableFlagsInUseLine: true,
 	ValidArgs:             []string{BashShell, ZshShell, FishShell, PowerShell},
-	Args:                  cobra.ExactValidArgs(1),
+	Args:                  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 	Run: func(cmd *cobra.Command, args []string) {
 		var err error
 		switch args[0] {

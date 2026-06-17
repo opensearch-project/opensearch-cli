@@ -24,8 +24,8 @@ const (
 	idFlagName                = "id"
 )
 
-//startDetectorsCmd start detectors based on id, name or name regex pattern.
-//default input is name pattern, one can change this format to be id by passing --id flag
+// startDetectorsCmd start detectors based on id, name or name regex pattern.
+// default input is name pattern, one can change this format to be id by passing --id flag
 var startDetectorsCmd = &cobra.Command{
 	Use:   startDetectorsCommandName + " detector_name ..." + " [flags] ",
 	Short: "Start detectors based on a list of IDs, names, or name regex patterns",
@@ -44,8 +44,8 @@ var startDetectorsCmd = &cobra.Command{
 	},
 }
 
-//stopDetectorsCmd stops detectors based on id and name pattern.
-//default input is name pattern, one can change this format to be id by passing --id flag
+// stopDetectorsCmd stops detectors based on id and name pattern.
+// default input is name pattern, one can change this format to be id by passing --id flag
 var stopDetectorsCmd = &cobra.Command{
 	Use:   stopDetectorsCommandName + " detector_name ..." + " [flags] ",
 	Short: "Stop detectors based on a list of IDs, names, or name regex patterns",

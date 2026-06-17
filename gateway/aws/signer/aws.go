@@ -17,9 +17,9 @@ import (
 	"opensearch-cli/entity"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/session"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go/aws/credentials"  //nolint:staticcheck // TODO: migrate to aws-sdk-go-v2
+	"github.com/aws/aws-sdk-go/aws/session"      //nolint:staticcheck // TODO: migrate to aws-sdk-go-v2
+	v4 "github.com/aws/aws-sdk-go/aws/signer/v4" //nolint:staticcheck // TODO: migrate to aws-sdk-go-v2
 	"github.com/hashicorp/go-retryablehttp"
 )
 
@@ -39,7 +39,7 @@ func sign(req *retryablehttp.Request, region *string, serviceName string, signer
 	return err
 }
 
-//SignRequest signs the request using SigV4
+// SignRequest signs the request using SigV4
 func SignRequest(req *retryablehttp.Request, awsProfile entity.AWSIAM, getSigner func(*credentials.Credentials) *v4.Signer) error {
 	awsSession, err := session.NewSessionWithOptions(session.Options{
 		Profile:           awsProfile.ProfileName,

@@ -26,7 +26,7 @@ func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req), nil
 }
 
-//NewTestClient returns *http.Client with Transport replaced to avoid making real calls
+// NewTestClient returns *http.Client with Transport replaced to avoid making real calls
 func NewTestClient(fn RoundTripFunc) *client.Client {
 	c, err := client.New(fn)
 	if err != nil {

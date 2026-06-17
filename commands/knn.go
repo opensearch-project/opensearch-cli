@@ -29,14 +29,14 @@ const (
 	knnStatsNamesFlagName = "stat-names"
 )
 
-//knnCommand is base command for k-NN plugin.
+// knnCommand is base command for k-NN plugin.
 var knnCommand = &cobra.Command{
 	Use:   knnCommandName,
 	Short: "Manage the k-NN plugin",
 	Long:  "Use the k-NN commands to perform operations like stats, warmup.",
 }
 
-//knnStatsCommandName provide stats command for k-NN plugin.
+// knnStatsCommandName provide stats command for k-NN plugin.
 var knnStatsCommand = &cobra.Command{
 	Use:   knnStatsCommandName,
 	Short: "Display current status of the k-NN Plugin",
@@ -62,7 +62,7 @@ var knnStatsCommand = &cobra.Command{
 	},
 }
 
-//knnWarmupCommand warmups shards
+// knnWarmupCommand warmups shards
 var knnWarmupCommand = &cobra.Command{
 	Use:   knnWarmupCommandName + " index ..." + " [flags] ",
 	Args:  cobra.MinimumNArgs(1),
@@ -129,7 +129,7 @@ func warmupIndices(h *handler.Handler, index []string) error {
 	return nil
 }
 
-//GetKNNHandler returns handler by wiring the dependency manually
+// GetKNNHandler returns handler by wiring the dependency manually
 func GetKNNHandler() (*handler.Handler, error) {
 	c, err := client.New(nil)
 	if err != nil {

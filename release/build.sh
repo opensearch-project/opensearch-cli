@@ -21,7 +21,7 @@ cd $GIT_ROOT # We need to start from repository root
 #####################################################
 
 echo 'setting cli version'
-export VERSION="1.2.0"
+export VERSION="1.3.0"
 
 echo 'Generating artifacts'
 goreleaser --snapshot --skip-publish --clean

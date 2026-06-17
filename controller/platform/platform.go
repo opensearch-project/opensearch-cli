@@ -21,9 +21,9 @@ import (
 	"fmt"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_platform.go -package=mocks . Controller
+//go:generate go run -mod=mod go.uber.org/mock/mockgen  -destination=mocks/mock_platform.go -package=mocks . Controller
 
-//Controller is an interface for OpenSearch
+// Controller is an interface for OpenSearch
 type Controller interface {
 	GetDistinctValues(ctx context.Context, index string, field string) ([]interface{}, error)
 	Curl(ctx context.Context, param platform.CurlCommandRequest) ([]byte, error)
@@ -33,14 +33,14 @@ type controller struct {
 	gateway osg.Gateway
 }
 
-//New returns new instance of Controller
+// New returns new instance of Controller
 func New(gateway osg.Gateway) Controller {
 	return &controller{
 		gateway,
 	}
 }
 
-//GetDistinctValues get only unique values for given index, given field name
+// GetDistinctValues get only unique values for given index, given field name
 func (c controller) GetDistinctValues(ctx context.Context, index string, field string) ([]interface{}, error) {
 	if len(index) == 0 || len(field) == 0 {
 		return nil, fmt.Errorf("index and field cannot be empty")
@@ -62,7 +62,7 @@ func (c controller) GetDistinctValues(ctx context.Context, index string, field s
 	return values, nil
 }
 
-//Curl accept user request and convert to format which OpenSearch can understand
+// Curl accept user request and convert to format which OpenSearch can understand
 func (c controller) Curl(ctx context.Context, param platform.CurlCommandRequest) ([]byte, error) {
 	curlRequest, err := mapper.CommandToCurlRequestParameter(param)
 	if err != nil {

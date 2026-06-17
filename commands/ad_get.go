@@ -27,8 +27,8 @@ const (
 	getDetectorIDFlagName   = "id"
 )
 
-//getDetectorsCmd prints detectors configuration based on id, name or name regex pattern.
-//default input is name pattern, one can change this format to be id by passing --id flag
+// getDetectorsCmd prints detectors configuration based on id, name or name regex pattern.
+// default input is name pattern, one can change this format to be id by passing --id flag
 var getDetectorsCmd = &cobra.Command{
 	Use:   getDetectorsCommandName + " detector_name ..." + " [flags] ",
 	Short: "Get detectors based on a list of IDs, names, or name regex patterns",
@@ -45,7 +45,7 @@ var getDetectorsCmd = &cobra.Command{
 
 type Display func(*cobra.Command, *entity.DetectorOutput) error
 
-//printDetectors print detectors
+// printDetectors print detectors
 func printDetectors(display Display, cmd *cobra.Command, detectors []string) error {
 	idStatus, _ := cmd.Flags().GetBool(getDetectorIDFlagName)
 	commandHandler, err := GetADHandler()
@@ -64,7 +64,7 @@ func printDetectors(display Display, cmd *cobra.Command, detectors []string) err
 	return fprint(cmd, display, results)
 }
 
-//getDetectors fetch detector from controller
+// getDetectors fetch detector from controller
 func getDetectors(
 	commandHandler *ad.Handler, args []string, get func(*ad.Handler, string) (
 		[]*entity.DetectorOutput, error)) ([]*entity.DetectorOutput, error) {
@@ -79,7 +79,7 @@ func getDetectors(
 	return results, nil
 }
 
-//getDetectorsByID gets detector output based on ID as argument
+// getDetectorsByID gets detector output based on ID as argument
 func getDetectorsByID(commandHandler *ad.Handler, ID string) ([]*entity.DetectorOutput, error) {
 
 	output, err := ad.GetAnomalyDetectorByID(commandHandler, ID)
@@ -89,7 +89,7 @@ func getDetectorsByID(commandHandler *ad.Handler, ID string) ([]*entity.Detector
 	return []*entity.DetectorOutput{output}, nil
 }
 
-//fprint displays the list of detectors.
+// fprint displays the list of detectors.
 func fprint(cmd *cobra.Command, display Display, results []*entity.DetectorOutput) error {
 	if results == nil {
 		return nil
@@ -102,8 +102,8 @@ func fprint(cmd *cobra.Command, display Display, results []*entity.DetectorOutpu
 	return nil
 }
 
-//FPrint prints detector configuration on writer
-//Since this is json format, use indent function to pretty print before printing on writer
+// FPrint prints detector configuration on writer
+// Since this is json format, use indent function to pretty print before printing on writer
 func FPrint(writer io.Writer, d *entity.DetectorOutput) error {
 	formattedOutput, err := json.MarshalIndent(d, "", "  ")
 	if err != nil {
@@ -113,7 +113,7 @@ func FPrint(writer io.Writer, d *entity.DetectorOutput) error {
 	return err
 }
 
-//Println prints detector configuration on stdout
+// Println prints detector configuration on stdout
 func Println(cmd *cobra.Command, d *entity.DetectorOutput) error {
 	return FPrint(os.Stdout, d)
 }

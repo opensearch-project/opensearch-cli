@@ -23,8 +23,8 @@ const (
 	generate                   = "generate-template"
 )
 
-//createCmd creates detectors with configuration from input file, if interactive mode is on,
-//this command will prompt for confirmation on number of detectors will be created on executions.
+// createCmd creates detectors with configuration from input file, if interactive mode is on,
+// this command will prompt for confirmation on number of detectors will be created on executions.
 var createCmd = &cobra.Command{
 	Use:   createDetectorsCommandName + " json-file-path ...",
 	Short: "Create detectors based on JSON files",
@@ -46,7 +46,7 @@ var createCmd = &cobra.Command{
 	},
 }
 
-//generateTemplate prints sample detector configuration
+// generateTemplate prints sample detector configuration
 func generateTemplate() {
 	detector, _ := handler.GenerateAnomalyDetector()
 	fmt.Println(string(detector))
@@ -59,7 +59,7 @@ func init() {
 
 }
 
-//createDetectors create detectors based on configurations from fileNames
+// createDetectors create detectors based on configurations from fileNames
 func createDetectors(fileNames []string) error {
 
 	commandHandler, err := GetADHandler()

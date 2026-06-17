@@ -18,7 +18,7 @@ import (
 	entity "opensearch-cli/entity/knn"
 )
 
-//Handler is facade for controller
+// Handler is facade for controller
 type Handler struct {
 	knn.Controller
 }
@@ -30,12 +30,12 @@ func New(controller knn.Controller) *Handler {
 	}
 }
 
-//GetStatistics gets stats data based on nodes and stat names
+// GetStatistics gets stats data based on nodes and stat names
 func GetStatistics(h *Handler, nodes string, names string) ([]byte, error) {
 	return h.GetStatistics(nodes, names)
 }
 
-//GetStatistics gets stats data based on nodes and stat names
+// GetStatistics gets stats data based on nodes and stat names
 func (h *Handler) GetStatistics(nodes string, names string) ([]byte, error) {
 	ctx := context.Background()
 	response, err := h.Controller.GetStatistics(ctx, nodes, names)
@@ -50,12 +50,12 @@ func (h *Handler) GetStatistics(nodes string, names string) ([]byte, error) {
 	return json.MarshalIndent(data, "", "  ")
 }
 
-//WarmupIndices warmups knn index
+// WarmupIndices warmups knn index
 func WarmupIndices(h *Handler, index []string) (*entity.Shards, error) {
 	return h.WarmupIndices(index)
 }
 
-//WarmupIndices warmups shard based on knn index and returns status of shards
+// WarmupIndices warmups shard based on knn index and returns status of shards
 func (h *Handler) WarmupIndices(index []string) (*entity.Shards, error) {
 	ctx := context.Background()
 	return h.Controller.WarmupIndices(ctx, index)

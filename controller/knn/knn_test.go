@@ -19,8 +19,8 @@ import (
 	gateway "opensearch-cli/gateway/knn/mocks"
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/mock/gomock"
 )
 
 func TestControllerGetStatistics(t *testing.T) {

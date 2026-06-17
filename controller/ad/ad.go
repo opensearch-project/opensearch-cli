@@ -28,9 +28,9 @@ import (
 	"github.com/cheggaaa/pb/v3"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen -destination=mocks/mock_ad.go -package=mocks . Controller
+//go:generate go run -mod=mod go.uber.org/mock/mockgen -destination=mocks/mock_ad.go -package=mocks . Controller
 
-//Controller is an interface for the AD plugin controllers
+// Controller is an interface for the AD plugin controllers
 type Controller interface {
 	StartDetector(context.Context, string) error
 	StopDetector(context.Context, string) error
@@ -52,7 +52,7 @@ type controller struct {
 	openSearch platform.Controller
 }
 
-//New returns new Controller instance
+// New returns new Controller instance
 func New(reader io.Reader, openSearch platform.Controller, gateway ad.Gateway) Controller {
 	return &controller{
 		reader,
@@ -77,7 +77,7 @@ func validateCreateRequest(r entity.CreateDetectorRequest) error {
 	return nil
 }
 
-//StartDetector start detector based on DetectorID
+// StartDetector start detector based on DetectorID
 func (c controller) StartDetector(ctx context.Context, ID string) error {
 	if len(ID) < 1 {
 		return fmt.Errorf("detector Id: %s cannot be empty", ID)
@@ -89,7 +89,7 @@ func (c controller) StartDetector(ctx context.Context, ID string) error {
 	return nil
 }
 
-//StopDetector stops detector based on DetectorID
+// StopDetector stops detector based on DetectorID
 func (c controller) StopDetector(ctx context.Context, ID string) error {
 	if len(ID) < 1 {
 		return fmt.Errorf("detector Id: %s cannot be empty", ID)
@@ -128,7 +128,7 @@ func (c controller) askForConfirmation(message *string) bool {
 	}
 }
 
-//DeleteDetector deletes detector based on DetectorID, if force is enabled, it stops before deletes
+// DeleteDetector deletes detector based on DetectorID, if force is enabled, it stops before deletes
 func (c controller) DeleteDetector(ctx context.Context, id string, interactive bool, force bool) error {
 	if len(id) < 1 {
 		return fmt.Errorf("detector Id cannot be empty")
@@ -164,7 +164,7 @@ func (c controller) DeleteDetector(ctx context.Context, id string, interactive b
 	return nil
 }
 
-//GetDetector fetch detector based on DetectorID
+// GetDetector fetch detector based on DetectorID
 func (c controller) GetDetector(ctx context.Context, ID string) (*entity.DetectorOutput, error) {
 	if len(ID) < 1 {
 		return nil, fmt.Errorf("detector Id: %s cannot be empty", ID)
@@ -194,7 +194,7 @@ func processEntityError(err error) error {
 	return err
 }
 
-//CreateAnomalyDetector creates detector based on user request
+// CreateAnomalyDetector creates detector based on user request
 func (c controller) CreateAnomalyDetector(ctx context.Context, r entity.CreateDetectorRequest) (*string, error) {
 
 	if err := validateCreateRequest(r); err != nil {
@@ -256,7 +256,7 @@ func getFilterValues(ctx context.Context, request entity.CreateDetectorRequest, 
 	return filterValues, nil
 }
 
-//createProgressBar creates progress bar with suffix as counter and number of action completed, prefix as percentage
+// createProgressBar creates progress bar with suffix as counter and number of action completed, prefix as percentage
 func createProgressBar(total int) *pb.ProgressBar {
 	template := `{{string . "prefix"}}{{percent . }} {{bar . "[" "=" ">" "_" "]" }} {{counters . }}{{string . "suffix"}}`
 	bar := pb.New(total)
@@ -290,7 +290,7 @@ func buildCompoundQuery(field string, value interface{}, userFilter json.RawMess
 	return marshal
 }
 
-//CreateMultiEntityAnomalyDetector creates multiple entity detector based on partition_by field
+// CreateMultiEntityAnomalyDetector creates multiple entity detector based on partition_by field
 func (c controller) CreateMultiEntityAnomalyDetector(ctx context.Context, request entity.CreateDetectorRequest, interactive bool, display bool) ([]string, error) {
 	if request.PartitionField == nil || len(*request.PartitionField) < 1 {
 		result, err := c.CreateAnomalyDetector(ctx, request)
@@ -355,7 +355,7 @@ func (c controller) CreateMultiEntityAnomalyDetector(ctx context.Context, reques
 	return detectors, nil
 }
 
-//SearchDetectorByName searches detector based on name
+// SearchDetectorByName searches detector based on name
 func (c controller) SearchDetectorByName(ctx context.Context, name string) ([]entity.Detector, error) {
 	if len(name) < 1 {
 		return nil, fmt.Errorf("detector name cannot be empty")
@@ -378,7 +378,7 @@ func (c controller) SearchDetectorByName(ctx context.Context, name string) ([]en
 	return detectors, nil
 }
 
-//getDetectors expand pattern to fetch list of matched detectors and return detectors accepted by user
+// getDetectors expand pattern to fetch list of matched detectors and return detectors accepted by user
 // for process
 func (c controller) getDetectors(ctx context.Context, method string, pattern string, warning bool) ([]entity.Detector, error) {
 	if len(pattern) < 1 {
@@ -448,19 +448,19 @@ func (c controller) processDetectorByAction(ctx context.Context, pattern string,
 	return nil
 }
 
-//StartDetectorByName starts detector based on name pattern. It first calls SearchDetectorByName and then
+// StartDetectorByName starts detector based on name pattern. It first calls SearchDetectorByName and then
 // gets lists of detectorId and call StartDetector to start individual detectors
 func (c controller) StartDetectorByName(ctx context.Context, pattern string, display bool) error {
 	return c.processDetectorByAction(ctx, pattern, "start", c.StartDetector, display, true)
 }
 
-//StopDetectorByName stops detector based on name pattern. It first calls SearchDetectorByName and then
+// StopDetectorByName stops detector based on name pattern. It first calls SearchDetectorByName and then
 // gets lists of detectorId and call StopDetector to stop individual detectors
 func (c controller) StopDetectorByName(ctx context.Context, pattern string, display bool) error {
 	return c.processDetectorByAction(ctx, pattern, "stop", c.StopDetector, display, true)
 }
 
-//DeleteDetectorByName deletes detector based on name pattern. It first calls SearchDetectorByName and then
+// DeleteDetectorByName deletes detector based on name pattern. It first calls SearchDetectorByName and then
 // gets lists of detectorId and call DeleteDetector to delete individual detectors
 func (c controller) DeleteDetectorByName(ctx context.Context, name string, force bool, display bool) error {
 	matchedDetectors, err := c.getDetectors(ctx, "delete", name, true)
@@ -497,7 +497,7 @@ func (c controller) DeleteDetectorByName(ctx context.Context, name string, force
 	return nil
 }
 
-//GetDetectorsByName get detector based on name pattern. It first calls SearchDetectorByName and then
+// GetDetectorsByName get detector based on name pattern. It first calls SearchDetectorByName and then
 // gets lists of detectorId and call GetDetector to get individual detector configuration
 func (c controller) GetDetectorsByName(ctx context.Context, pattern string, display bool) ([]*entity.DetectorOutput, error) {
 	matchedDetectors, err := c.getDetectors(ctx, "fetch", pattern, false)
@@ -528,7 +528,7 @@ func (c controller) GetDetectorsByName(ctx context.Context, pattern string, disp
 	return output, nil
 }
 
-//UpdateDetector updates detector based on DetectorID, if force is enabled, it overrides without checking whether
+// UpdateDetector updates detector based on DetectorID, if force is enabled, it overrides without checking whether
 // user downloaded latest version before updating it, if start is true, detector will be started after update
 func (c controller) UpdateDetector(ctx context.Context, input entity.UpdateDetectorUserInput, force bool, start bool) error {
 	if len(input.ID) < 1 {

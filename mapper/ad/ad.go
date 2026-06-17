@@ -130,7 +130,7 @@ func mapIntervalToStringPtr(request ad.Interval) (*string, error) {
 	return mapper.StringToStringPtr(fmt.Sprintf("%d%s", duration, *unit)), nil
 }
 
-//MapToCreateDetector maps to CreateDetector
+// MapToCreateDetector maps to CreateDetector
 func MapToCreateDetector(request ad.CreateDetectorRequest) (*ad.CreateDetector, error) {
 
 	var features []ad.Feature
@@ -177,7 +177,7 @@ func validateFeatureLimit(features []ad.FeatureRequest) error {
 	return nil
 }
 
-//MapToDetectors maps response to detectors
+// MapToDetectors maps response to detectors
 func MapToDetectors(searchResponse []byte, name string) ([]ad.Detector, error) {
 	var data ad.SearchResponse
 	err := json.Unmarshal(searchResponse, &data)

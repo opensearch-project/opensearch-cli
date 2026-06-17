@@ -23,7 +23,7 @@ const (
 	startFlagName              = "start"
 )
 
-//updateDetectorsCmd updates detectors with configuration from input file
+// updateDetectorsCmd updates detectors with configuration from input file
 var updateDetectorsCmd = &cobra.Command{
 	Use:   updateDetectorsCommandName + " json-file-path ... [flags]",
 	Short: "Update detectors based on JSON files",

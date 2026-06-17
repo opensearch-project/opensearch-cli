@@ -23,8 +23,8 @@ const (
 	detectorForceDeletionFlagName = "force"
 )
 
-//deleteDetectorsCmd deletes detectors based on id, name or name regex pattern.
-//default input is name pattern, one can change this format to be id by passing --id flag
+// deleteDetectorsCmd deletes detectors based on id, name or name regex pattern.
+// default input is name pattern, one can change this format to be id by passing --id flag
 var deleteDetectorsCmd = &cobra.Command{
 	Use:   deleteDetectorsCommandName + " detector_name ..." + " [flags] ",
 	Short: "Delete detectors based on a list of IDs, names, or name regex patterns",
@@ -51,7 +51,7 @@ func init() {
 	deleteDetectorsCmd.Flags().BoolP("help", "h", false, "Help for "+deleteDetectorsCommandName)
 }
 
-//deleteDetectors deletes detectors with force by calling delete method provided
+// deleteDetectors deletes detectors with force by calling delete method provided
 func deleteDetectors(detectors []string, force bool, f func(*handler.Handler, string, bool) error) error {
 	commandHandler, err := GetADHandler()
 	if err != nil {

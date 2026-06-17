@@ -17,8 +17,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go/aws/credentials"  //nolint:staticcheck // TODO: migrate to aws-sdk-go-v2
+	v4 "github.com/aws/aws-sdk-go/aws/signer/v4" //nolint:staticcheck // TODO: migrate to aws-sdk-go-v2
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/stretchr/testify/assert"
 )
@@ -33,9 +33,9 @@ func TestV4Signer(t *testing.T) {
 	t.Run("sign request success", func(t *testing.T) {
 		req, _ := retryablehttp.NewRequest(http.MethodGet, "https://localhost:9200", nil)
 		region := os.Getenv("AWS_REGION")
-		os.Setenv("AWS_REGION", "us-west-2")
+		_ = os.Setenv("AWS_REGION", "us-west-2")
 		defer func() {
-			os.Setenv("AWS_REGION", region)
+			_ = os.Setenv("AWS_REGION", region)
 		}()
 		err := SignRequest(req, entity.AWSIAM{
 			ProfileName: "test1",
@@ -51,9 +51,9 @@ func TestV4Signer(t *testing.T) {
 	t.Run("sign request failed due to no region found", func(t *testing.T) {
 		req, _ := retryablehttp.NewRequest(http.MethodGet, "https://localhost:9200", nil)
 		region := os.Getenv("AWS_REGION")
-		os.Setenv("AWS_REGION", "")
+		_ = os.Setenv("AWS_REGION", "")
 		defer func() {
-			os.Setenv("AWS_REGION", region)
+			_ = os.Setenv("AWS_REGION", region)
 		}()
 		err := SignRequest(req, entity.AWSIAM{
 			ProfileName: "test1",

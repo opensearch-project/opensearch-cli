@@ -37,14 +37,14 @@ const (
 	KnnSampleIndexMappingFileName = "knn-sample-index-mapping"
 )
 
-//KNNTestSuite suite specific to k-NN plugin
+// KNNTestSuite suite specific to k-NN plugin
 type KNNTestSuite struct {
 	CLISuite
 	Gateway    gateway.Gateway
 	Controller ctrl.Controller
 }
 
-//SetupSuite runs once for every test suite
+// SetupSuite runs once for every test suite
 func (a *KNNTestSuite) SetupSuite() {
 	var err error
 	a.Client, err = client.New(nil)
@@ -71,7 +71,7 @@ func (a *KNNTestSuite) TearDownSuite() {
 	a.DeleteIndex(KNNSampleIndexFileName)
 }
 
-//GetNodesIDUsingRESTAPI helper to get node id using rest api
+// GetNodesIDUsingRESTAPI helper to get node id using rest api
 func (a *KNNTestSuite) GetNodesIDUsingRESTAPI(t *testing.T) string {
 	indexURL := fmt.Sprintf("%s/_cat/nodes?full_id=true&h=id", a.Profile.Endpoint)
 	response, err := a.callRequest(http.MethodGet, []byte(""), indexURL)

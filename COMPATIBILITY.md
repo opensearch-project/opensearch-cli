@@ -3,8 +3,9 @@
 
 The below matrix shows the compatibility of the [`opensearch-cli`](https://github.com/opensearch-project/opensearch-cli/releases) with versions of [`OpenSearch`](https://opensearch.org/downloads.html#opensearch).
 
-| OpenSearch CLI  | OpenSearch      |
-| -------------   | --------------- |
-| 1.0.0           | 1.0.0           |
-| 1.1.0           | 1.x             |
-| 1.1.0           | 2.x             |
+| OpenSearch CLI | OpenSearch |
+|----------------|------------|
+| 1.0.0          | 1.0.0      |
+| 1.1.0          | 1.x, 2.x   |
+| 1.2.0          | 2.x        |
+| 1.3.0          | 2.x, 3.x   |

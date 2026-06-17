@@ -41,7 +41,7 @@ const (
 	EcommerceIndexMappingFileName = "ecommerce-mapping"
 )
 
-//ADTestSuite suite specific to AD plugin
+// ADTestSuite suite specific to AD plugin
 type ADTestSuite struct {
 	CLISuite
 	DetectorRequest adentity.CreateDetectorRequest
@@ -62,7 +62,7 @@ func getRawFeatureAggregation() []byte {
 	}`)
 }
 
-//SetupSuite runs once for every test suite
+// SetupSuite runs once for every test suite
 func (a *ADTestSuite) SetupSuite() {
 	var err error
 	a.Plugins = append(a.Plugins, "opensearch-anomaly-detection")
@@ -144,7 +144,7 @@ func (a *ADTestSuite) AfterTest(suiteName, testName string) {
 	}
 }
 
-//DeleteDetectorUsingRESTAPI helper to delete detector using rest api
+// DeleteDetectorUsingRESTAPI helper to delete detector using rest api
 func (a *ADTestSuite) DeleteDetectorUsingRESTAPI(t *testing.T, ID string) {
 	indexURL := fmt.Sprintf("%s/_plugins/_anomaly_detection/detectors/%s", a.Profile.Endpoint, ID)
 	_, err := a.callRequest(http.MethodDelete, []byte(""), indexURL)
@@ -153,7 +153,7 @@ func (a *ADTestSuite) DeleteDetectorUsingRESTAPI(t *testing.T, ID string) {
 	}
 }
 
-//StartDetectorUsingRESTAPI helper to start detector using rest api
+// StartDetectorUsingRESTAPI helper to start detector using rest api
 func (a *ADTestSuite) StartDetectorUsingRESTAPI(t *testing.T, ID string) {
 	if ID == "" {
 		t.Fatal("Detector ID cannot be empty")
@@ -165,7 +165,7 @@ func (a *ADTestSuite) StartDetectorUsingRESTAPI(t *testing.T, ID string) {
 	}
 }
 
-//StopDetectorUsingRESTAPI helper to stop detector using rest api
+// StopDetectorUsingRESTAPI helper to stop detector using rest api
 func (a *ADTestSuite) StopDetectorUsingRESTAPI(t *testing.T, ID string) {
 	if ID == "" {
 		t.Fatal("Detector ID cannot be empty")
@@ -177,7 +177,7 @@ func (a *ADTestSuite) StopDetectorUsingRESTAPI(t *testing.T, ID string) {
 	}
 }
 
-//CreateDetectorUsingRESTAPI helper to create detector using rest api
+// CreateDetectorUsingRESTAPI helper to create detector using rest api
 func (a *ADTestSuite) CreateDetectorUsingRESTAPI(t *testing.T) {
 	indexURL := fmt.Sprintf("%s/_plugins/_anomaly_detection/detectors", a.Profile.Endpoint)
 	reqBytes, err := json.Marshal(a.Detector)

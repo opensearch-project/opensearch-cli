@@ -21,12 +21,12 @@ import (
 
 const defaultTimeout = 10
 
-//Client is an Abstraction for actual client
+// Client is an Abstraction for actual client
 type Client struct {
 	HTTPClient *retryablehttp.Client
 }
 
-//NewDefaultClient return new instance of client
+// NewDefaultClient return new instance of client
 func NewDefaultClient(tripper http.RoundTripper) (*Client, error) {
 
 	client := retryablehttp.NewClient()
@@ -38,7 +38,7 @@ func NewDefaultClient(tripper http.RoundTripper) (*Client, error) {
 	}, nil
 }
 
-//New takes transport and uses accordingly
+// New takes transport and uses accordingly
 func New(tripper http.RoundTripper) (*Client, error) {
 	if tripper == nil {
 		tripper = &http.Transport{

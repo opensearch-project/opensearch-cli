@@ -28,7 +28,7 @@ const (
 	flagProfileName       = "profile"
 	ConfigEnvVarName      = "OPENSEARCH_CLI_CONFIG"
 	RootCommandName       = "opensearch-cli"
-	version               = "1.2.0"
+	version               = "1.3.0"
 )
 
 func buildVersionString() string {
@@ -94,8 +94,8 @@ func GetConfigFilePath(configFlagValue string) (string, error) {
 	return GetDefaultConfigFilePath(), nil
 }
 
-//isExists check if given path exists or not
-//if path is just a name, it will check in current directory
+// isExists check if given path exists or not
+// if path is just a name, it will check in current directory
 func isExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return false

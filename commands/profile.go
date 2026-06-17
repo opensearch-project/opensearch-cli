@@ -44,7 +44,7 @@ const (
 	FlagProfileHelp             = "help"
 )
 
-//GetProfileController gets controller based on config file
+// GetProfileController gets controller based on config file
 func GetProfileController() (profile.Controller, error) {
 	cfgFile, err := GetRoot().Flags().GetString(flagConfig)
 	if err != nil {
@@ -53,7 +53,7 @@ func GetProfileController() (profile.Controller, error) {
 	return getProfileController(cfgFile)
 }
 
-//profileCommand is main command for profile operations like list, create and delete
+// profileCommand is main command for profile operations like list, create and delete
 var profileCommand = &cobra.Command{
 	Use:   ProfileCommandName + " sub-command",
 	Short: "Manage a collection of settings and credentials that you can apply to an opensearch-cli command",
@@ -64,7 +64,7 @@ var profileCommand = &cobra.Command{
 		"variable (`" + environment.OPENSEARCH_PROFILE + "`) or create a profile named `default`.",
 }
 
-//createProfileCmd creates profile interactively by prompting for name (distinct), user, endpoint, password.
+// createProfileCmd creates profile interactively by prompting for name (distinct), user, endpoint, password.
 var createProfileCmd = &cobra.Command{
 	Use:   CreateNewProfileCommandName,
 	Short: "Create profile",
@@ -119,7 +119,7 @@ func getProfileName(cmd *cobra.Command, controller profile.Controller) (string, 
 	return name, nil
 }
 
-//deleteProfilesCmd deletes profiles by names
+// deleteProfilesCmd deletes profiles by names
 var deleteProfilesCmd = &cobra.Command{
 	Use:   DeleteProfilesCommandName + " profile_name ...",
 	Short: "Delete profiles by names",
@@ -134,7 +134,7 @@ var deleteProfilesCmd = &cobra.Command{
 	},
 }
 
-//listProfileCmd lists profiles by names
+// listProfileCmd lists profiles by names
 var listProfileCmd = &cobra.Command{
 	Use:   ListProfilesCommandName,
 	Short: "List profiles from the config file",
@@ -147,7 +147,7 @@ var listProfileCmd = &cobra.Command{
 	},
 }
 
-//deleteProfiles deletes profiles based on names
+// deleteProfiles deletes profiles based on names
 func deleteProfiles(profiles []string) error {
 	profileController, err := GetProfileController()
 	if err != nil {
@@ -191,7 +191,7 @@ func init() {
 	GetRoot().AddCommand(profileCommand)
 }
 
-//getProfileController gets profile controller by wiring config controller with config file
+// getProfileController gets profile controller by wiring config controller with config file
 func getProfileController(cfgFlagValue string) (profile.Controller, error) {
 	configFilePath, err := GetConfigFilePath(cfgFlagValue)
 	if err != nil {
@@ -296,7 +296,7 @@ func getUserInputAsMaskedText(isValid func(string) bool) string {
 	return value
 }
 
-//listProfiles list profiles from the config file
+// listProfiles list profiles from the config file
 func listProfiles(cmd *cobra.Command) error {
 	ok, err := cmd.Flags().GetBool(FlagProfileVerbose)
 	if err != nil {
@@ -339,7 +339,7 @@ func displayCompleteProfiles(p profile.Controller) (err error) {
 	return
 }
 
-//displayProfileNames lists only profile names
+// displayProfileNames lists only profile names
 func displayProfileNames(p profile.Controller) (err error) {
 
 	var names []string

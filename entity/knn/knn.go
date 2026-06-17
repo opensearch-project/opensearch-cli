@@ -11,30 +11,30 @@
 
 package knn
 
-//Shards represents number of shards succeeded or failed to warmup
+// Shards represents number of shards succeeded or failed to warmup
 type Shards struct {
 	Total      int `json:"total"`
 	Successful int `json:"successful"`
 	Failed     int `json:"failed"`
 }
 
-//WarmupAPIResponse warmup api response structure
+// WarmupAPIResponse warmup api response structure
 type WarmupAPIResponse struct {
 	Shards Shards `json:"_shards"`
 }
 
-//RootCause gives information about type and reason
+// RootCause gives information about type and reason
 type RootCause struct {
 	Type   string `json:"type"`
 	Reason string `json:"reason"`
 }
 
-//Error contains root cause
+// Error contains root cause
 type Error struct {
 	RootCause []RootCause `json:"root_cause"`
 }
 
-//ErrorResponse knn request failure error response
+// ErrorResponse knn request failure error response
 type ErrorResponse struct {
 	KNNError Error `json:"error"`
 	Status   int   `json:"status"`

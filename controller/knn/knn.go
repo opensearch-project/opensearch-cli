@@ -19,9 +19,9 @@ import (
 	"strings"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_knn.go -package=mocks . Controller
+//go:generate go run -mod=mod go.uber.org/mock/mockgen  -destination=mocks/mock_knn.go -package=mocks . Controller
 
-//Controller is an interface for the k-NN plugin controllers
+// Controller is an interface for the k-NN plugin controllers
 type Controller interface {
 	GetStatistics(context.Context, string, string) ([]byte, error)
 	WarmupIndices(context.Context, []string) (*entity.Shards, error)
@@ -31,20 +31,20 @@ type controller struct {
 	gateway gateway.Gateway
 }
 
-//GetStatistics gets stats data based on nodes and stat names
+// GetStatistics gets stats data based on nodes and stat names
 func (c controller) GetStatistics(ctx context.Context, nodes string, names string) ([]byte, error) {
 	return c.gateway.GetStatistics(ctx, nodes, names)
 }
 
-//New returns new Controller instance
+// New returns new Controller instance
 func New(gateway gateway.Gateway) Controller {
 	return &controller{
 		gateway,
 	}
 }
 
-//WarmupIndices will load all the graphs for all of the shards (primaries and replicas)
-//of all the indices specified in the request into native memory
+// WarmupIndices will load all the graphs for all of the shards (primaries and replicas)
+// of all the indices specified in the request into native memory
 func (c controller) WarmupIndices(ctx context.Context, index []string) (*entity.Shards, error) {
 	indices := strings.Join(index, ",")
 	response, err := c.gateway.WarmupIndices(ctx, indices)

@@ -32,7 +32,7 @@ const (
 	updateURLTemplate = baseURL + "/%s"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen  -destination=mocks/mock_ad.go -package=mocks . Gateway
+//go:generate go run -mod=mod go.uber.org/mock/mockgen  -destination=mocks/mock_ad.go -package=mocks . Gateway
 
 // Gateway interface to AD Plugin
 type Gateway interface {
@@ -67,56 +67,59 @@ func (g *gateway) buildCreateURL() (*url.URL, error) {
 	return endpoint, nil
 }
 
-/*CreateDetector Creates an anomaly detector job.
+/*
+CreateDetector Creates an anomaly detector job.
 It calls http request: POST _plugins/_anomaly_detection/detectors
 Sample Input:
-{
- "name": "test-detector",
- "description": "Test detector",
- "time_field": "timestamp",
- "indices": [
-   "order*"
- ],
- "feature_attributes": [
-   {
-     "feature_name": "total_order",
-     "feature_enabled": true,
-     "aggregation_query": {
-       "total_order": {
-         "sum": {
-           "field": "value"
-         }
-       }
-     }
-   }
- ],
- "filter_query": {
-   "bool": {
-     "filter": [
-       {
-         "exists": {
-           "field": "value",
-           "boost": 1
-         }
-       }
-     ],
-     "adjust_pure_negative": true,
-     "boost": 1
-   }
- },
- "detection_interval": {
-   "period": {
-     "interval": 1,
-     "unit": "Minutes"
-   }
- },
- "window_delay": {
-   "period": {
-     "interval": 1,
-     "unit": "Minutes"
-   }
- }
-}*/
+
+	{
+	 "name": "test-detector",
+	 "description": "Test detector",
+	 "time_field": "timestamp",
+	 "indices": [
+	   "order*"
+	 ],
+	 "feature_attributes": [
+	   {
+	     "feature_name": "total_order",
+	     "feature_enabled": true,
+	     "aggregation_query": {
+	       "total_order": {
+	         "sum": {
+	           "field": "value"
+	         }
+	       }
+	     }
+	   }
+	 ],
+	 "filter_query": {
+	   "bool": {
+	     "filter": [
+	       {
+	         "exists": {
+	           "field": "value",
+	           "boost": 1
+	         }
+	       }
+	     ],
+	     "adjust_pure_negative": true,
+	     "boost": 1
+	   }
+	 },
+	 "detection_interval": {
+	   "period": {
+	     "interval": 1,
+	     "unit": "Minutes"
+	   }
+	 },
+	 "window_delay": {
+	   "period": {
+	     "interval": 1,
+	     "unit": "Minutes"
+	   }
+	 }
+	}
+*/
 func (g *gateway) CreateDetector(ctx context.Context, payload interface{}) ([]byte, error) {
 	createURL, err := g.buildCreateURL()
 	if err != nil {
@@ -196,16 +199,19 @@ func (g *gateway) buildSearchURL() (*url.URL, error) {
 	return endpoint, nil
 }
 
-/*SearchDetector Returns all anomaly detectors for a search query.
+/*
+SearchDetector Returns all anomaly detectors for a search query.
 It calls http request: POST _plugins/_anomaly_detection/detectors/_search
 sample input
 Sample Input:
-{
- "query": {
-   "match": {
-     "name": "test-detector"
-   }
- }*/
+
+	{
+	 "query": {
+	   "match": {
+	     "name": "test-detector"
+	   }
+	 }
+*/
 func (g *gateway) SearchDetector(ctx context.Context, payload interface{}) ([]byte, error) {
 	searchURL, err := g.buildSearchURL()
 	if err != nil {
@@ -285,56 +291,59 @@ func (g *gateway) buildUpdateURL(ID string) (*url.URL, error) {
 	return endpoint, nil
 }
 
-/*UpdateDetector Updates a detector with any changes, including the description or adding or removing of features.
+/*
+UpdateDetector Updates a detector with any changes, including the description or adding or removing of features.
 It calls http request: PUT _plugins/_anomaly_detection/detectors/<detectorId>
 Sample Input:
-{
- "name": "test-detector",
- "description": "Test detector",
- "time_field": "timestamp",
- "indices": [
-   "order*"
- ],
- "feature_attributes": [
-   {
-     "feature_name": "total_order",
-     "feature_enabled": true,
-     "aggregation_query": {
-       "total_order": {
-         "sum": {
-           "field": "value"
-         }
-       }
-     }
-   }
- ],
- "filter_query": {
-   "bool": {
-     "filter": [
-       {
-         "exists": {
-           "field": "value",
-           "boost": 1
-         }
-       }
-     ],
-     "adjust_pure_negative": true,
-     "boost": 1
-   }
- },
- "detection_interval": {
-   "period": {
-     "interval": 10,
-     "unit": "Minutes"
-   }
- },
- "window_delay": {
-   "period": {
-     "interval": 1,
-     "unit": "Minutes"
-   }
- }
-}*/
+
+	{
+	 "name": "test-detector",
+	 "description": "Test detector",
+	 "time_field": "timestamp",
+	 "indices": [
+	   "order*"
+	 ],
+	 "feature_attributes": [
+	   {
+	     "feature_name": "total_order",
+	     "feature_enabled": true,
+	     "aggregation_query": {
+	       "total_order": {
+	         "sum": {
+	           "field": "value"
+	         }
+	       }
+	     }
+	   }
+	 ],
+	 "filter_query": {
+	   "bool": {
+	     "filter": [
+	       {
+	         "exists": {
+	           "field": "value",
+	           "boost": 1
+	         }
+	       }
+	     ],
+	     "adjust_pure_negative": true,
+	     "boost": 1
+	   }
+	 },
+	 "detection_interval": {
+	   "period": {
+	     "interval": 10,
+	     "unit": "Minutes"
+	   }
+	 },
+	 "window_delay": {
+	   "period": {
+	     "interval": 1,
+	     "unit": "Minutes"
+	   }
+	 }
+	}
+*/
 func (g *gateway) UpdateDetector(ctx context.Context, ID string, payload interface{}) error {
 	updateURL, err := g.buildUpdateURL(ID)
 	if err != nil {

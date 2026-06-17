@@ -24,7 +24,7 @@ const (
 	DefaultProfileName = "default"
 )
 
-//go:generate go run -mod=mod github.com/golang/mock/mockgen -destination=mocks/mock_profile.go -package=mocks . Controller
+//go:generate go run -mod=mod go.uber.org/mock/mockgen -destination=mocks/mock_profile.go -package=mocks . Controller
 type Controller interface {
 	CreateProfile(profile entity.Profile) error
 	DeleteProfiles(names []string) error
@@ -38,14 +38,14 @@ type controller struct {
 	configCtrl config.Controller
 }
 
-//New returns new config controller instance
+// New returns new config controller instance
 func New(c config.Controller) Controller {
 	return &controller{
 		configCtrl: c,
 	}
 }
 
-//GetProfiles gets list of profiles fom config file
+// GetProfiles gets list of profiles fom config file
 func (c controller) GetProfiles() ([]entity.Profile, error) {
 	data, err := c.configCtrl.Read()
 	if err != nil {
@@ -54,7 +54,7 @@ func (c controller) GetProfiles() ([]entity.Profile, error) {
 	return data.Profiles, nil
 }
 
-//GetProfileNames gets list of profile names
+// GetProfileNames gets list of profile names
 func (c controller) GetProfileNames() ([]string, error) {
 	profiles, err := c.GetProfiles()
 	if err != nil {
@@ -67,7 +67,7 @@ func (c controller) GetProfileNames() ([]string, error) {
 	return names, nil
 }
 
-//GetProfilesMap returns a map view of the profiles contained in config
+// GetProfilesMap returns a map view of the profiles contained in config
 func (c controller) GetProfilesMap() (map[string]entity.Profile, error) {
 	profiles, err := c.GetProfiles()
 	if err != nil {
@@ -80,8 +80,8 @@ func (c controller) GetProfilesMap() (map[string]entity.Profile, error) {
 	return result, nil
 }
 
-//CreateProfile creates profile by gets list of existing profiles, append new profile to list
-//and saves it in config file
+// CreateProfile creates profile by gets list of existing profiles, append new profile to list
+// and saves it in config file
 func (c controller) CreateProfile(p entity.Profile) error {
 	data, err := c.configCtrl.Read()
 	if err != nil {
@@ -91,7 +91,7 @@ func (c controller) CreateProfile(p entity.Profile) error {
 	return c.configCtrl.Write(data)
 }
 
-//DeleteProfiles loads all profile, deletes selected profiles, and saves rest in config file
+// DeleteProfiles loads all profile, deletes selected profiles, and saves rest in config file
 func (c controller) DeleteProfiles(names []string) error {
 	profilesMap, err := c.GetProfilesMap()
 	if err != nil {

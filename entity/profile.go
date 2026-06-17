@@ -16,7 +16,7 @@ type AWSIAM struct {
 	ServiceName string `yaml:"service"`
 }
 
-//Trust contains file path for certificate and private key locations
+// Trust contains file path for certificate and private key locations
 type Trust struct {
 	CAFilePath                *string
 	ClientCertificateFilePath *string
